@@ -82,14 +82,26 @@ command -v xcodebuild >/dev/null 2>&1 || fail "xcodebuild is not available. Inst
 command -v ruby >/dev/null 2>&1 || fail "ruby is required to update Xcode build settings."
 [[ -f "${PBXPROJ_PATH}" ]] || fail "Xcode project not found at ${PROJECT_PATH}"
 
-# The project stores the same version in Debug and Release. Update every
-# occurrence together and fail if they ever drift apart.
+# The app target stores the same version in Debug and Release. Only inspect
+# build-setting blocks that define MARKETING_VERSION so unrelated targets (for
+# example, the unit-test bundle) can keep their own build numbers.
 VERSION_RESULT="$({ DRY_RUN="${DRY_RUN}" ruby - "${PBXPROJ_PATH}" <<'RUBY'
 path = ARGV.fetch(0)
 contents = File.read(path)
 
-marketing_versions = contents.scan(/\bMARKETING_VERSION\s*=\s*([^;]+);/).flatten.map(&:strip).uniq
-build_numbers = contents.scan(/\bCURRENT_PROJECT_VERSION\s*=\s*([^;]+);/).flatten.map(&:strip).uniq
+build_settings_pattern = /buildSettings\s*=\s*\{.*?^\s*\};/m
+versioned_settings = contents.scan(build_settings_pattern).select do |settings|
+  settings.match?(/\bMARKETING_VERSION\s*=/)
+end
+
+abort "No versioned app build settings found" if versioned_settings.empty?
+
+marketing_versions = versioned_settings.flat_map do |settings|
+  settings.scan(/\bMARKETING_VERSION\s*=\s*([^;]+);/).flatten
+end.map(&:strip).uniq
+build_numbers = versioned_settings.flat_map do |settings|
+  settings.scan(/\bCURRENT_PROJECT_VERSION\s*=\s*([^;]+);/).flatten
+end.map(&:strip).uniq
 
 abort "Expected exactly one MARKETING_VERSION value, found: #{marketing_versions.inspect}" unless marketing_versions.length == 1
 abort "Expected exactly one CURRENT_PROJECT_VERSION value, found: #{build_numbers.inspect}" unless build_numbers.length == 1
@@ -105,8 +117,12 @@ next_marketing = "#{match[1]}.#{match[2]}.#{match[3].to_i + 1}"
 next_build = (current_build.to_i + 1).to_s
 
 unless ENV.fetch('DRY_RUN') == 'true'
-  updated = contents.gsub(/(\bMARKETING_VERSION\s*=\s*)[^;]+;/, "\\1#{next_marketing};")
-  updated = updated.gsub(/(\bCURRENT_PROJECT_VERSION\s*=\s*)[^;]+;/, "\\1#{next_build};")
+  updated = contents.gsub(build_settings_pattern) do |settings|
+    next settings unless settings.match?(/\bMARKETING_VERSION\s*=/)
+
+    settings = settings.gsub(/(\bMARKETING_VERSION\s*=\s*)[^;]+;/, "\\1#{next_marketing};")
+    settings.gsub(/(\bCURRENT_PROJECT_VERSION\s*=\s*)[^;]+;/, "\\1#{next_build};")
+  end
 
   temp_path = "#{path}.tmp.#{$$}"
   begin
