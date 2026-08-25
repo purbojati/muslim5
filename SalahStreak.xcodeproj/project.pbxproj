@@ -20,6 +20,12 @@
 		A0000000000000000000010B /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000020B /* InsightsView.swift */; };
 		A0000000000000000000010C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000020C /* SettingsView.swift */; };
 		A0000000000000000000010D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000020D /* Assets.xcassets */; };
+		A0000000000000000000010E /* PrayerPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000020E /* PrayerPhase.swift */; };
+		A0000000000000000000010F /* PrayerScheduleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000020F /* PrayerScheduleService.swift */; };
+		A00000000000000000000110 /* LocationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000210 /* LocationProvider.swift */; };
+		A00000000000000000000111 /* PrayerHeroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000211 /* PrayerHeroView.swift */; };
+		A00000000000000000000112 /* PrayerSkyBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000212 /* PrayerSkyBackground.swift */; };
+		A00000000000000000000113 /* Adhan in Frameworks */ = {isa = PBXBuildFile; productRef = A00000000000000000000901 /* Adhan */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +43,11 @@
 		A0000000000000000000020B /* InsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
 		A0000000000000000000020C /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		A0000000000000000000020D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A0000000000000000000020E /* PrayerPhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerPhase.swift; sourceTree = "<group>"; };
+		A0000000000000000000020F /* PrayerScheduleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerScheduleService.swift; sourceTree = "<group>"; };
+		A00000000000000000000210 /* LocationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationProvider.swift; sourceTree = "<group>"; };
+		A00000000000000000000211 /* PrayerHeroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerHeroView.swift; sourceTree = "<group>"; };
+		A00000000000000000000212 /* PrayerSkyBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerSkyBackground.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,6 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A00000000000000000000113 /* Adhan in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,6 +89,7 @@
 				A00000000000000000000202 /* Prayer.swift */,
 				A00000000000000000000203 /* PrayerRecord.swift */,
 				A00000000000000000000204 /* TrackingPause.swift */,
+				A0000000000000000000020E /* PrayerPhase.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -93,6 +106,8 @@
 			isa = PBXGroup;
 			children = (
 				A00000000000000000000206 /* ProgressMetrics.swift */,
+				A0000000000000000000020F /* PrayerScheduleService.swift */,
+				A00000000000000000000210 /* LocationProvider.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -114,6 +129,8 @@
 			isa = PBXGroup;
 			children = (
 				A00000000000000000000208 /* PrayerRow.swift */,
+				A00000000000000000000211 /* PrayerHeroView.swift */,
+				A00000000000000000000212 /* PrayerSkyBackground.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -142,6 +159,9 @@
 			dependencies = (
 			);
 			name = "Salah Streak";
+			packageProductDependencies = (
+				A00000000000000000000901 /* Adhan */,
+			);
 			productName = SalahStreak;
 			productReference = A00000000000000000000200 /* Salah Streak.app */;
 			productType = "com.apple.product-type.application";
@@ -171,6 +191,9 @@
 			);
 			mainGroup = A00000000000000000000400;
 			productRefGroup = A00000000000000000000407 /* Products */;
+			packageReferences = (
+				A00000000000000000000900 /* XCRemoteSwiftPackageReference "adhan-swift" */,
+			);
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -207,6 +230,11 @@
 				A0000000000000000000010A /* JourneyView.swift in Sources */,
 				A0000000000000000000010B /* InsightsView.swift in Sources */,
 				A0000000000000000000010C /* SettingsView.swift in Sources */,
+				A0000000000000000000010E /* PrayerPhase.swift in Sources */,
+				A0000000000000000000010F /* PrayerScheduleService.swift in Sources */,
+				A00000000000000000000110 /* LocationProvider.swift in Sources */,
+				A00000000000000000000111 /* PrayerHeroView.swift in Sources */,
+				A00000000000000000000112 /* PrayerSkyBackground.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,6 +367,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Salah Streak";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is used on this device to calculate local prayer times.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -367,6 +396,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "Salah Streak";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is used on this device to calculate local prayer times.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -405,6 +435,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A00000000000000000000900 /* XCRemoteSwiftPackageReference "adhan-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/batoulapps/adhan-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A00000000000000000000901 /* Adhan */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A00000000000000000000900 /* XCRemoteSwiftPackageReference "adhan-swift" */;
+			productName = Adhan;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A00000000000000000000600 /* Project object */;
 }

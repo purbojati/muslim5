@@ -51,7 +51,7 @@ struct SettingsView: View {
                 } header: {
                     Text("Your prayer practice")
                 } footer: {
-                    Text("These preferences are ready for the prayer-time and reminder phase.")
+                    Text("These preferences shape the offline prayer times shown on Today.")
                 }
 
                 Section("Your privacy") {

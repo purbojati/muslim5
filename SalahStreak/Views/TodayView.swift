@@ -1,100 +1,187 @@
 import SwiftData
 import SwiftUI
+import UIKit
 
 struct TodayView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.openURL) private var openURL
+    @Environment(\.scenePhase) private var scenePhase
     @Query(sort: \PrayerRecord.day, order: .reverse) private var records: [PrayerRecord]
     @Query(sort: \TrackingPause.startDay, order: .reverse) private var pauses: [TrackingPause]
     @AppStorage("periodMode") private var periodMode = false
     @AppStorage("travelMode") private var travelMode = false
+    @AppStorage("asrMethod") private var asrMethod = "standard"
+    @AppStorage("calculationMethod") private var calculationMethod = "local"
+    @StateObject private var locationProvider = LocationProvider()
+
+    private let prayerScheduleService = PrayerScheduleService()
 
     private var metrics: ProgressMetrics { ProgressMetrics(records: records, pauses: pauses) }
     private var completedToday: Int { metrics.completedCount(on: .now) }
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    welcomeHeader
-                    dailyCompanionCard
-
-                    if periodMode {
-                        pauseBanner
-                    } else if travelMode {
-                        travelBanner
-                    }
-
-                    prayerList
-                    gentleFooter
-                }
-                .padding(.horizontal, 18)
-                .padding(.top, 18)
-                .padding(.bottom, 28)
+            TimelineView(.periodic(from: .now, by: 30)) { timeline in
+                homepage(at: timeline.date)
             }
-            .background(Color(.systemGroupedBackground))
             .toolbar(.hidden, for: .navigationBar)
+        }
+        .task {
+            locationProvider.start()
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                locationProvider.requestLocation()
+            }
         }
     }
 
-    private var welcomeHeader: some View {
-        VStack(alignment: .leading, spacing: 5) {
-            Text("Assalamu alaikum")
-                .font(.system(.largeTitle, design: .rounded, weight: .bold))
-            Text(.now, format: .dateTime.weekday(.wide).month(.wide).day())
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+    @ViewBuilder
+    private func homepage(at date: Date) -> some View {
+        let schedule = makeSchedule(at: date)
+        let phase = schedule?.phase(at: date)
+
+        GeometryReader { geometry in
+            ScrollView {
+                VStack(spacing: 0) {
+                    prayerHeader(
+                        at: date,
+                        phase: phase,
+                        topInset: geometry.safeAreaInsets.top
+                    )
+
+                    VStack(alignment: .leading, spacing: 18) {
+                        dailyCompanionCard
+
+                        if periodMode {
+                            pauseBanner
+                        } else if travelMode {
+                            travelBanner
+                        }
+
+                        prayerList(schedule: schedule?.today)
+                        gentleFooter
+                    }
+                    .padding(.horizontal, 18)
+                    .padding(.top, 20)
+                    .padding(.bottom, 28)
+                }
+            }
+            .scrollIndicators(.hidden)
+            .background(Color(.systemGroupedBackground))
+            .ignoresSafeArea(edges: .top)
         }
-        .accessibilityElement(children: .combine)
+    }
+
+    private func prayerHeader(at date: Date, phase: PrayerPhase?, topInset: CGFloat) -> some View {
+        ZStack {
+            PrayerSkyBackground(scene: phase?.scene ?? fallbackScene(at: date))
+
+            VStack(alignment: .leading, spacing: 26) {
+                todayHeader(at: date)
+
+                PrayerHeroView(
+                    phase: phase,
+                    date: date,
+                    locationState: locationProvider.state,
+                    onLocationAction: handleLocationAction
+                )
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, topInset + 12)
+            .padding(.bottom, 24)
+        }
+        .frame(minHeight: 332 + topInset)
+    }
+
+    private func todayHeader(at date: Date) -> some View {
+        HStack(alignment: .top) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text("Today")
+                    .font(.system(.title2, design: .rounded, weight: .bold))
+                Text(date, format: .dateTime.weekday(.wide).month(.wide).day())
+                    .font(.footnote)
+                    .foregroundStyle(.white.opacity(0.72))
+            }
+
+            Spacer()
+
+            locationControl
+        }
+        .foregroundStyle(.white)
+    }
+
+    @ViewBuilder
+    private var locationControl: some View {
+        if #available(iOS 26.0, *) {
+            locationButton
+                .glassEffect(.regular.interactive(), in: Capsule())
+        } else {
+            locationButton
+                .background(.thinMaterial, in: Capsule())
+        }
+    }
+
+    private var locationButton: some View {
+        Button(action: handleLocationAction) {
+            Label(locationLabel, systemImage: locationSymbol)
+                .font(.footnote.weight(.semibold))
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+        }
+        .buttonStyle(.plain)
+        .accessibilityHint("Updates the location used for prayer times")
+    }
+
+    private var locationLabel: String {
+        switch locationProvider.state {
+        case .requesting: "Locating"
+        case .denied: "Location off"
+        default: "Local"
+        }
+    }
+
+    private var locationSymbol: String {
+        locationProvider.state == .denied ? "location.slash.fill" : "location.fill"
     }
 
     private var dailyCompanionCard: some View {
-        VStack(alignment: .leading, spacing: 22) {
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 5) {
-                    Text(completionTitle)
-                        .font(.title2.bold())
-                    Text(completionSubtitle)
-                        .font(.subheadline)
-                        .foregroundStyle(.white.opacity(0.72))
-                        .fixedSize(horizontal: false, vertical: true)
+        VStack(alignment: .leading, spacing: 10) {
+            if dynamicTypeSize.isAccessibilitySize {
+                VStack(alignment: .leading, spacing: 4) {
+                    completionCount
+                    streakStatus
                 }
-
-                Spacer()
-
-                Text("\(completedToday)/5")
-                    .font(.system(.title2, design: .rounded, weight: .bold))
-                    .monospacedDigit()
-                    .contentTransition(.numericText())
-            }
-
-            HStack(spacing: 10) {
-                ForEach(Prayer.allCases) { prayer in
-                    let isDone = metrics.record(for: prayer, on: .now) != nil
-                    ZStack {
-                        Circle()
-                            .fill(isDone ? AppTheme.success : .white.opacity(0.12))
-                        Image(systemName: isDone ? "checkmark" : prayer.symbol)
-                            .font(.system(size: 12, weight: .semibold))
-                            .foregroundStyle(isDone ? .white : .white.opacity(0.6))
-                            .contentTransition(.symbolEffect(.replace))
-                    }
-                    .frame(maxWidth: .infinity)
-                    .aspectRatio(1, contentMode: .fit)
-                        .accessibilityLabel("\(prayer.name) \(isDone ? "complete" : "incomplete")")
+            } else {
+                HStack {
+                    completionCount
+                    Spacer()
+                    streakStatus
                 }
             }
 
-            Label(streakMessage, systemImage: metrics.currentStreak > 0 ? "flame.fill" : "sunrise.fill")
-                .font(.footnote.weight(.semibold))
-                .foregroundStyle(.white.opacity(0.82))
+            ProgressView(value: Double(completedToday), total: 5)
+                .tint(completedToday == 5 ? AppTheme.success : AppTheme.accent)
         }
-        .foregroundStyle(.white)
-        .padding(22)
-        .background(AppTheme.cardGradient, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
-        .shadow(color: AppTheme.deepIndigo.opacity(0.18), radius: 18, y: 10)
+        .padding(.horizontal, 2)
+        .accessibilityElement(children: .combine)
     }
 
-    private var prayerList: some View {
+    private var completionCount: some View {
+        Text("\(completedToday) of 5 today")
+            .font(.headline)
+            .monospacedDigit()
+            .contentTransition(.numericText())
+    }
+
+    private var streakStatus: some View {
+        Text(streakMessage)
+            .font(.footnote)
+            .foregroundStyle(.secondary)
+    }
+
+    private func prayerList(schedule: DailyPrayerSchedule?) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             VStack(alignment: .leading, spacing: 3) {
                 Text("Your five moments")
@@ -109,6 +196,7 @@ struct TodayView: View {
             ForEach(Prayer.allCases) { prayer in
                 PrayerRow(
                     prayer: prayer,
+                    prayerTime: schedule?.time(for: prayer),
                     record: metrics.record(for: prayer, on: .now),
                     isEnabled: !periodMode,
                     onToggle: { toggle(prayer) },
@@ -158,26 +246,6 @@ struct TodayView: View {
         .padding(.horizontal, 6)
     }
 
-    private var completionTitle: String {
-        switch completedToday {
-        case 5: "Alhamdulillah"
-        case 4: "One moment remains"
-        case 3: "Your rhythm is growing"
-        case 2: "A gentle momentum"
-        case 1: "A beautiful beginning"
-        default: "Begin with one"
-        }
-    }
-
-    private var completionSubtitle: String {
-        switch completedToday {
-        case 5: "You made space for all five prayers today."
-        case 3...4: "Keep going with the same quiet intention."
-        case 1...2: "No pressure. Let the next prayer meet you where you are."
-        default: "The day doesn’t need to be perfect. Just begin where you are."
-        }
-    }
-
     private var streakMessage: String {
         metrics.currentStreak == 0
             ? "Today is a fresh start"
@@ -207,5 +275,35 @@ struct TodayView: View {
 
     private func save() {
         try? modelContext.save()
+    }
+
+    private func makeSchedule(at date: Date) -> PrayerSchedule? {
+        guard let coordinate = locationProvider.coordinate else { return nil }
+        return prayerScheduleService.schedule(
+            for: coordinate,
+            at: date,
+            calculationMethod: calculationMethod,
+            asrMethod: asrMethod
+        )
+    }
+
+    private func handleLocationAction() {
+        if locationProvider.state == .denied,
+           let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+            openURL(settingsURL)
+        } else {
+            locationProvider.requestLocation()
+        }
+    }
+
+    private func fallbackScene(at date: Date) -> PrayerScene {
+        let hour = Calendar.autoupdatingCurrent.component(.hour, from: date)
+        return switch hour {
+        case 4..<7: .dawn
+        case 7..<16: .daylight
+        case 16..<18: .goldenHour
+        case 18..<20: .dusk
+        default: .night
+        }
     }
 }

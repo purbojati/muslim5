@@ -1,7 +1,10 @@
 import SwiftUI
 
 struct PrayerRow: View {
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
     let prayer: Prayer
+    let prayerTime: Date?
     let record: PrayerRecord?
     let isEnabled: Bool
     let onToggle: () -> Void
@@ -9,38 +12,11 @@ struct PrayerRow: View {
 
     var body: some View {
         Button(action: onToggle) {
-            HStack(spacing: 16) {
-                ZStack {
-                    Circle()
-                        .fill(record == nil ? AppTheme.accent.opacity(0.09) : AppTheme.gold.opacity(0.14))
-                        .frame(width: 46, height: 46)
-
-                    Image(systemName: prayer.symbol)
-                        .font(.system(size: 18, weight: .medium))
-                        .foregroundStyle(record == nil ? AppTheme.accent : AppTheme.gold)
-                }
-
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(prayer.name)
-                        .font(.headline)
-                        .foregroundStyle(.primary)
-
-                    Text(statusMessage)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Spacer()
-
-                ZStack {
-                    Circle()
-                        .fill(record == nil ? AppTheme.accent.opacity(0.08) : AppTheme.success)
-                        .frame(width: 40, height: 40)
-
-                    Image(systemName: record == nil ? "plus" : "checkmark")
-                        .font(.system(size: 15, weight: .bold))
-                        .foregroundStyle(record == nil ? AppTheme.accent : .white)
-                        .contentTransition(.symbolEffect(.replace))
+            Group {
+                if dynamicTypeSize.isAccessibilitySize {
+                    accessibilityLayout
+                } else {
+                    regularLayout
                 }
             }
             .contentShape(Rectangle())
@@ -66,8 +42,86 @@ struct PrayerRow: View {
                 }
             }
         }
-        .accessibilityLabel("\(prayer.name), \(record?.status.title ?? "not recorded")")
+        .accessibilityLabel(accessibilityLabel)
         .accessibilityHint(isEnabled ? "Double tap to toggle. Touch and hold for more statuses." : "Tracking is paused.")
+    }
+
+    private var regularLayout: some View {
+        HStack(spacing: 16) {
+            prayerIcon
+            prayerLabel
+            Spacer()
+            prayerTimeLabel
+            toggleIcon
+        }
+    }
+
+    private var accessibilityLayout: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 12) {
+                prayerIcon
+                Text(prayer.name)
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+                Spacer()
+                toggleIcon
+            }
+
+            HStack(alignment: .firstTextBaseline) {
+                Text(statusMessage)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                prayerTimeLabel
+            }
+        }
+    }
+
+    private var prayerIcon: some View {
+        ZStack {
+            Circle()
+                .fill(record == nil ? AppTheme.accent.opacity(0.09) : AppTheme.gold.opacity(0.14))
+                .frame(width: 46, height: 46)
+
+            Image(systemName: prayer.symbol)
+                .font(.system(size: 18, weight: .medium))
+                .foregroundStyle(record == nil ? AppTheme.accent : AppTheme.gold)
+        }
+    }
+
+    private var prayerLabel: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text(prayer.name)
+                .font(.headline)
+                .foregroundStyle(.primary)
+
+            Text(statusMessage)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    @ViewBuilder
+    private var prayerTimeLabel: some View {
+        if let prayerTime {
+            Text(prayerTime, format: .dateTime.hour().minute())
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.secondary)
+                .monospacedDigit()
+        }
+    }
+
+    private var toggleIcon: some View {
+        ZStack {
+            Circle()
+                .fill(record == nil ? AppTheme.accent.opacity(0.08) : AppTheme.success)
+                .frame(width: 40, height: 40)
+
+            Image(systemName: record == nil ? "plus" : "checkmark")
+                .font(.system(size: 15, weight: .bold))
+                .foregroundStyle(record == nil ? AppTheme.accent : .white)
+                .contentTransition(.symbolEffect(.replace))
+        }
     }
 
     private var statusMessage: String {
@@ -77,6 +131,13 @@ struct PrayerRow: View {
         case .late: "Prayed a little later"
         case .madeUp: "Made up with care"
         }
+    }
+
+    private var accessibilityLabel: String {
+        let time = prayerTime?.formatted(date: .omitted, time: .shortened)
+        return [prayer.name, time, record?.status.title ?? "not recorded"]
+            .compactMap { $0 }
+            .joined(separator: ", ")
     }
 }
 
