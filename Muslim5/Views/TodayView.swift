@@ -224,22 +224,22 @@ struct TodayView: View {
         calendar.timeZone = .autoupdatingCurrent
         let components = calendar.dateComponents([.month, .day], from: date)
 
-        let weekday = date.formatted(Date.FormatStyle(
-            date: .omitted,
+        let fallbackDate = date.formatted(Date.FormatStyle(
+            date: .abbreviated,
             time: .omitted,
             locale: locale,
             calendar: calendar
-        ).weekday(.wide))
+        ))
 
         guard
             let month = components.month,
             Self.hijriMonthNames.indices.contains(month - 1),
             let day = components.day
         else {
-            return weekday
+            return fallbackDate
         }
 
-        return "\(weekday), \(day) \(Self.hijriMonthNames[month - 1])"
+        return "\(day) \(Self.hijriMonthNames[month - 1])"
     }
 
     @ViewBuilder
