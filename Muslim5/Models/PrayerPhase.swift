@@ -108,12 +108,30 @@ struct DailyPrayerSchedule: Equatable {
         case .isha: isha
         }
     }
+
+    func endTime(for prayer: Prayer) -> Date? {
+        switch prayer {
+        case .fajr: sunrise
+        case .dhuhr: asr
+        case .asr: maghrib
+        case .maghrib: isha
+        case .isha: nil
+        }
+    }
 }
 
 struct PrayerSchedule: Equatable {
     let previous: DailyPrayerSchedule
     let today: DailyPrayerSchedule
     let tomorrow: DailyPrayerSchedule
+
+    func endTime(for prayer: Prayer) -> Date {
+        today.endTime(for: prayer) ?? tomorrow.fajr
+    }
+
+    func hasEnded(_ prayer: Prayer, at date: Date) -> Bool {
+        date >= endTime(for: prayer)
+    }
 
     func phase(at date: Date) -> PrayerPhase {
         if date < today.fajr {

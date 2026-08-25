@@ -8,6 +8,7 @@ struct PrayerRow: View {
     let record: PrayerRecord?
     let linkedUsers: [SharingUser]
     let isEnabled: Bool
+    let hasPrayerTimePassed: Bool
     let onToggle: () -> Void
     let onStatusChange: (PrayerStatus) -> Void
     let onAttendanceChange: (PrayerAttendance) -> Void
@@ -153,7 +154,9 @@ struct PrayerRow: View {
     }
 
     private var statusMessage: String {
-        guard let record else { return "Ready when you are" }
+        guard let record else {
+            return hasPrayerTimePassed ? prayer.passedTimeEncouragement : "Ready when you are"
+        }
 
         let timingMessage = switch record.status {
         case .completed: "Alhamdulillah"
@@ -170,7 +173,7 @@ struct PrayerRow: View {
         let linkedNames = linkedUsers.isEmpty
             ? nil
             : "Completed by " + linkedUsers.map(\.nickname).joined(separator: ", ")
-        return [prayer.name, time, record?.status.title ?? "not recorded", record?.attendance?.title, linkedNames]
+        return [prayer.name, time, record?.status.title ?? statusMessage, record?.attendance?.title, linkedNames]
             .compactMap { $0 }
             .joined(separator: ", ")
     }

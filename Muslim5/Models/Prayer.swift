@@ -28,6 +28,46 @@ enum Prayer: String, CaseIterable, Codable, Identifiable {
         case .isha: "moon.stars.fill"
         }
     }
+
+    var passedTimeEncouragement: String {
+        switch self {
+        case .fajr: "It’s okay — begin again with Dhuhr"
+        case .dhuhr: "It’s okay — Asr is a fresh chance"
+        case .asr: "It’s okay — return with Maghrib"
+        case .maghrib: "It’s okay — Isha is another chance"
+        case .isha: "It’s okay — tomorrow begins with Fajr"
+        }
+    }
+
+    var missedReflection: (title: String, body: String) {
+        switch self {
+        case .fajr:
+            (
+                "Fajr does not define the whole day",
+                "If Fajr was missed, be gentle with yourself. Return with the next salah."
+            )
+        case .dhuhr:
+            (
+                "There is still room after Dhuhr",
+                "If Dhuhr was missed, pause without despair and begin again with the next salah."
+            )
+        case .asr:
+            (
+                "The day can turn again after Asr",
+                "If Asr was missed, carry a renewed intention into the prayer ahead."
+            )
+        case .maghrib:
+            (
+                "The evening still holds another chance",
+                "If Maghrib was missed, meet the next salah with a gentle heart."
+            )
+        case .isha:
+            (
+                "Tomorrow opens again with Fajr",
+                "If Isha was missed, rest without despair and begin again tomorrow."
+            )
+        }
+    }
 }
 
 enum PrayerStatus: String, CaseIterable, Codable {

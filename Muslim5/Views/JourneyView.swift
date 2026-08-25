@@ -2,26 +2,32 @@ import SwiftData
 import SwiftUI
 
 struct JourneyView: View {
+    @EnvironmentObject private var locationProvider: LocationProvider
     @Query(sort: \PrayerRecord.day, order: .reverse) private var records: [PrayerRecord]
     @Query(sort: \TrackingPause.startDay, order: .reverse) private var pauses: [TrackingPause]
+    @AppStorage("asrMethod") private var asrMethod = "standard"
+    @AppStorage("calculationMethod") private var calculationMethod = "local"
 
     private let calendar = Calendar.current
+    private let prayerScheduleService = PrayerScheduleService()
     private var metrics: ProgressMetrics { ProgressMetrics(records: records, pauses: pauses) }
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
-                    summary
-                    contributionCard
-                    legend
-                    InsightsView()
-                    reflectionCard
+            TimelineView(.periodic(from: .now, by: 30)) { timeline in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 24) {
+                        summary
+                        contributionCard
+                        legend
+                        InsightsView()
+                        reflectionCard(at: timeline.date)
+                    }
+                    .padding(.horizontal, 18)
+                    .padding(.bottom, 28)
                 }
-                .padding(.horizontal, 18)
-                .padding(.bottom, 28)
+                .background(Color(.systemGroupedBackground))
             }
-            .background(Color(.systemGroupedBackground))
             .navigationTitle("Your salah journey")
         }
     }
@@ -92,8 +98,8 @@ struct JourneyView: View {
         .padding(.horizontal, 4)
     }
 
-    private var reflectionCard: some View {
-        let reflection = journeyReflection
+    private func reflectionCard(at date: Date) -> some View {
+        let reflection = journeyReflection(at: date)
 
         return HStack(alignment: .top, spacing: 14) {
             Image(systemName: "quote.opening")
@@ -112,12 +118,16 @@ struct JourneyView: View {
         .background(AppTheme.accent.opacity(0.08), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
     }
 
-    private var journeyReflection: (title: String, body: String) {
-        if metrics.isPaused(on: .now) {
+    private func journeyReflection(at date: Date) -> (title: String, body: String) {
+        if metrics.isPaused(on: date) {
             return (
                 "Your pause is protected",
                 "Period Mode keeps these days from affecting your streak. Take care of yourself."
             )
+        }
+
+        if let prayer = mostRecentMissedPrayer(at: date) {
+            return prayer.missedReflection
         }
 
         if records.isEmpty {
@@ -187,6 +197,25 @@ struct JourneyView: View {
             "The door is always open",
             "A missed day doesn’t erase your effort. Begin again with the next salah."
         )
+    }
+
+    private func mostRecentMissedPrayer(at date: Date) -> Prayer? {
+        guard
+            let coordinate = locationProvider.coordinate,
+            let schedule = prayerScheduleService.schedule(
+                for: coordinate,
+                at: date,
+                calculationMethod: calculationMethod,
+                asrMethod: asrMethod
+            )
+        else {
+            return nil
+        }
+
+        return Prayer.allCases.last { prayer in
+            schedule.hasEnded(prayer, at: date)
+                && metrics.record(for: prayer, on: date) == nil
+        }
     }
 
     private func summaryTile(value: String, label: String, symbol: String, color: Color) -> some View {

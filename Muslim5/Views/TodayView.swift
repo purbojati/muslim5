@@ -46,7 +46,7 @@ struct TodayView: View {
                     to: timeline.date
                 ) ?? timeline.date
 
-                homepage(at: selectedDate)
+                homepage(at: selectedDate, currentDate: timeline.date)
             }
             .toolbar(.hidden, for: .navigationBar)
         }
@@ -74,7 +74,7 @@ struct TodayView: View {
     }
 
     @ViewBuilder
-    private func homepage(at date: Date) -> some View {
+    private func homepage(at date: Date, currentDate: Date) -> some View {
         let schedule = makeSchedule(at: date)
         let phase = schedule?.phase(at: date)
         let scene = previewScene ?? phase?.scene ?? fallbackScene(at: date)
@@ -103,12 +103,16 @@ struct TodayView: View {
                             pauseBanner
                         }
 
-                        prayerList(schedule: schedule?.today, on: date)
+                        prayerList(schedule: schedule, on: date, currentDate: currentDate)
 
                         checklistDayNavigation
                             .frame(maxWidth: .infinity, alignment: .center)
 
-                        gentleFooter(for: date)
+                        gentleFooter(
+                            for: date,
+                            schedule: schedule,
+                            currentDate: currentDate
+                        )
                     }
                     .padding(.horizontal, 18)
                     .padding(.top, 18)
@@ -366,7 +370,11 @@ struct TodayView: View {
         .accessibilityHint("Opens Prayer Circle setup")
     }
 
-    private func prayerList(schedule: DailyPrayerSchedule?, on date: Date) -> some View {
+    private func prayerList(
+        schedule: PrayerSchedule?,
+        on date: Date,
+        currentDate: Date
+    ) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             VStack(alignment: .leading, spacing: 3) {
                 Text("Your five daily prayers")
@@ -387,10 +395,15 @@ struct TodayView: View {
                     ForEach(Prayer.allCases) { prayer in
                         PrayerRow(
                             prayer: prayer,
-                            prayerTime: schedule?.time(for: prayer),
+                            prayerTime: schedule?.today.time(for: prayer),
                             record: metrics.record(for: prayer, on: date),
                             linkedUsers: sharingService.users(for: prayer, on: date),
                             isEnabled: !periodMode,
+                            hasPrayerTimePassed: hasPrayerTimePassed(
+                                prayer,
+                                in: schedule,
+                                at: currentDate
+                            ),
                             onToggle: { toggle(prayer, on: date) },
                             onStatusChange: { setStatus($0, for: prayer, on: date) },
                             onAttendanceChange: { setAttendance($0, for: prayer, on: date) }
@@ -402,6 +415,15 @@ struct TodayView: View {
             }
             .frame(maxWidth: .infinity, alignment: .topLeading)
         }
+    }
+
+    private func hasPrayerTimePassed(
+        _ prayer: Prayer,
+        in schedule: PrayerSchedule?,
+        at date: Date
+    ) -> Bool {
+        guard let schedule else { return false }
+        return schedule.hasEnded(prayer, at: date)
     }
 
     private var checklistDayNavigation: some View {
@@ -470,10 +492,18 @@ struct TodayView: View {
         .background(AppTheme.accent.opacity(0.1), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 
-    private func gentleFooter(for date: Date) -> some View {
+    private func gentleFooter(
+        for date: Date,
+        schedule: PrayerSchedule?,
+        currentDate: Date
+    ) -> some View {
         let isComplete = metrics.completedCount(on: date) == Prayer.allCases.count
         let celebratesCompletion = isComplete && shouldCelebrateCompletion(on: date)
-        let message = gentleFooterMessage(for: date)
+        let message = gentleFooterMessage(
+            for: date,
+            schedule: schedule,
+            currentDate: currentDate
+        )
 
         return HStack(spacing: 14) {
             ZStack {
@@ -504,11 +534,23 @@ struct TodayView: View {
         .padding(.horizontal, 6)
     }
 
-    private func gentleFooterMessage(for date: Date) -> String {
+    private func gentleFooterMessage(
+        for date: Date,
+        schedule: PrayerSchedule?,
+        currentDate: Date
+    ) -> String {
         let completedCount = metrics.completedCount(on: date)
 
         if metrics.isPaused(on: date) {
             return "Take care of yourself. Your salah journey will be here when you return."
+        }
+
+        if let prayer = mostRecentMissedPrayer(
+            on: date,
+            schedule: schedule,
+            currentDate: currentDate
+        ) {
+            return prayer.missedReflection.body
         }
 
         switch completedCount {
@@ -530,6 +572,19 @@ struct TodayView: View {
                 return "Bismillah. Continue with the next prayer."
             }
             return "Every salah is a fresh chance to return to Allah."
+        }
+    }
+
+    private func mostRecentMissedPrayer(
+        on date: Date,
+        schedule: PrayerSchedule?,
+        currentDate: Date
+    ) -> Prayer? {
+        guard let schedule else { return nil }
+
+        return Prayer.allCases.last { prayer in
+            schedule.hasEnded(prayer, at: currentDate)
+                && metrics.record(for: prayer, on: date) == nil
         }
     }
 
