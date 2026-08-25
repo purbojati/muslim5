@@ -29,163 +29,271 @@ struct AppLaunchView: View {
 
 struct WelcomeView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @Environment(\.colorScheme) private var colorScheme
     @State private var hasAppeared = false
     @State private var backgroundDrift = false
     let onContinue: () -> Void
 
     var body: some View {
         ZStack {
-            welcomeBackground
+            background
 
             GeometryReader { geometry in
-                let contentWidth = min(geometry.size.width - 44, 520)
+                let contentWidth = min(geometry.size.width - 48, 520)
+                let compactHeight = geometry.size.height < 720
 
-                ScrollView {
-                    VStack(spacing: 0) {
-                        brand
-                            .padding(.top, 18)
-                            .welcomeEntrance(
-                                isVisible: hasAppeared,
-                                delay: 0.04,
-                                reduceMotion: reduceMotion
-                            )
+                VStack(spacing: 0) {
+                    brand
+                        .padding(.top, compactHeight ? 8 : 14)
+                        .welcomeEntrance(
+                            isVisible: hasAppeared,
+                            delay: 0.03,
+                            reduceMotion: reduceMotion
+                        )
 
-                        Spacer(minLength: 34)
+                    Spacer(minLength: compactHeight ? 16 : 28)
 
-                        introduction
-                            .welcomeEntrance(
-                                isVisible: hasAppeared,
-                                delay: 0.11,
-                                reduceMotion: reduceMotion
-                            )
+                    headline(compactHeight: compactHeight)
+                        .welcomeEntrance(
+                            isVisible: hasAppeared,
+                            delay: 0.10,
+                            reduceMotion: reduceMotion
+                        )
 
-                        Spacer(minLength: 30)
+                    Spacer(minLength: compactHeight ? 16 : 24)
 
-                        featureList(width: contentWidth)
-                            .welcomeEntrance(
-                                isVisible: hasAppeared,
-                                delay: 0.19,
-                                reduceMotion: reduceMotion
-                            )
+                    highlights
+                        .welcomeEntrance(
+                            isVisible: hasAppeared,
+                            delay: 0.18,
+                            reduceMotion: reduceMotion
+                        )
 
-                        Spacer(minLength: 26)
+                    Spacer(minLength: compactHeight ? 135 : 230)
 
-                        continueButton(width: contentWidth)
-                            .welcomeEntrance(
-                                isVisible: hasAppeared,
-                                delay: 0.28,
-                                reduceMotion: reduceMotion
-                            )
-                    }
-                    .padding(.bottom, 20)
-                    .frame(
-                        minWidth: geometry.size.width,
-                        maxWidth: geometry.size.width,
-                        minHeight: geometry.size.height
-                    )
+                    continueButton(width: contentWidth)
+                        .welcomeEntrance(
+                            isVisible: hasAppeared,
+                            delay: 0.27,
+                            reduceMotion: reduceMotion
+                        )
+
+                    Text("Your prayer history stays on this iPhone.")
+                        .font(.footnote.weight(.medium))
+                        .foregroundStyle(AppTheme.ink.opacity(0.74))
+                        .padding(.top, 12)
+                        .welcomeEntrance(
+                            isVisible: hasAppeared,
+                            delay: 0.31,
+                            reduceMotion: reduceMotion
+                        )
                 }
-                .scrollIndicators(.hidden)
+                .padding(.horizontal, 24)
+                .padding(.bottom, 14)
+                .frame(
+                    width: geometry.size.width,
+                    height: geometry.size.height
+                )
             }
         }
-        .foregroundStyle(primaryTextColor)
         .onAppear(perform: revealWelcome)
         .onChange(of: reduceMotion) { _, isReduced in
             if isReduced {
-                withAnimation(.none) { backgroundDrift = false }
+                withAnimation(.none) {
+                    backgroundDrift = false
+                }
             } else {
                 startAmbientMotion()
             }
         }
     }
 
-    private var welcomeBackground: some View {
+    private var background: some View {
         GeometryReader { geometry in
-            ZStack {
-                Image("PrayerAtmosphere")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                    .saturation(colorScheme == .dark ? 0.76 : 1)
-                    .brightness(colorScheme == .dark ? -0.24 : 0)
-                    .scaleEffect(backgroundDrift ? 1.055 : 1.025)
-                    .offset(
-                        x: backgroundDrift ? -4 : 4,
-                        y: backgroundDrift ? -7 : 3
+            Image("OnboardingMountain")
+                .resizable()
+                .scaledToFill()
+                .frame(width: geometry.size.width, height: geometry.size.height)
+                .scaleEffect(backgroundDrift ? 1.035 : 1.012)
+                .offset(
+                    x: backgroundDrift ? -3 : 3,
+                    y: backgroundDrift ? -5 : 2
+                )
+                .overlay {
+                    LinearGradient(
+                        colors: [
+                            AppTheme.ink.opacity(0.15),
+                            Color.clear,
+                            AppTheme.parchment.opacity(0.08)
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
                     )
-                    .clipped()
-
-                ambientGlows(in: geometry.size)
-
-                backgroundOverlay
-            }
+                }
+                .clipped()
         }
         .ignoresSafeArea()
         .accessibilityHidden(true)
     }
 
-    private func ambientGlows(in size: CGSize) -> some View {
-        ZStack {
-            Circle()
-                .fill(AppTheme.gold.opacity(colorScheme == .dark ? 0.10 : 0.15))
-                .frame(width: 210, height: 210)
-                .blur(radius: 46)
-                .position(
-                    x: size.width * 0.12 + (backgroundDrift ? 12 : -6),
-                    y: size.height * 0.26 + (backgroundDrift ? -8 : 8)
-                )
+    private var brand: some View {
+        HStack(spacing: 9) {
+            Image("BrandMark")
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFit()
+                .foregroundStyle(AppTheme.parchment)
+                .frame(width: 34, height: 34)
 
-            Circle()
-                .fill(AppTheme.accent.opacity(colorScheme == .dark ? 0.17 : 0.11))
-                .frame(width: 260, height: 260)
-                .blur(radius: 60)
-                .position(
-                    x: size.width * 0.92 + (backgroundDrift ? -10 : 8),
-                    y: size.height * 0.72 + (backgroundDrift ? 10 : -8)
+            Text("MUSLIM 5")
+                .font(.system(.subheadline, design: .rounded, weight: .bold))
+                .tracking(1.7)
+                .foregroundStyle(AppTheme.parchment)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Muslim 5")
+    }
+
+    private func headline(compactHeight: Bool) -> some View {
+        ZStack {
+            decorativeSymbol(
+                "leaf.fill",
+                color: AppTheme.warmOrange,
+                size: compactHeight ? 24 : 28,
+                rotation: -28,
+                x: compactHeight ? -108 : -132,
+                y: compactHeight ? -96 : -110
+            )
+
+            decorativeSymbol(
+                "camera.macro",
+                color: AppTheme.gold,
+                size: compactHeight ? 25 : 29,
+                rotation: -10,
+                x: compactHeight ? -118 : -142,
+                y: compactHeight ? 58 : 66
+            )
+
+            decorativeSymbol(
+                "moon.stars.fill",
+                color: AppTheme.warmOrange.opacity(0.92),
+                size: compactHeight ? 23 : 27,
+                rotation: 12,
+                x: compactHeight ? 112 : 137,
+                y: compactHeight ? -29 : -34
+            )
+
+            VStack(spacing: compactHeight ? -5 : -3) {
+                Text("Stay close")
+                Text("to salah,")
+                Text("a little more")
+                Text("every day.")
+                    .foregroundStyle(AppTheme.parchment.opacity(0.66))
+            }
+            .font(
+                .system(
+                    size: compactHeight ? 42 : 48,
+                    weight: .semibold,
+                    design: .serif
                 )
+            )
+            .tracking(-1.3)
+            .multilineTextAlignment(.center)
+            .foregroundStyle(AppTheme.parchment)
+            .shadow(
+                color: AppTheme.ink.opacity(0.58),
+                radius: 2.5,
+                y: 2
+            )
+            .minimumScaleFactor(0.82)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Stay close to salah, a little more every day.")
+    }
+
+    private func decorativeSymbol(
+        _ systemName: String,
+        color: Color,
+        size: CGFloat,
+        rotation: Double,
+        x: CGFloat,
+        y: CGFloat
+    ) -> some View {
+        Image(systemName: systemName)
+            .font(.system(size: size, weight: .bold))
+            .symbolRenderingMode(.hierarchical)
+            .foregroundStyle(color)
+            .rotationEffect(.degrees(rotation))
+            .offset(x: x, y: y)
+            .accessibilityHidden(true)
+    }
+
+    private var highlights: some View {
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: 8) {
+                highlight("Only 3 MB", systemImage: "arrow.down.circle.fill")
+                highlight("No ads", systemImage: "eye.slash.fill")
+                highlight("Prayer Circle", systemImage: "person.2.fill")
+            }
+
+            VStack(spacing: 8) {
+                HStack(spacing: 8) {
+                    highlight("Only 3 MB", systemImage: "arrow.down.circle.fill")
+                    highlight("No ads", systemImage: "eye.slash.fill")
+                }
+
+                highlight("Prayer Circle", systemImage: "person.2.fill")
+            }
         }
     }
 
-    private var backgroundOverlay: some View {
-        LinearGradient(
-            colors: colorScheme == .dark
-                ? [
-                    Color(red: 0.035, green: 0.028, blue: 0.07).opacity(0.62),
-                    Color(red: 0.035, green: 0.028, blue: 0.07).opacity(0.82),
-                    Color(red: 0.025, green: 0.02, blue: 0.05).opacity(0.95)
-                ]
-                : [
-                    Color.white.opacity(0.44),
-                    Color.white.opacity(0.72),
-                    Color.white.opacity(0.90)
-                ],
-            startPoint: .top,
-            endPoint: .bottom
+    private func highlight(_ title: String, systemImage: String) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: systemImage)
+            Text(title)
+                .lineLimit(1)
+        }
+        .font(.caption.weight(.semibold))
+        .foregroundStyle(AppTheme.parchment.opacity(0.92))
+        .padding(.horizontal, 11)
+        .frame(height: 36)
+        .fixedSize(horizontal: true, vertical: false)
+        .background(
+            AppTheme.ink.opacity(0.52),
+            in: Capsule()
         )
+        .overlay {
+            Capsule()
+                .stroke(AppTheme.parchment.opacity(0.14), lineWidth: 1)
+        }
+        .accessibilityElement(children: .combine)
     }
 
-    private var primaryTextColor: Color {
-        colorScheme == .dark
-            ? Color(red: 0.94, green: 0.92, blue: 0.98)
-            : AppTheme.deepIndigo
-    }
-
-    private var cardColor: Color {
-        colorScheme == .dark
-            ? Color(red: 0.10, green: 0.08, blue: 0.16).opacity(0.84)
-            : Color.white.opacity(0.66)
-    }
-
-    private var cardBorderColor: Color {
-        colorScheme == .dark
-            ? Color.white.opacity(0.14)
-            : Color.white.opacity(0.72)
-    }
-
-    private var buttonColor: Color {
-        colorScheme == .dark
-            ? Color(red: 0.38, green: 0.30, blue: 0.74)
-            : AppTheme.deepIndigo
+    private func continueButton(width: CGFloat) -> some View {
+        Button(action: onContinue) {
+            HStack(spacing: 9) {
+                Text("Begin")
+                Image(systemName: "arrow.right")
+                    .font(.system(size: 16, weight: .bold))
+            }
+            .font(.headline)
+            .foregroundStyle(AppTheme.ink)
+            .frame(width: width, height: 62)
+            .background(
+                Color(red: 0.99, green: 0.98, blue: 0.94),
+                in: RoundedRectangle(cornerRadius: 22, style: .continuous)
+            )
+            .overlay {
+                RoundedRectangle(cornerRadius: 22, style: .continuous)
+                    .stroke(AppTheme.parchment.opacity(0.88), lineWidth: 1)
+            }
+            .shadow(
+                color: AppTheme.ink.opacity(0.16),
+                radius: 18,
+                y: 8
+            )
+        }
+        .buttonStyle(WelcomeButtonStyle())
+        .accessibilityHint("Opens the Today screen")
     }
 
     private func revealWelcome() {
@@ -205,137 +313,11 @@ struct WelcomeView: View {
         guard !reduceMotion else { return }
 
         withAnimation(
-            .timingCurve(0.77, 0, 0.175, 1, duration: 7)
+            .timingCurve(0.77, 0, 0.175, 1, duration: 8)
                 .repeatForever(autoreverses: true)
         ) {
             backgroundDrift = true
         }
-    }
-
-    private var brand: some View {
-        HStack(spacing: 10) {
-            Image("BrandMark")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 38, height: 38)
-
-            Text("MUSLIM 5")
-                .font(.system(.subheadline, design: .rounded, weight: .bold))
-                .tracking(1.8)
-        }
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("Muslim 5")
-    }
-
-    private var introduction: some View {
-        VStack(spacing: 14) {
-            Text("Stay close\nto salah.")
-                .font(.system(size: 44, weight: .bold, design: .rounded))
-                .tracking(-1.4)
-                .multilineTextAlignment(.center)
-                .lineSpacing(-2)
-                .minimumScaleFactor(0.82)
-
-            Text("A simple, private space to help us stay consistent with our five daily prayers.")
-                .font(.body)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .lineSpacing(3)
-                .frame(maxWidth: 330)
-        }
-    }
-
-    private func featureList(width: CGFloat) -> some View {
-        VStack(spacing: 0) {
-            WelcomeFeatureRow(
-                title: "Only 3 MB",
-                message: "Light on your phone, made for every day.",
-                systemImage: "arrow.down.circle.fill"
-            )
-
-            Divider()
-                .overlay(primaryTextColor.opacity(colorScheme == .dark ? 0.14 : 0.10))
-                .padding(.leading, 58)
-
-            WelcomeFeatureRow(
-                title: "No ads. Ever.",
-                message: "Nothing between you and your worship.",
-                systemImage: "eye.slash.fill"
-            )
-
-            Divider()
-                .overlay(primaryTextColor.opacity(colorScheme == .dark ? 0.14 : 0.10))
-                .padding(.leading, 58)
-
-            WelcomeFeatureRow(
-                title: "Prayer Circle",
-                message: "Pray with loved ones, even when you’re apart.",
-                systemImage: "person.2.fill"
-            )
-        }
-        .frame(width: width - 32)
-        .padding(.horizontal, 16)
-        .background(cardColor, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
-        .overlay {
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .stroke(cardBorderColor, lineWidth: 1)
-        }
-        .shadow(
-            color: colorScheme == .dark
-                ? Color.black.opacity(0.32)
-                : AppTheme.deepIndigo.opacity(0.08),
-            radius: 22,
-            y: 10
-        )
-    }
-
-    private func continueButton(width: CGFloat) -> some View {
-        Button(action: onContinue) {
-            HStack(spacing: 8) {
-                Text("Let’s begin")
-                Image(systemName: "arrow.right")
-            }
-            .font(.headline)
-            .foregroundStyle(.white)
-            .frame(width: width, height: 56)
-            .background(buttonColor, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-        }
-        .buttonStyle(WelcomeButtonStyle())
-        .accessibilityHint("Opens the Today screen")
-    }
-}
-
-private struct WelcomeFeatureRow: View {
-    @Environment(\.colorScheme) private var colorScheme
-    let title: String
-    let message: String
-    let systemImage: String
-
-    var body: some View {
-        HStack(spacing: 14) {
-            Image(systemName: systemImage)
-                .font(.system(size: 20, weight: .semibold))
-                .foregroundStyle(AppTheme.accent)
-                .frame(width: 42, height: 42)
-                .background(
-                    AppTheme.accent.opacity(colorScheme == .dark ? 0.22 : 0.12),
-                    in: Circle()
-                )
-
-            VStack(alignment: .leading, spacing: 3) {
-                Text(title)
-                    .font(.headline)
-
-                Text(message)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
-            Spacer(minLength: 0)
-        }
-        .padding(.vertical, 13)
-        .accessibilityElement(children: .combine)
     }
 }
 

@@ -1,10 +1,12 @@
 import SwiftUI
 
 enum AppTheme {
-    static let accent = Color(red: 0.45, green: 0.38, blue: 0.88)
-    static let deepIndigo = Color(red: 0.17, green: 0.12, blue: 0.25)
-    static let success = Color(red: 0.25, green: 0.67, blue: 0.50)
-    static let gold = Color(red: 0.94, green: 0.65, blue: 0.28)
+    static let accent = Color("AccentColor")
+    static let ink = Color(red: 0.03, green: 0.24, blue: 0.22)
+    static let parchment = Color(red: 0.97, green: 0.93, blue: 0.80)
+    static let warmOrange = Color(red: 0.96, green: 0.43, blue: 0.18)
+    static let success = Color(red: 0.16, green: 0.55, blue: 0.45)
+    static let gold = Color(red: 0.94, green: 0.64, blue: 0.29)
 
     static func prayerColor(for prayer: Prayer) -> Color {
         switch prayer {
