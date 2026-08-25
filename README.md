@@ -13,6 +13,7 @@ Muslim 5 is a private, local-first iPhone tracker for the five daily prayers. It
 - User-friendly monthly and prayer-by-prayer reflections
 - Period mode with streak-neutral date ranges
 - Offline, location-aware prayer times powered by Adhan Swift
+- Offline Qibla compass with live turn-by-turn guidance
 - Active-prayer and next-prayer countdowns on the Today screen
 - Dawn, daylight, golden-hour, dusk, and night homepage scenes
 - Calculation-method and Asr-method preferences

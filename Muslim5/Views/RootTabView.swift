@@ -22,6 +22,7 @@ struct RootTabView: View {
 
     private enum AppTab: Hashable {
         case today
+        case qibla
         case journey
         case settings
     }
@@ -65,6 +66,12 @@ struct RootTabView: View {
                     Label("Today", systemImage: "sun.max.fill")
                 }
                 .tag(AppTab.today)
+
+            QiblaView()
+                .tabItem {
+                    Label("Qibla", systemImage: "location.north.circle.fill")
+                }
+                .tag(AppTab.qibla)
 
             JourneyView()
                 .tabItem {

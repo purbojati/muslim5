@@ -1,0 +1,9 @@
+# Animation plans
+
+| # | Plan | Severity | Status |
+|---|---|---|---|
+| 001 | Qibla alignment confirmation | MEDIUM | DONE |
+| 002 | Qibla content transition | LOW | DONE |
+| 003 | Qibla refresh feedback | LOW | DONE |
+
+Recommended execution order: 001, 002, 003. They touch the same Qibla view but have no behavioral dependencies. Implement all three in one focused diff, then run the test suite once and perform the physical-device feel checks together.

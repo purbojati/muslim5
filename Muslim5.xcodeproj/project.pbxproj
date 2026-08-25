@@ -29,7 +29,21 @@
 		A00000000000000000000114 /* Muslim5Icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000213 /* Muslim5Icon.icon */; };
 		A00000000000000000000115 /* HapticFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000214 /* HapticFeedback.swift */; };
 		A00000000000000000000116 /* PrayerNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000215 /* PrayerNotificationService.swift */; };
+		A00000000000000000000117 /* QiblaCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000216 /* QiblaCalculator.swift */; };
+		A00000000000000000000118 /* HeadingProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000217 /* HeadingProvider.swift */; };
+		A00000000000000000000119 /* QiblaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000218 /* QiblaView.swift */; };
+		B00000000000000000000001 /* QiblaCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000002 /* QiblaCalculatorTests.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B00000000000000000000009 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A00000000000000000000600 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A00000000000000000000500;
+			remoteInfo = "Muslim 5";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		A00000000000000000000200 /* Muslim 5.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Muslim 5.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -54,6 +68,11 @@
 		A00000000000000000000213 /* Muslim5Icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Muslim5Icon.icon; sourceTree = "<group>"; };
 		A00000000000000000000214 /* HapticFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedback.swift; sourceTree = "<group>"; };
 		A00000000000000000000215 /* PrayerNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerNotificationService.swift; sourceTree = "<group>"; };
+		A00000000000000000000216 /* QiblaCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaCalculator.swift; sourceTree = "<group>"; };
+		A00000000000000000000217 /* HeadingProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingProvider.swift; sourceTree = "<group>"; };
+		A00000000000000000000218 /* QiblaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaView.swift; sourceTree = "<group>"; };
+		B00000000000000000000002 /* QiblaCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaCalculatorTests.swift; sourceTree = "<group>"; };
+		B00000000000000000000003 /* Muslim5Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Muslim5Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +84,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B00000000000000000000006 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -72,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				A00000000000000000000401 /* Muslim5 */,
+				B00000000000000000000004 /* Muslim5Tests */,
 				A00000000000000000000407 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -113,7 +140,9 @@
 			isa = PBXGroup;
 			children = (
 				A00000000000000000000214 /* HapticFeedback.swift */,
+				A00000000000000000000217 /* HeadingProvider.swift */,
 				A00000000000000000000206 /* ProgressMetrics.swift */,
+				A00000000000000000000216 /* QiblaCalculator.swift */,
 				A0000000000000000000020F /* PrayerScheduleService.swift */,
 				A00000000000000000000215 /* PrayerNotificationService.swift */,
 				A00000000000000000000210 /* LocationProvider.swift */,
@@ -126,6 +155,7 @@
 			children = (
 				A00000000000000000000207 /* RootTabView.swift */,
 				A00000000000000000000209 /* TodayView.swift */,
+				A00000000000000000000218 /* QiblaView.swift */,
 				A0000000000000000000020A /* JourneyView.swift */,
 				A0000000000000000000020B /* InsightsView.swift */,
 				A0000000000000000000020C /* SettingsView.swift */,
@@ -148,8 +178,17 @@
 			isa = PBXGroup;
 			children = (
 				A00000000000000000000200 /* Muslim 5.app */,
+				B00000000000000000000003 /* Muslim5Tests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		B00000000000000000000004 /* Muslim5Tests */ = {
+			isa = PBXGroup;
+			children = (
+				B00000000000000000000002 /* QiblaCalculatorTests.swift */,
+			);
+			path = Muslim5Tests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -175,6 +214,26 @@
 			productReference = A00000000000000000000200 /* Muslim 5.app */;
 			productType = "com.apple.product-type.application";
 		};
+		B00000000000000000000008 /* Muslim5Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B0000000000000000000000D /* Build configuration list for PBXNativeTarget "Muslim5Tests" */;
+			buildPhases = (
+				B00000000000000000000005 /* Sources */,
+				B00000000000000000000006 /* Frameworks */,
+				B00000000000000000000007 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B0000000000000000000000A /* PBXTargetDependency */,
+			);
+			name = Muslim5Tests;
+			packageProductDependencies = (
+			);
+			productName = Muslim5Tests;
+			productReference = B00000000000000000000003 /* Muslim5Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -187,6 +246,10 @@
 				TargetAttributes = {
 					A00000000000000000000500 = {
 						CreatedOnToolsVersion = 26.6;
+					};
+					B00000000000000000000008 = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = A00000000000000000000500;
 					};
 				};
 			};
@@ -207,6 +270,7 @@
 			projectRoot = "";
 			targets = (
 				A00000000000000000000500 /* Muslim 5 */,
+				B00000000000000000000008 /* Muslim5Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -218,6 +282,13 @@
 			files = (
 				A00000000000000000000114 /* Muslim5Icon.icon in Resources */,
 				A0000000000000000000010D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B00000000000000000000007 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,10 +318,29 @@
 				A00000000000000000000112 /* PrayerSkyBackground.swift in Sources */,
 				A00000000000000000000115 /* HapticFeedback.swift in Sources */,
 				A00000000000000000000116 /* PrayerNotificationService.swift in Sources */,
+				A00000000000000000000117 /* QiblaCalculator.swift in Sources */,
+				A00000000000000000000118 /* HeadingProvider.swift in Sources */,
+				A00000000000000000000119 /* QiblaView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B00000000000000000000005 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B00000000000000000000001 /* QiblaCalculatorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B0000000000000000000000A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A00000000000000000000500 /* Muslim 5 */;
+			targetProxy = B00000000000000000000009 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		A00000000000000000000700 /* Debug */ = {
@@ -381,7 +471,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Muslim 5";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is used on this device to calculate local prayer times.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is used on this device to calculate local prayer times and the Qibla direction.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -412,7 +502,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Muslim 5";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is used on this device to calculate local prayer times.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is used on this device to calculate local prayer times and the Qibla direction.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -426,6 +516,42 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		B0000000000000000000000B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SYKPVZC9UP;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.muslim5.app.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Muslim 5.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Muslim 5";
+			};
+			name = Debug;
+		};
+		B0000000000000000000000C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SYKPVZC9UP;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.muslim5.app.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Muslim 5.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Muslim 5";
 			};
 			name = Release;
 		};
@@ -446,6 +572,15 @@
 			buildConfigurations = (
 				A00000000000000000000702 /* Debug */,
 				A00000000000000000000703 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B0000000000000000000000D /* Build configuration list for PBXNativeTarget "Muslim5Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B0000000000000000000000B /* Debug */,
+				B0000000000000000000000C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
