@@ -28,6 +28,7 @@
 		A00000000000000000000113 /* Adhan in Frameworks */ = {isa = PBXBuildFile; productRef = A00000000000000000000901 /* Adhan */; };
 		A00000000000000000000114 /* Muslim5Icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000213 /* Muslim5Icon.icon */; };
 		A00000000000000000000115 /* HapticFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000214 /* HapticFeedback.swift */; };
+		A00000000000000000000116 /* PrayerNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000215 /* PrayerNotificationService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		A00000000000000000000212 /* PrayerSkyBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerSkyBackground.swift; sourceTree = "<group>"; };
 		A00000000000000000000213 /* Muslim5Icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Muslim5Icon.icon; sourceTree = "<group>"; };
 		A00000000000000000000214 /* HapticFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedback.swift; sourceTree = "<group>"; };
+		A00000000000000000000215 /* PrayerNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerNotificationService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 				A00000000000000000000214 /* HapticFeedback.swift */,
 				A00000000000000000000206 /* ProgressMetrics.swift */,
 				A0000000000000000000020F /* PrayerScheduleService.swift */,
+				A00000000000000000000215 /* PrayerNotificationService.swift */,
 				A00000000000000000000210 /* LocationProvider.swift */,
 			);
 			path = Services;
@@ -243,6 +246,7 @@
 				A00000000000000000000111 /* PrayerHeroView.swift in Sources */,
 				A00000000000000000000112 /* PrayerSkyBackground.swift in Sources */,
 				A00000000000000000000115 /* HapticFeedback.swift in Sources */,
+				A00000000000000000000116 /* PrayerNotificationService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

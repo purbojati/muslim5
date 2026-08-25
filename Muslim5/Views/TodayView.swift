@@ -6,14 +6,12 @@ struct TodayView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.openURL) private var openURL
-    @Environment(\.scenePhase) private var scenePhase
+    @EnvironmentObject private var locationProvider: LocationProvider
     @Query(sort: \PrayerRecord.day, order: .reverse) private var records: [PrayerRecord]
     @Query(sort: \TrackingPause.startDay, order: .reverse) private var pauses: [TrackingPause]
     @AppStorage("periodMode") private var periodMode = false
     @AppStorage("asrMethod") private var asrMethod = "standard"
     @AppStorage("calculationMethod") private var calculationMethod = "local"
-    @StateObject private var locationProvider = LocationProvider()
-
     private let prayerScheduleService = PrayerScheduleService()
 
     private var metrics: ProgressMetrics { ProgressMetrics(records: records, pauses: pauses) }
@@ -25,14 +23,6 @@ struct TodayView: View {
                 homepage(at: timeline.date)
             }
             .toolbar(.hidden, for: .navigationBar)
-        }
-        .task {
-            locationProvider.start()
-        }
-        .onChange(of: scenePhase) { _, newPhase in
-            if newPhase == .active {
-                locationProvider.requestLocation()
-            }
         }
         .onChange(of: locationProvider.state) { oldState, newState in
             guard oldState != newState else { return }

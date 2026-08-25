@@ -16,6 +16,7 @@ Muslim 5 is a private, local-first iPhone tracker for the five daily prayers. It
 - Active-prayer and next-prayer countdowns on the Today screen
 - Dawn, daylight, golden-hour, dusk, and night homepage scenes
 - Calculation-method and Asr-method preferences
+- Configurable on-device reminders for each prayer time
 - Subtle prayer-phase color transitions
 - Dark Mode and accessibility labels
 
@@ -26,12 +27,11 @@ Muslim 5 is a private, local-first iPhone tracker for the five daily prayers. It
 3. Choose an iPhone simulator or your signing-enabled iPhone.
 4. Press **Run**.
 
-The project requires iOS 17 or later and has no third-party dependencies.
+The project requires iOS 17 or later and uses Adhan Swift for offline prayer-time calculations.
 
 ## Suggested next phase
 
-1. Schedule local prayer reminders.
-2. Add manual city selection and per-prayer minute adjustments.
-3. Add a WidgetKit home/Lock Screen widget.
-4. Add data export and local backup.
-5. Create the final app icon and onboarding flow.
+1. Add manual city selection and per-prayer minute adjustments.
+2. Add a WidgetKit home/Lock Screen widget.
+3. Add data export and local backup.
+4. Create the final app icon and onboarding flow.

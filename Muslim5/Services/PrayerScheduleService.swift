@@ -3,6 +3,25 @@ import CoreLocation
 import Foundation
 
 struct PrayerScheduleService {
+    func dailySchedule(
+        for coordinate: CLLocationCoordinate2D,
+        at date: Date,
+        timeZone: TimeZone = .autoupdatingCurrent,
+        calculationMethod: String,
+        asrMethod: String
+    ) -> DailyPrayerSchedule? {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = timeZone
+
+        return makeDay(
+            for: coordinate,
+            date: date,
+            calendar: calendar,
+            calculationMethod: calculationMethod,
+            asrMethod: asrMethod
+        )
+    }
+
     func schedule(
         for coordinate: CLLocationCoordinate2D,
         at date: Date,
