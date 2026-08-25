@@ -9,6 +9,7 @@ struct PrayerRow: View {
     let isEnabled: Bool
     let onToggle: () -> Void
     let onStatusChange: (PrayerStatus) -> Void
+    let onAttendanceChange: (PrayerAttendance) -> Void
 
     var body: some View {
         Button(action: onToggle) {
@@ -27,11 +28,23 @@ struct PrayerRow: View {
         .disabled(!isEnabled)
         .contextMenu {
             if isEnabled {
-                ForEach(PrayerStatus.allCases, id: \.self) { status in
-                    Button {
-                        onStatusChange(status)
-                    } label: {
-                        Label(status.title, systemImage: status.symbol)
+                Section("Prayer time") {
+                    ForEach(PrayerStatus.allCases, id: \.self) { status in
+                        Button {
+                            onStatusChange(status)
+                        } label: {
+                            Label(status.title, systemImage: selectionSymbol(for: status))
+                        }
+                    }
+                }
+
+                Section("Attendance") {
+                    ForEach(PrayerAttendance.allCases, id: \.self) { attendance in
+                        Button {
+                            onAttendanceChange(attendance)
+                        } label: {
+                            Label(attendance.title, systemImage: selectionSymbol(for: attendance))
+                        }
                     }
                 }
 
@@ -133,19 +146,31 @@ struct PrayerRow: View {
     }
 
     private var statusMessage: String {
-        guard let status = record?.status else { return "Ready when you are" }
-        return switch status {
+        guard let record else { return "Ready when you are" }
+
+        let timingMessage = switch record.status {
         case .completed: "Alhamdulillah"
         case .late: "Prayed a little later"
-        case .madeUp: "Made up with care"
+        case .madeUp: "Prayed after time"
         }
+
+        guard let attendance = record.attendance else { return timingMessage }
+        return "\(timingMessage) · \(attendance.shortTitle)"
     }
 
     private var accessibilityLabel: String {
         let time = prayerTime?.formatted(date: .omitted, time: .shortened)
-        return [prayer.name, time, record?.status.title ?? "not recorded"]
+        return [prayer.name, time, record?.status.title ?? "not recorded", record?.attendance?.title]
             .compactMap { $0 }
             .joined(separator: ", ")
+    }
+
+    private func selectionSymbol(for status: PrayerStatus) -> String {
+        record?.status == status ? "checkmark.circle.fill" : status.symbol
+    }
+
+    private func selectionSymbol(for attendance: PrayerAttendance) -> String {
+        record?.attendance == attendance ? "checkmark.circle.fill" : attendance.symbol
     }
 }
 

@@ -5,7 +5,8 @@ Salah Streak is a private, local-first iPhone tracker for the five daily prayers
 ## Current MVP
 
 - Five-prayer daily checklist
-- Completed, late, and made-up statuses
+- Completed, late, and prayed-after-time statuses
+- Congregation and individual prayer attendance
 - SwiftData persistence stored on-device
 - Twenty-week contribution grid
 - Current streak, complete days, and 30-day consistency

@@ -39,7 +39,7 @@ enum PrayerStatus: String, CaseIterable, Codable {
         switch self {
         case .completed: "Completed"
         case .late: "Completed late"
-        case .madeUp: "Made up"
+        case .madeUp: "Prayed after time"
         }
     }
 
@@ -47,7 +47,7 @@ enum PrayerStatus: String, CaseIterable, Codable {
         switch self {
         case .completed: "Done"
         case .late: "Late"
-        case .madeUp: "Made up"
+        case .madeUp: "After time"
         }
     }
 
@@ -56,6 +56,32 @@ enum PrayerStatus: String, CaseIterable, Codable {
         case .completed: "checkmark"
         case .late: "clock"
         case .madeUp: "arrow.counterclockwise"
+        }
+    }
+}
+
+enum PrayerAttendance: String, CaseIterable, Codable {
+    case congregation
+    case individual
+
+    var title: String {
+        switch self {
+        case .congregation: "Jamā'ah"
+        case .individual: "Individual"
+        }
+    }
+
+    var shortTitle: String {
+        switch self {
+        case .congregation: "Jamā'ah"
+        case .individual: "Individual"
+        }
+    }
+
+    var symbol: String {
+        switch self {
+        case .congregation: "person.3.fill"
+        case .individual: "person.fill"
         }
     }
 }

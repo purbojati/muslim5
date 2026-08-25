@@ -200,7 +200,8 @@ struct TodayView: View {
                     record: metrics.record(for: prayer, on: .now),
                     isEnabled: !periodMode,
                     onToggle: { toggle(prayer) },
-                    onStatusChange: { setStatus($0, for: prayer) }
+                    onStatusChange: { setStatus($0, for: prayer) },
+                    onAttendanceChange: { setAttendance($0, for: prayer) }
                 )
             }
         }
@@ -269,6 +270,23 @@ struct TodayView: View {
             record.recordedAt = .now
         } else {
             modelContext.insert(PrayerRecord(day: .now, prayer: prayer, status: status))
+        }
+        save()
+    }
+
+    private func setAttendance(_ attendance: PrayerAttendance, for prayer: Prayer) {
+        if let record = metrics.record(for: prayer, on: .now) {
+            record.attendance = attendance
+            record.recordedAt = .now
+        } else {
+            modelContext.insert(
+                PrayerRecord(
+                    day: .now,
+                    prayer: prayer,
+                    status: .completed,
+                    attendance: attendance
+                )
+            )
         }
         save()
     }
