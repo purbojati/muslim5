@@ -26,6 +26,7 @@
 		A00000000000000000000111 /* PrayerHeroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000211 /* PrayerHeroView.swift */; };
 		A00000000000000000000112 /* PrayerSkyBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000212 /* PrayerSkyBackground.swift */; };
 		A00000000000000000000113 /* Adhan in Frameworks */ = {isa = PBXBuildFile; productRef = A00000000000000000000901 /* Adhan */; };
+		A00000000000000000000114 /* SalahStreakIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000213 /* SalahStreakIcon.icon */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		A00000000000000000000210 /* LocationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationProvider.swift; sourceTree = "<group>"; };
 		A00000000000000000000211 /* PrayerHeroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerHeroView.swift; sourceTree = "<group>"; };
 		A00000000000000000000212 /* PrayerSkyBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerSkyBackground.swift; sourceTree = "<group>"; };
+		A00000000000000000000213 /* SalahStreakIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = SalahStreakIcon.icon; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +80,7 @@
 				A00000000000000000000403 /* Design */,
 				A00000000000000000000404 /* Services */,
 				A00000000000000000000405 /* Views */,
+				A00000000000000000000213 /* SalahStreakIcon.icon */,
 				A0000000000000000000020D /* Assets.xcassets */,
 			);
 			path = SalahStreak;
@@ -207,6 +210,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A00000000000000000000114 /* SalahStreakIcon.icon in Resources */,
 				A0000000000000000000010D /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -359,7 +363,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = SalahStreakIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
@@ -388,7 +392,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = SalahStreakIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
