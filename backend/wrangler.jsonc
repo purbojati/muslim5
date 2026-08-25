@@ -8,6 +8,7 @@
     {
       "binding": "DB",
       "database_name": "salah-streak",
+      "database_id": "11aa1f25-d969-4d07-96e5-443f8ae01775",
       "migrations_dir": "migrations"
     }
   ],
