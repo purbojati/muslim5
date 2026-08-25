@@ -96,14 +96,15 @@ struct TodayView: View {
                     VStack(alignment: .leading, spacing: 18) {
                         dailyCompanionCard(for: date)
 
-                        checklistDayNavigation
-                            .frame(maxWidth: .infinity, alignment: .center)
-
                         if periodMode {
                             pauseBanner
                         }
 
                         prayerList(schedule: schedule?.today, on: date)
+
+                        checklistDayNavigation
+                            .frame(maxWidth: .infinity, alignment: .center)
+
                         gentleFooter(for: date)
                     }
                     .padding(.horizontal, 18)

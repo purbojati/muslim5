@@ -11,8 +11,6 @@ struct SettingsView: View {
     @EnvironmentObject private var sharingService: SharingService
     @Query(sort: \TrackingPause.startDay, order: .reverse) private var pauses: [TrackingPause]
     @AppStorage("periodMode") private var periodMode = false
-    @AppStorage("asrMethod") private var asrMethod = "standard"
-    @AppStorage("calculationMethod") private var calculationMethod = "local"
     @AppStorage(PrayerNotificationPreferences.StorageKey.enabled)
     private var prayerNotificationsEnabled = false
     @AppStorage(PrayerNotificationPreferences.StorageKey.fajr)
@@ -97,29 +95,18 @@ struct SettingsView: View {
                 }
 
                 Section {
-                    Picker("Asr method", selection: $asrMethod) {
-                        Text("Standard").tag("standard")
-                        Text("Hanafi").tag("hanafi")
-                    }
-                    .onChange(of: asrMethod) {
-                        HapticFeedback.selection()
-                    }
-
-                    Text("Standard is used by Shafi’i, Maliki, and Hanbali traditions. Hanafi calculates Asr later. Standard usually matches local practice in Indonesia.")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-
-                    Picker("Calculation method", selection: $calculationMethod) {
-                        Text("Use local convention").tag("local")
-                        Text("Muslim World League").tag("mwl")
-                        Text("Umm al-Qura").tag("ummAlQura")
-                        Text("Singapore (MUIS)").tag("muis")
-                    }
-                    .onChange(of: calculationMethod) {
-                        HapticFeedback.selection()
+                    NavigationLink {
+                        PrayerTimesSettingsView()
+                    } label: {
+                        Label {
+                            Text("Prayer Times")
+                        } icon: {
+                            Image(systemName: "clock.fill")
+                                .foregroundStyle(AppTheme.accent)
+                        }
                     }
                 } header: {
-                    Text("Prayer times")
+                    Text("Settings")
                 }
 
                 Section {
@@ -293,6 +280,45 @@ struct SettingsView: View {
         } catch {
             HapticFeedback.notification(.error)
         }
+    }
+}
+
+private struct PrayerTimesSettingsView: View {
+    @AppStorage("asrMethod") private var asrMethod = "standard"
+    @AppStorage("calculationMethod") private var calculationMethod = "local"
+
+    var body: some View {
+        Form {
+            Section {
+                Picker("Asr method", selection: $asrMethod) {
+                    Text("Standard").tag("standard")
+                    Text("Hanafi").tag("hanafi")
+                }
+                .onChange(of: asrMethod) {
+                    HapticFeedback.selection()
+                }
+            } header: {
+                Text("Asr")
+            } footer: {
+                Text("Standard is used by Shafi’i, Maliki, and Hanbali traditions. Hanafi calculates Asr later. Standard usually matches local practice in Indonesia.")
+            }
+
+            Section {
+                Picker("Calculation method", selection: $calculationMethod) {
+                    Text("Use local convention").tag("local")
+                    Text("Muslim World League").tag("mwl")
+                    Text("Umm al-Qura").tag("ummAlQura")
+                    Text("Singapore (MUIS)").tag("muis")
+                }
+                .onChange(of: calculationMethod) {
+                    HapticFeedback.selection()
+                }
+            } header: {
+                Text("Calculation")
+            }
+        }
+        .navigationTitle("Prayer Times")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
