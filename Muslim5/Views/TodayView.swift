@@ -236,7 +236,7 @@ struct TodayView: View {
         switch locationProvider.state {
         case .requesting: "Locating"
         case .denied: "Location off"
-        default: "Local"
+        default: locationProvider.cityName ?? "Locating"
         }
     }
 

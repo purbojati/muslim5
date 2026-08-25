@@ -12,14 +12,17 @@ final class LocationProvider: NSObject, ObservableObject {
     }
 
     @Published private(set) var coordinate: CLLocationCoordinate2D?
+    @Published private(set) var cityName: String?
     @Published private(set) var state: State = .idle
 
     private let manager = CLLocationManager()
+    private let geocoder = CLGeocoder()
     private let defaults = UserDefaults.standard
 
     private enum StorageKey {
         static let latitude = "lastPrayerLatitude"
         static let longitude = "lastPrayerLongitude"
+        static let cityName = "lastPrayerCityName"
     }
 
     override init() {
@@ -30,6 +33,7 @@ final class LocationProvider: NSObject, ObservableObject {
             coordinate = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
             state = .ready
         }
+        cityName = defaults.string(forKey: StorageKey.cityName)
 
         super.init()
         manager.delegate = self
@@ -75,6 +79,23 @@ final class LocationProvider: NSObject, ObservableObject {
         defaults.set(location.coordinate.latitude, forKey: StorageKey.latitude)
         defaults.set(location.coordinate.longitude, forKey: StorageKey.longitude)
         state = .ready
+        updateCityName(for: location)
+    }
+
+    private func updateCityName(for location: CLLocation) {
+        geocoder.cancelGeocode()
+        geocoder.reverseGeocodeLocation(location) { [weak self] placemarks, _ in
+            guard let placemark = placemarks?.first else { return }
+            let cityName = placemark.locality
+                ?? placemark.subAdministrativeArea
+                ?? placemark.administrativeArea
+            guard let cityName else { return }
+
+            Task { @MainActor [weak self] in
+                self?.cityName = cityName
+                self?.defaults.set(cityName, forKey: StorageKey.cityName)
+            }
+        }
     }
 }
 
