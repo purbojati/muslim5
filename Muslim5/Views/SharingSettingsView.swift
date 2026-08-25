@@ -6,11 +6,11 @@ struct SharingSettingsView: View {
     @FocusState private var focusedField: Field?
     @State private var nickname = ""
     @State private var linkingCode = ""
+    @State private var isShowingLinkPrompt = false
     @State private var isShowingDeleteConfirmation = false
 
     private enum Field: Hashable {
         case nickname
-        case linkingCode
     }
 
     var body: some View {
@@ -51,6 +51,19 @@ struct SharingSettingsView: View {
         .onAppear(perform: loadProfileFields)
         .onChange(of: sharingService.profile) { _, _ in
             loadProfileFields()
+        }
+        .alert("Link Someone", isPresented: $isShowingLinkPrompt) {
+            TextField("ABCDE-FGHIJ", text: $linkingCode)
+                .textInputAutocapitalization(.characters)
+                .autocorrectionDisabled()
+
+            Button("Cancel", role: .cancel) {
+                linkingCode = ""
+            }
+            Button("Link", action: linkSomeone)
+                .disabled(linkingCode.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+        } message: {
+            Text("Enter their private linking code.")
         }
         .confirmationDialog(
             "Delete your sharing profile?",
@@ -171,20 +184,12 @@ struct SharingSettingsView: View {
 
     private var linkSomeoneSection: some View {
         Section {
-            TextField("ABCDE-FGHIJ", text: $linkingCode)
-                .textInputAutocapitalization(.characters)
-                .autocorrectionDisabled()
-                .font(.body.monospaced())
-                .focused($focusedField, equals: .linkingCode)
-                .submitLabel(.go)
-                .onSubmit(linkSomeone)
-
-            Button(action: linkSomeone) {
-                Label("Link User", systemImage: "link")
+            Button {
+                linkingCode = ""
+                isShowingLinkPrompt = true
+            } label: {
+                Label("Link Someone", systemImage: "link")
             }
-            .disabled(linkingCode.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-        } header: {
-            Text("Link someone")
         }
     }
 
@@ -289,8 +294,8 @@ struct SharingAvatarView: View {
         ZStack {
             Circle()
                 .fill(AppTheme.accent.opacity(0.14))
-            Text(user.initial)
-                .font(.system(size: size * 0.42, weight: .bold, design: .rounded))
+            Text(user.initials)
+                .font(.system(size: size * 0.34, weight: .bold, design: .rounded))
                 .foregroundStyle(AppTheme.accent)
         }
         .frame(width: size, height: size)

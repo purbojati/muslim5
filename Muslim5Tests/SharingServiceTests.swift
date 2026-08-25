@@ -3,14 +3,20 @@ import XCTest
 @testable import Muslim_5
 
 final class SharingServiceTests: XCTestCase {
-    func testSharingUserInitialUsesFirstVisibleNicknameCharacter() {
-        let user = SharingUser(
+    func testSharingUserInitialsUseTwoVisibleCharacters() {
+        let fullName = SharingUser(
             id: "user-1",
-            nickname: "  aisha ",
+            nickname: "  Adjie Purbojati ",
+            avatar: "unused"
+        )
+        let singleName = SharingUser(
+            id: "user-2",
+            nickname: "Aisha",
             avatar: "unused"
         )
 
-        XCTAssertEqual(user.initial, "A")
+        XCTAssertEqual(fullName.initials, "AP")
+        XCTAssertEqual(singleName.initials, "AI")
     }
 
     func testPrayerUsersDecodeAndMapByPrayer() throws {

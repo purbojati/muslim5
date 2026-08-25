@@ -14,7 +14,7 @@ struct PrayerRow: View {
 
     var body: some View {
         Button(action: onToggle) {
-            VStack(alignment: .leading, spacing: linkedUsers.isEmpty ? 0 : 12) {
+            VStack(alignment: .leading, spacing: linkedUsers.isEmpty ? 0 : 8) {
                 Group {
                     if dynamicTypeSize.isAccessibilitySize {
                         accessibilityLayout
@@ -24,8 +24,6 @@ struct PrayerRow: View {
                 }
 
                 if !linkedUsers.isEmpty {
-                    Divider()
-                        .padding(.leading, 62)
                     PrayerCompanionsView(users: linkedUsers)
                 }
             }
@@ -190,27 +188,22 @@ private struct PrayerCompanionsView: View {
     let users: [SharingUser]
 
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
-            ForEach(users.prefix(4)) { user in
-                VStack(spacing: 4) {
+        HStack(spacing: 6) {
+            ForEach(users.prefix(5)) { user in
+                ZStack {
                     SharingAvatarView(user: user, size: 28)
-                    Text(user.nickname)
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
-                        .frame(maxWidth: 58)
                 }
-                .accessibilityElement(children: .combine)
+                .accessibilityElement(children: .ignore)
                 .accessibilityLabel("\(user.nickname) completed this prayer")
             }
 
-            if users.count > 4 {
-                Text("+\(users.count - 4)")
+            if users.count > 5 {
+                Text("+\(users.count - 5)")
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(.secondary)
                     .frame(width: 28, height: 28)
                     .background(Color.secondary.opacity(0.1), in: Circle())
-                    .accessibilityLabel("\(users.count - 4) more people completed this prayer")
+                    .accessibilityLabel("\(users.count - 5) more people completed this prayer")
             }
 
             Spacer(minLength: 0)

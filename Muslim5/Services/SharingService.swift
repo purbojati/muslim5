@@ -7,9 +7,15 @@ struct SharingUser: Codable, Hashable, Identifiable, Sendable {
     let nickname: String
     let avatar: String
 
-    var initial: String {
+    var initials: String {
         let trimmedNickname = nickname.trimmingCharacters(in: .whitespacesAndNewlines)
-        return trimmedNickname.first.map { String($0).uppercased() } ?? "?"
+        let nameParts = trimmedNickname.split(whereSeparator: { $0.isWhitespace })
+
+        if let firstName = nameParts.first, let lastName = nameParts.dropFirst().last {
+            return (String(firstName.prefix(1)) + String(lastName.prefix(1))).uppercased()
+        }
+
+        return nameParts.first.map { String($0.prefix(2)).uppercased() } ?? "?"
     }
 }
 
