@@ -1,0 +1,147 @@
+import SwiftData
+import SwiftUI
+
+struct InsightsView: View {
+    @Query private var records: [PrayerRecord]
+    @Query private var pauses: [TrackingPause]
+
+    private var metrics: ProgressMetrics { ProgressMetrics(records: records, pauses: pauses) }
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 18) {
+                    consistencyCard
+                    prayerBreakdown
+                    privacyNote
+                }
+                .padding(.horizontal, 18)
+                .padding(.bottom, 28)
+            }
+            .background(Color(.systemGroupedBackground))
+            .navigationTitle("Reflection")
+        }
+    }
+
+    private var consistencyCard: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Your month so far")
+                        .font(.headline)
+                    Text(consistencyMessage)
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Image(systemName: reflectionSymbol)
+                    .font(.title2)
+                    .foregroundStyle(AppTheme.accent)
+            }
+
+            Text(monthRhythmTitle)
+                .font(.system(.largeTitle, design: .rounded, weight: .bold))
+
+            ProgressView(value: metrics.last30DayConsistency)
+                .tint(AppTheme.accent)
+                .scaleEffect(x: 1, y: 1.6)
+
+            Text("\(metrics.last30DayConsistency, format: .percent.precision(.fractionLength(0))) of your prayer moments were recorded")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .padding(22)
+        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+    }
+
+    private var prayerBreakdown: some View {
+        VStack(alignment: .leading, spacing: 18) {
+                Text("The moments you return to")
+                    .font(.headline)
+
+            ForEach(Prayer.allCases) { prayer in
+                let count = recentCount(for: prayer)
+                HStack(spacing: 12) {
+                    Image(systemName: prayer.symbol)
+                        .foregroundStyle(AppTheme.gold)
+                        .frame(width: 24)
+                    Text(prayer.name)
+                        .font(.subheadline.weight(.medium))
+                    Spacer()
+                    Text(rhythmLabel(for: count))
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(count == 0 ? Color.secondary : AppTheme.success)
+                }
+            }
+
+            if let strongest = strongestRecentPrayer {
+                Divider()
+                Label("\(strongest.name) has been your steadiest moment lately.", systemImage: "heart.fill")
+                    .font(.caption)
+                    .foregroundStyle(AppTheme.success)
+            }
+        }
+        .padding(22)
+        .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+    }
+
+    private var privacyNote: some View {
+        Label {
+            Text("This reflection belongs to you. Your prayer history never leaves this iPhone.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        } icon: {
+            Image(systemName: "lock.shield.fill")
+                .foregroundStyle(AppTheme.success)
+        }
+        .padding(.horizontal, 6)
+    }
+
+    private var consistencyMessage: String {
+        switch metrics.last30DayConsistency {
+        case 0: "Your story will take shape as you begin."
+        case 0..<0.4: "Small steps are becoming a rhythm."
+        case 0.4..<0.8: "You’ve been making space to return."
+        default: "Your prayer rhythm has felt beautifully steady."
+        }
+    }
+
+    private var monthRhythmTitle: String {
+        switch metrics.last30DayConsistency {
+        case 0: "Ready to begin"
+        case 0..<0.4: "Taking root"
+        case 0.4..<0.8: "Growing steadily"
+        default: "Feeling grounded"
+        }
+    }
+
+    private var reflectionSymbol: String {
+        switch metrics.last30DayConsistency {
+        case 0: "sunrise.fill"
+        case 0..<0.4: "leaf.fill"
+        case 0.4..<0.8: "heart.fill"
+        default: "sparkles"
+        }
+    }
+
+    private func recentCount(for prayer: Prayer) -> Int {
+        let calendar = Calendar.current
+        let start = calendar.date(byAdding: .day, value: -29, to: calendar.startOfDay(for: .now)) ?? .distantPast
+        return records.filter { $0.prayer == prayer && $0.day >= start }.count
+    }
+
+    private func rhythmLabel(for count: Int) -> String {
+        switch count {
+        case 0: "Ready to begin"
+        case 1..<10: "Taking root"
+        case 10..<22: "Growing"
+        default: "Steady"
+        }
+    }
+
+    private var strongestRecentPrayer: Prayer? {
+        let counts = Prayer.allCases.map { prayer in (prayer, recentCount(for: prayer)) }
+        guard let strongest = counts.max(by: { $0.1 < $1.1 }), strongest.1 > 0 else { return nil }
+        return strongest.0
+    }
+}

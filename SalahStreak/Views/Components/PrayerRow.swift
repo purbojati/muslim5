@@ -1,0 +1,90 @@
+import SwiftUI
+
+struct PrayerRow: View {
+    let prayer: Prayer
+    let record: PrayerRecord?
+    let isEnabled: Bool
+    let onToggle: () -> Void
+    let onStatusChange: (PrayerStatus) -> Void
+
+    var body: some View {
+        Button(action: onToggle) {
+            HStack(spacing: 16) {
+                ZStack {
+                    Circle()
+                        .fill(record == nil ? AppTheme.accent.opacity(0.09) : AppTheme.gold.opacity(0.14))
+                        .frame(width: 46, height: 46)
+
+                    Image(systemName: prayer.symbol)
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundStyle(record == nil ? AppTheme.accent : AppTheme.gold)
+                }
+
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(prayer.name)
+                        .font(.headline)
+                        .foregroundStyle(.primary)
+
+                    Text(statusMessage)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                ZStack {
+                    Circle()
+                        .fill(record == nil ? AppTheme.accent.opacity(0.08) : AppTheme.success)
+                        .frame(width: 40, height: 40)
+
+                    Image(systemName: record == nil ? "plus" : "checkmark")
+                        .font(.system(size: 15, weight: .bold))
+                        .foregroundStyle(record == nil ? AppTheme.accent : .white)
+                        .contentTransition(.symbolEffect(.replace))
+                }
+            }
+            .contentShape(Rectangle())
+            .padding(15)
+            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        }
+        .buttonStyle(PrayerRowButtonStyle())
+        .disabled(!isEnabled)
+        .contextMenu {
+            if isEnabled {
+                ForEach(PrayerStatus.allCases, id: \.self) { status in
+                    Button {
+                        onStatusChange(status)
+                    } label: {
+                        Label(status.title, systemImage: status.symbol)
+                    }
+                }
+
+                if record != nil {
+                    Button(role: .destructive, action: onToggle) {
+                        Label("Clear", systemImage: "xmark")
+                    }
+                }
+            }
+        }
+        .accessibilityLabel("\(prayer.name), \(record?.status.title ?? "not recorded")")
+        .accessibilityHint(isEnabled ? "Double tap to toggle. Touch and hold for more statuses." : "Tracking is paused.")
+    }
+
+    private var statusMessage: String {
+        guard let status = record?.status else { return "Ready when you are" }
+        return switch status {
+        case .completed: "Alhamdulillah"
+        case .late: "Prayed a little later"
+        case .madeUp: "Made up with care"
+        }
+    }
+}
+
+private struct PrayerRowButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.985 : 1)
+            .opacity(configuration.isPressed ? 0.88 : 1)
+            .animation(.easeOut(duration: 0.14), value: configuration.isPressed)
+    }
+}
