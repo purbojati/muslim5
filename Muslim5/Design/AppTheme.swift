@@ -3,7 +3,6 @@ import SwiftUI
 enum AppTheme {
     static let accent = Color(red: 0.45, green: 0.38, blue: 0.88)
     static let deepIndigo = Color(red: 0.17, green: 0.12, blue: 0.25)
-    static let warmBackground = Color(red: 0.97, green: 0.95, blue: 0.92)
     static let success = Color(red: 0.25, green: 0.67, blue: 0.50)
     static let gold = Color(red: 0.94, green: 0.65, blue: 0.28)
 
@@ -21,12 +20,6 @@ enum AppTheme {
             Color(red: 0.48, green: 0.37, blue: 0.84)
         }
     }
-
-    static let cardGradient = LinearGradient(
-        colors: [deepIndigo, Color(red: 0.34, green: 0.27, blue: 0.50)],
-        startPoint: .topLeading,
-        endPoint: .bottomTrailing
-    )
 
     static func contributionColor(for count: Int) -> Color {
         switch count {
