@@ -29,6 +29,43 @@ Muslim 5 is a private, local-first iPhone tracker for the five daily prayers. It
 
 The project requires iOS 17 or later and uses Adhan Swift for offline prayer-time calculations.
 
+## Distribute to App Store Connect
+
+Run the distribution script from the project root:
+
+```sh
+./scripts/distribute-app-store.sh
+```
+
+Every run increments both versions before archiving: the last digit of the
+marketing version increments (`0.1.0` to `0.1.1`) and the build number increments
+by one (`1` to `2`). It then creates a Release archive and uploads it to App Store
+Connect using the Apple account configured in Xcode.
+
+Useful modes:
+
+```sh
+# Preview the next version without changing or building anything
+./scripts/distribute-app-store.sh --dry-run
+
+# Build and export an IPA locally without uploading it
+./scripts/distribute-app-store.sh --no-upload
+```
+
+For CI, authenticate with an App Store Connect API key instead of an Xcode
+account:
+
+```sh
+ASC_API_KEY_PATH=/absolute/path/to/AuthKey_XXXXXXXXXX.p8 \
+ASC_API_KEY_ID=XXXXXXXXXX \
+ASC_API_ISSUER_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx \
+./scripts/distribute-app-store.sh
+```
+
+Archives, exported files, and distribution logs are written under
+`.build/app-store/`. If a build or upload fails after versioning, the bumped
+values remain in the Xcode project so the attempted build number is not reused.
+
 ## Suggested next phase
 
 1. Add manual city selection and per-prayer minute adjustments.
