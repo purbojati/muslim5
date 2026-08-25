@@ -10,7 +10,6 @@ struct TodayView: View {
     @Query(sort: \PrayerRecord.day, order: .reverse) private var records: [PrayerRecord]
     @Query(sort: \TrackingPause.startDay, order: .reverse) private var pauses: [TrackingPause]
     @AppStorage("periodMode") private var periodMode = false
-    @AppStorage("travelMode") private var travelMode = false
     @AppStorage("asrMethod") private var asrMethod = "standard"
     @AppStorage("calculationMethod") private var calculationMethod = "local"
     @StateObject private var locationProvider = LocationProvider()
@@ -70,8 +69,6 @@ struct TodayView: View {
 
                         if periodMode {
                             pauseBanner
-                        } else if travelMode {
-                            travelBanner
                         }
 
                         prayerList(schedule: schedule?.today)
@@ -237,14 +234,6 @@ struct TodayView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
         .background(AppTheme.accent.opacity(0.1), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-    }
-
-    private var travelBanner: some View {
-        Label("Travel mode is on", systemImage: "airplane")
-            .font(.subheadline.weight(.semibold))
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(16)
-            .background(AppTheme.gold.opacity(0.13), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 
     private var gentleFooter: some View {

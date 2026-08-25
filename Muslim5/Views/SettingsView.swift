@@ -5,7 +5,6 @@ struct SettingsView: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \TrackingPause.startDay, order: .reverse) private var pauses: [TrackingPause]
     @AppStorage("periodMode") private var periodMode = false
-    @AppStorage("travelMode") private var travelMode = false
     @AppStorage("asrMethod") private var asrMethod = "standard"
     @AppStorage("calculationMethod") private var calculationMethod = "local"
 
@@ -25,10 +24,6 @@ struct SettingsView: View {
                             Image(systemName: "pause.circle.fill")
                                 .foregroundStyle(AppTheme.accent)
                         }
-                    }
-
-                    Toggle(isOn: travelModeBinding) {
-                        Label("Travel mode", systemImage: "airplane")
                     }
                 } header: {
                     Text("Support for your life")
@@ -97,16 +92,6 @@ struct SettingsView: View {
                 } catch {
                     HapticFeedback.notification(.error)
                 }
-            }
-        )
-    }
-
-    private var travelModeBinding: Binding<Bool> {
-        Binding(
-            get: { travelMode },
-            set: { newValue in
-                travelMode = newValue
-                HapticFeedback.impact(newValue ? .light : .soft)
             }
         )
     }
