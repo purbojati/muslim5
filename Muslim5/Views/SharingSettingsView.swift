@@ -6,6 +6,7 @@ struct SharingSettingsView: View {
     @FocusState private var focusedField: Field?
     @State private var nickname = ""
     @State private var linkingCode = ""
+    @State private var isShowingSetupForm = false
     @State private var isShowingLinkPrompt = false
     @State private var isShowingDeleteConfirmation = false
 
@@ -14,27 +15,11 @@ struct SharingSettingsView: View {
     }
 
     var body: some View {
-        Form {
-            if !sharingService.isConfigured {
-                unavailableSection
-            } else if let profile = sharingService.profile {
-                profileSection(profile)
-                linkingCodeSection(profile)
-                linkSomeoneSection
-                linkedPeopleSection
-                privacySection
-                deleteSection
+        Group {
+            if shouldShowOnboarding {
+                onboardingView
             } else {
-                setupSection
-                privacySection
-            }
-
-            if let message = sharingService.lastErrorMessage {
-                Section {
-                    Label(message, systemImage: "exclamationmark.triangle.fill")
-                        .font(.footnote)
-                        .foregroundStyle(.orange)
-                }
+                settingsForm
             }
         }
         .navigationTitle("Prayer Circle")
@@ -75,6 +60,7 @@ struct SharingSettingsView: View {
                 Task {
                     if await sharingService.deleteAccount() {
                         nickname = ""
+                        isShowingSetupForm = false
                         HapticFeedback.notification(.success)
                     } else {
                         HapticFeedback.notification(.error)
@@ -84,6 +70,129 @@ struct SharingSettingsView: View {
             Button("Cancel", role: .cancel) {}
         } message: {
             Text("Your prayer history stays on this iPhone. Your profile, links, and shared check-ins will be removed from the server.")
+        }
+    }
+
+    private var shouldShowOnboarding: Bool {
+        sharingService.isConfigured
+            && sharingService.profile == nil
+            && !isShowingSetupForm
+    }
+
+    private var settingsForm: some View {
+        Form {
+            if !sharingService.isConfigured {
+                unavailableSection
+            } else if let profile = sharingService.profile {
+                profileSection(profile)
+                linkingCodeSection(profile)
+                linkSomeoneSection
+                linkedPeopleSection
+                privacySection
+                deleteSection
+            } else {
+                setupSection
+                privacySection
+            }
+
+            if let message = sharingService.lastErrorMessage {
+                Section {
+                    Label(message, systemImage: "exclamationmark.triangle.fill")
+                        .font(.footnote)
+                        .foregroundStyle(.orange)
+                }
+            }
+        }
+    }
+
+    private var onboardingView: some View {
+        ScrollView {
+            VStack(spacing: 28) {
+                VStack(spacing: 16) {
+                    ZStack {
+                        Circle()
+                            .fill(AppTheme.accent.opacity(0.14))
+
+                        Image(systemName: "person.2.fill")
+                            .font(.system(size: 30, weight: .semibold))
+                            .foregroundStyle(AppTheme.accent)
+                    }
+                    .frame(width: 74, height: 74)
+                    .accessibilityHidden(true)
+
+                    VStack(spacing: 8) {
+                        Text("Pray together, wherever you are")
+                            .font(.title2.bold())
+                            .multilineTextAlignment(.center)
+
+                        Text("Prayer Circle lets family members share simple prayer check-ins using a private linking code.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+                }
+
+                PrayerCircleOnboardingIllustration()
+
+                VStack(alignment: .leading, spacing: 18) {
+                    onboardingDetail(
+                        title: "See who has prayed",
+                        message: "Their initials appear beneath a prayer after they check in.",
+                        systemImage: "checkmark.circle.fill"
+                    )
+
+                    onboardingDetail(
+                        title: "Keep it private",
+                        message: "Your location, prayer times, and streak are never shared.",
+                        systemImage: "lock.fill"
+                    )
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .padding(.horizontal, 24)
+            .padding(.top, 24)
+            .padding(.bottom, 28)
+        }
+        .background(Color(.systemGroupedBackground))
+        .safeAreaInset(edge: .bottom) {
+            Button {
+                isShowingSetupForm = true
+                HapticFeedback.impact(.soft)
+            } label: {
+                Text("Continue to Setup")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .tint(AppTheme.accent)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 12)
+            .background(.regularMaterial)
+        }
+    }
+
+    private func onboardingDetail(
+        title: String,
+        message: String,
+        systemImage: String
+    ) -> some View {
+        HStack(alignment: .top, spacing: 14) {
+            Image(systemName: systemImage)
+                .font(.title3)
+                .foregroundStyle(AppTheme.accent)
+                .frame(width: 28)
+                .accessibilityHidden(true)
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(title)
+                    .font(.headline)
+
+                Text(message)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
     }
 
@@ -284,6 +393,78 @@ struct SharingSettingsView: View {
 
     private func sharingUser(from profile: SharingProfile) -> SharingUser {
         SharingUser(id: profile.id, nickname: profile.nickname, avatar: profile.avatar)
+    }
+}
+
+private struct PrayerCircleOnboardingIllustration: View {
+    private let sampleUsers = [
+        SharingUser(id: "amina", nickname: "Amina Yusuf", avatar: ""),
+        SharingUser(id: "omar", nickname: "Omar Malik", avatar: ""),
+        SharingUser(id: "siti", nickname: "Siti Rahma", avatar: "")
+    ]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(spacing: 14) {
+                ZStack {
+                    Circle()
+                        .fill(AppTheme.prayerColor(for: .maghrib).opacity(0.16))
+
+                    Image(systemName: Prayer.maghrib.symbol)
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundStyle(AppTheme.prayerColor(for: .maghrib))
+                }
+                .frame(width: 46, height: 46)
+                .accessibilityHidden(true)
+
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Maghrib")
+                        .font(.headline)
+
+                    Text("Completed by your circle")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer(minLength: 8)
+
+                ZStack {
+                    Circle()
+                        .fill(AppTheme.success)
+
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 15, weight: .bold))
+                        .foregroundStyle(.white)
+                }
+                .frame(width: 40, height: 40)
+                .accessibilityHidden(true)
+            }
+
+            HStack(spacing: 7) {
+                ForEach(sampleUsers) { user in
+                    SharingAvatarView(user: user, size: 34)
+                }
+
+                Text("Family initials appear here")
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(.secondary)
+                    .padding(.leading, 3)
+
+                Spacer(minLength: 0)
+            }
+            .padding(.leading, 60)
+        }
+        .padding(16)
+        .background(
+            Color(.secondarySystemGroupedBackground),
+            in: RoundedRectangle(cornerRadius: 22, style: .continuous)
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .strokeBorder(AppTheme.accent.opacity(0.14), lineWidth: 1)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Maghrib completed. Family initials A Y, O M, and S R appear beneath the prayer.")
     }
 }
 
