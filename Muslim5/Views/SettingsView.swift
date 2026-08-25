@@ -140,7 +140,7 @@ struct SettingsView: View {
                 Section {
                     LabeledContent("Version", value: appVersion)
                 } footer: {
-                    Text("Made in Indonesia 🇮🇩")
+                    Text("Made by a Muslim in Indonesia 🇮🇩")
                         .frame(maxWidth: .infinity)
                         .multilineTextAlignment(.center)
                 }
