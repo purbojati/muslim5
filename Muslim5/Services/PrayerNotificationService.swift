@@ -172,8 +172,9 @@ final class PrayerNotificationService: ObservableObject {
         timeZone: TimeZone
     ) -> UNNotificationRequest {
         let content = UNMutableNotificationContent()
-        content.title = "\(prayer.name) prayer time"
-        content.body = "It’s time for \(prayer.name). Take a quiet moment to return."
+        let message = notificationMessage(for: prayer)
+        content.title = message.title
+        content.body = message.body
         content.sound = .default
         content.threadIdentifier = "muslim5.prayer"
         content.userInfo = ["prayer": prayer.rawValue]
@@ -196,5 +197,20 @@ final class PrayerNotificationService: ObservableObject {
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
 
         return UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+    }
+
+    private func notificationMessage(for prayer: Prayer) -> (title: String, body: String) {
+        switch prayer {
+        case .fajr:
+            ("🌅 Fajr — Begin with Allah", "The day is waking. Begin yours with Fajr.")
+        case .dhuhr:
+            ("☀️ Dhuhr — Pause and return", "Step away from the noise. It’s time for Dhuhr.")
+        case .asr:
+            ("Asr — Renew your focus", "Pause, breathe, and reconnect. It’s time for Asr.")
+        case .maghrib:
+            ("🌇 Maghrib — A moment of gratitude", "The sun has set. Welcome Maghrib with a grateful heart.")
+        case .isha:
+            ("🌙 Isha — Close the day in peace", "Before you rest, return to Allah through Isha.")
+        }
     }
 }
