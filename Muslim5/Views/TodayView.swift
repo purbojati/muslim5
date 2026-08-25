@@ -3,6 +3,21 @@ import SwiftUI
 import UIKit
 
 struct TodayView: View {
+    private static let hijriMonthNames = [
+        "Muharram",
+        "Safar",
+        "Rabi al-Awwal",
+        "Rabi al-Thani",
+        "Jumada al-Awwal",
+        "Jumada al-Thani",
+        "Rajab",
+        "Sha'ban",
+        "Ramadan",
+        "Shawwal",
+        "Dhu al-Qi'dah",
+        "Dhu al-Hijjah"
+    ]
+
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.locale) private var locale
@@ -143,7 +158,7 @@ struct TodayView: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text(dayTitle)
                     .font(.system(.title2, design: .rounded, weight: .bold))
-                Text(date.formatted(hijriDateFormat))
+                Text(hijriDateText(for: date))
                     .font(.footnote)
                     .foregroundStyle(.white.opacity(0.72))
             }
@@ -172,19 +187,27 @@ struct TodayView: View {
         HapticFeedback.selection()
     }
 
-    private var hijriDateFormat: Date.FormatStyle {
+    private func hijriDateText(for date: Date) -> String {
         var calendar = Calendar(identifier: .islamicUmmAlQura)
         calendar.timeZone = .autoupdatingCurrent
+        let components = calendar.dateComponents([.month, .day], from: date)
 
-        return Date.FormatStyle(
+        let weekday = date.formatted(Date.FormatStyle(
             date: .omitted,
             time: .omitted,
             locale: locale,
             calendar: calendar
-        )
-        .weekday(.wide)
-        .month(.wide)
-        .day()
+        ).weekday(.wide))
+
+        guard
+            let month = components.month,
+            Self.hijriMonthNames.indices.contains(month - 1),
+            let day = components.day
+        else {
+            return weekday
+        }
+
+        return "\(weekday), \(day) \(Self.hijriMonthNames[month - 1])"
     }
 
     @ViewBuilder
@@ -304,7 +327,7 @@ struct TodayView: View {
                 .font(.caption.weight(.semibold))
                 .lineLimit(1)
                 .minimumScaleFactor(0.75)
-                .frame(minWidth: 48)
+                .frame(width: 72)
                 .contentTransition(.numericText())
 
             checklistDayButton(
