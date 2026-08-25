@@ -495,7 +495,7 @@
 				MARKETING_VERSION = 0.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.muslim5.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SALAH_API_BASE_URL = "http://127.0.0.1:8787";
+				SALAH_API_BASE_URL = "https://muslim5.purbojati.workers.dev";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -528,7 +528,7 @@
 				MARKETING_VERSION = 0.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.muslim5.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SALAH_API_BASE_URL = "";
+				SALAH_API_BASE_URL = "https://muslim5.purbojati.workers.dev";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
