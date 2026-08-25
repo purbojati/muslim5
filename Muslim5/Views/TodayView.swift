@@ -257,6 +257,7 @@ struct TodayView: View {
         Button(action: handleLocationAction) {
             Label(locationLabel, systemImage: locationSymbol)
                 .font(.footnote.weight(.semibold))
+                .foregroundStyle(.primary)
                 .lineLimit(2)
                 .truncationMode(.tail)
                 .frame(maxWidth: 160)
