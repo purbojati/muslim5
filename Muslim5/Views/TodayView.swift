@@ -99,6 +99,10 @@ struct TodayView: View {
                         .padding(.top, 12)
 
                     VStack(alignment: .leading, spacing: 18) {
+                        if sharingService.isConfigured, sharingService.profile == nil {
+                            prayerCircleCard
+                        }
+
                         if periodMode {
                             pauseBanner
                         }
@@ -325,6 +329,55 @@ struct TodayView: View {
         case .night:
             Color(red: 0.32, green: 0.30, blue: 0.48)
         }
+    }
+
+    private var prayerCircleCard: some View {
+        NavigationLink {
+            SharingSettingsView()
+        } label: {
+            HStack(spacing: 12) {
+                ZStack {
+                    Circle()
+                        .fill(AppTheme.accent.opacity(0.14))
+
+                    Image(systemName: "person.2.fill")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(AppTheme.accent)
+                }
+                .frame(width: 38, height: 38)
+
+                VStack(alignment: .leading, spacing: 3) {
+                    Text("Prayer Circle")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.primary)
+
+                    Text("Pray together, even when apart")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                }
+
+                Spacer(minLength: 8)
+
+                Text("Set up")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(AppTheme.accent)
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 12)
+            .background(
+                Color(.secondarySystemGroupedBackground),
+                in: RoundedRectangle(cornerRadius: 18, style: .continuous)
+            )
+            .overlay {
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .strokeBorder(AppTheme.accent.opacity(0.12), lineWidth: 1)
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Set up Prayer Circle")
+        .accessibilityHint("Opens Prayer Circle setup")
     }
 
     private func prayerList(schedule: DailyPrayerSchedule?, on date: Date) -> some View {

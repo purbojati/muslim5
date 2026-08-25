@@ -1,8 +1,14 @@
-# Salah Streak API
+# Muslim 5 API
 
-A small Cloudflare Worker + D1 backend for linking Salah Streak users and showing
-their avatars on completed prayer cards. Bun is used for local package scripts;
+A small Cloudflare Worker + D1 backend for linking Muslim 5 users and showing
+their initials on completed prayer cards. Bun is used for local package scripts;
 the deployed code runs in the Cloudflare Workers runtime.
+
+Production: [muslim5.purbojati.workers.dev](https://muslim5.purbojati.workers.dev)
+
+- Worker name: `muslim5`
+- D1 database: `salah-streak`
+- API version: `v1`
 
 ## What is synced
 
@@ -12,7 +18,8 @@ the deployed code runs in the Cloudflare Workers runtime.
 - Whether a prayer was completed on a given local calendar date
 
 Timing status, attendance, streaks, location, and prayer times remain local to
-the iPhone.
+the iPhone. The service uses request-based HTTPS synchronization, not WebSockets
+or server push.
 
 ## Local setup
 
@@ -70,14 +77,15 @@ bun run deploy:check
 
 ## Deploy
 
-Authenticate Wrangler, then deploy. The D1 binding is configured for automatic
-provisioning, so Cloudflare will create the database and write its ID into
-`wrangler.jsonc` on the first deployment.
+The production D1 database and its binding are already configured in
+`wrangler.jsonc`. Authenticate Wrangler, apply any pending migrations, verify the
+deployment bundle, and deploy the Worker:
 
 ```sh
 bunx wrangler login
-bun run deploy
 bun run db:migrate:remote
+bun run deploy:check
+bun run deploy
 ```
 
 Apply the migration before connecting a production app. For a public launch,

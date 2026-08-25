@@ -39,6 +39,7 @@ struct SharingSettingsView: View {
         }
         .navigationTitle("Prayer Circle")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.visible, for: .navigationBar)
         .disabled(sharingService.isWorking)
         .overlay {
             if sharingService.isWorking {

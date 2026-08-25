@@ -1,9 +1,30 @@
 # Muslim 5
 
-Muslim 5 is a private, local-first iPhone tracker for the five daily prayers. It uses a gentle habit-building approach: progress is visible, while missed days never erase earlier effort.
+Muslim 5 is a private, local-first iPhone tracker for the five daily prayers. It
+uses a gentle habit-building approach: progress is visible, while missed days
+never erase earlier effort. Its optional **Prayer Circle** helps families and
+friends quietly encourage one another without turning worship into a social
+feed.
+
+## Prayer Circle — pray together, even when apart
+
+Every user receives a simple personal linking code. Share the code with family
+or friends to connect instantly—there are no invitations to approve and no
+complicated account setup.
+
+When someone in your Prayer Circle completes a prayer, their compact two-letter
+initial appears directly on that prayer's card on the Today screen. One glance
+shows that your people have prayed, offering gentle accountability without
+scores, rankings, messages, profile photos, or full-name clutter.
+
+Only the minimum sharing data is sent to the backend. Detailed prayer history,
+timing and attendance status, streaks, location, and preferences remain on the
+iPhone.
 
 ## Current MVP
 
+- Prayer Circle linking through auto-generated personal codes
+- Compact two-letter initials from linked users on each completed prayer card
 - Five-prayer daily checklist
 - Completed, late, and prayed-after-time statuses
 - Congregation and individual prayer attendance
@@ -30,15 +51,64 @@ Muslim 5 is a private, local-first iPhone tracker for the five daily prayers. It
 
 The project requires iOS 17 or later and uses Adhan Swift for offline prayer-time calculations.
 
-## Optional sharing backend
+## Prayer Circle backend
 
-The Cloudflare Worker + D1 service for linking users and sharing completed-prayer
-initials lives in [`backend/`](backend/README.md). The core prayer tracker remains
-local-first; only the small social-sharing data set is synced.
+Muslim 5 uses a small Cloudflare Worker and D1 database for linking users and
+showing who has completed each prayer. The production API is available at
+[muslim5.purbojati.workers.dev](https://muslim5.purbojati.workers.dev), with a
+health check at [`/health`](https://muslim5.purbojati.workers.dev/health).
 
-For simulator development, the Debug build uses `http://127.0.0.1:8787`. Start
-the backend with `cd backend && bun run dev`. Before an App Store build, set the
-Release `SALAH_API_BASE_URL` build setting to the deployed HTTPS Worker URL.
+The prayer tracker remains local-first. SwiftData stores the full prayer log,
+timing and attendance status, streaks, period mode, preferences, location, and
+calculated prayer times on the iPhone. The backend only stores the data required
+for sharing:
+
+- User ID, nickname, avatar key, linking code, hashed authentication token, and
+  creation/update timestamps
+- Mutual user links and their creation timestamps
+- Completed prayer name, local calendar date, and completion timestamp
+
+Private authentication tokens are returned once when a profile is created and
+stored in the iOS Keychain; D1 stores only their SHA-256 hashes. Linking is
+immediate when a valid code is entered and does not require acceptance. Either
+person can unlink later, and deleting a sharing profile also deletes its links
+and check-ins through database cascades.
+
+Sync uses normal HTTPS requests rather than WebSockets or push updates. A user's
+changes are written immediately when the app synchronizes, while linked-user
+initials refresh when the Today screen loads, the app becomes active, or the
+user pulls to refresh.
+
+### Backend development
+
+The Worker source, D1 migration, tests, and complete API reference live in
+[`backend/`](backend/README.md). Bun runs the local scripts and Wrangler runs the
+Worker:
+
+```sh
+cd backend
+bun install
+bun run cf-typegen
+bun run db:migrate:local
+bun run dev
+```
+
+The local API runs at `http://127.0.0.1:8787`, which is already configured for
+Debug builds. Production uses the Worker named `muslim5` and the D1 database
+named `salah-streak`. To verify and deploy backend changes:
+
+```sh
+cd backend
+bun run cf-typecheck
+bun run typecheck
+bun run test
+bun run deploy:check
+bun run db:migrate:remote
+bun run deploy
+```
+
+Set the Release `SALAH_API_BASE_URL` build setting to
+`https://muslim5.purbojati.workers.dev` before an App Store build.
 
 ## Distribute to App Store Connect
 
