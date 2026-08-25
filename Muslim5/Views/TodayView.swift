@@ -35,6 +35,20 @@ struct TodayView: View {
                 locationProvider.requestLocation()
             }
         }
+        .onChange(of: locationProvider.state) { oldState, newState in
+            guard oldState != newState else { return }
+
+            switch newState {
+            case .ready where oldState == .requesting:
+                HapticFeedback.notification(.success)
+            case .denied:
+                HapticFeedback.notification(.warning)
+            case .unavailable:
+                HapticFeedback.notification(.error)
+            default:
+                break
+            }
+        }
     }
 
     @ViewBuilder
@@ -254,13 +268,28 @@ struct TodayView: View {
     }
 
     private func toggle(_ prayer: Prayer) {
+        let existingRecord = metrics.record(for: prayer, on: .now)
+        let willCompleteDay = existingRecord == nil && completedToday == Prayer.allCases.count - 1
+
         withAnimation(.easeOut(duration: 0.2)) {
-            if let record = metrics.record(for: prayer, on: .now) {
+            if let record = existingRecord {
                 modelContext.delete(record)
             } else {
                 modelContext.insert(PrayerRecord(day: .now, prayer: prayer, status: .completed))
             }
-            save()
+        }
+
+        guard save() else {
+            HapticFeedback.notification(.error)
+            return
+        }
+
+        if existingRecord != nil {
+            HapticFeedback.impact(.soft, intensity: 0.7)
+        } else if willCompleteDay {
+            HapticFeedback.notification(.success)
+        } else {
+            HapticFeedback.impact(.medium)
         }
     }
 
@@ -271,7 +300,11 @@ struct TodayView: View {
         } else {
             modelContext.insert(PrayerRecord(day: .now, prayer: prayer, status: status))
         }
-        save()
+        if save() {
+            HapticFeedback.selection()
+        } else {
+            HapticFeedback.notification(.error)
+        }
     }
 
     private func setAttendance(_ attendance: PrayerAttendance, for prayer: Prayer) {
@@ -288,11 +321,21 @@ struct TodayView: View {
                 )
             )
         }
-        save()
+        if save() {
+            HapticFeedback.selection()
+        } else {
+            HapticFeedback.notification(.error)
+        }
     }
 
-    private func save() {
-        try? modelContext.save()
+    @discardableResult
+    private func save() -> Bool {
+        do {
+            try modelContext.save()
+            return true
+        } catch {
+            return false
+        }
     }
 
     private func makeSchedule(at date: Date) -> PrayerSchedule? {
@@ -306,6 +349,8 @@ struct TodayView: View {
     }
 
     private func handleLocationAction() {
+        HapticFeedback.impact(.light)
+
         if locationProvider.state == .denied,
            let settingsURL = URL(string: UIApplication.openSettingsURLString) {
             openURL(settingsURL)

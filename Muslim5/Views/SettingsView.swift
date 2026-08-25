@@ -27,7 +27,7 @@ struct SettingsView: View {
                         }
                     }
 
-                    Toggle(isOn: $travelMode) {
+                    Toggle(isOn: travelModeBinding) {
                         Label("Travel mode", systemImage: "airplane")
                     }
                 } header: {
@@ -41,12 +41,18 @@ struct SettingsView: View {
                         Text("Standard").tag("standard")
                         Text("Hanafi").tag("hanafi")
                     }
+                    .onChange(of: asrMethod) {
+                        HapticFeedback.selection()
+                    }
 
                     Picker("Calculation method", selection: $calculationMethod) {
                         Text("Use local convention").tag("local")
                         Text("Muslim World League").tag("mwl")
                         Text("Umm al-Qura").tag("ummAlQura")
                         Text("Singapore (MUIS)").tag("muis")
+                    }
+                    .onChange(of: calculationMethod) {
+                        HapticFeedback.selection()
                     }
                 } header: {
                     Text("Your prayer practice")
@@ -84,7 +90,23 @@ struct SettingsView: View {
                         .filter { $0.endDay == nil && $0.reason == "period" }
                         .forEach { $0.endDay = Calendar.current.startOfDay(for: .now) }
                 }
-                try? modelContext.save()
+
+                do {
+                    try modelContext.save()
+                    HapticFeedback.impact(newValue ? .medium : .soft)
+                } catch {
+                    HapticFeedback.notification(.error)
+                }
+            }
+        )
+    }
+
+    private var travelModeBinding: Binding<Bool> {
+        Binding(
+            get: { travelMode },
+            set: { newValue in
+                travelMode = newValue
+                HapticFeedback.impact(newValue ? .light : .soft)
             }
         )
     }
