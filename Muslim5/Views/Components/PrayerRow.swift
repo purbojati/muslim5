@@ -6,6 +6,7 @@ struct PrayerRow: View {
     let prayer: Prayer
     let prayerTime: Date?
     let record: PrayerRecord?
+    let linkedUsers: [SharingUser]
     let isEnabled: Bool
     let onToggle: () -> Void
     let onStatusChange: (PrayerStatus) -> Void
@@ -13,11 +14,19 @@ struct PrayerRow: View {
 
     var body: some View {
         Button(action: onToggle) {
-            Group {
-                if dynamicTypeSize.isAccessibilitySize {
-                    accessibilityLayout
-                } else {
-                    regularLayout
+            VStack(alignment: .leading, spacing: linkedUsers.isEmpty ? 0 : 12) {
+                Group {
+                    if dynamicTypeSize.isAccessibilitySize {
+                        accessibilityLayout
+                    } else {
+                        regularLayout
+                    }
+                }
+
+                if !linkedUsers.isEmpty {
+                    Divider()
+                        .padding(.leading, 62)
+                    PrayerCompanionsView(users: linkedUsers)
                 }
             }
             .contentShape(Rectangle())
@@ -160,7 +169,10 @@ struct PrayerRow: View {
 
     private var accessibilityLabel: String {
         let time = prayerTime?.formatted(date: .omitted, time: .shortened)
-        return [prayer.name, time, record?.status.title ?? "not recorded", record?.attendance?.title]
+        let linkedNames = linkedUsers.isEmpty
+            ? nil
+            : "Completed by " + linkedUsers.map(\.nickname).joined(separator: ", ")
+        return [prayer.name, time, record?.status.title ?? "not recorded", record?.attendance?.title, linkedNames]
             .compactMap { $0 }
             .joined(separator: ", ")
     }
@@ -171,6 +183,39 @@ struct PrayerRow: View {
 
     private func selectionSymbol(for attendance: PrayerAttendance) -> String {
         record?.attendance == attendance ? "checkmark.circle.fill" : attendance.symbol
+    }
+}
+
+private struct PrayerCompanionsView: View {
+    let users: [SharingUser]
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            ForEach(users.prefix(4)) { user in
+                VStack(spacing: 4) {
+                    SharingAvatarView(user: user, size: 28)
+                    Text(user.nickname)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                        .frame(maxWidth: 58)
+                }
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("\(user.nickname) completed this prayer")
+            }
+
+            if users.count > 4 {
+                Text("+\(users.count - 4)")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                    .frame(width: 28, height: 28)
+                    .background(Color.secondary.opacity(0.1), in: Circle())
+                    .accessibilityLabel("\(users.count - 4) more people completed this prayer")
+            }
+
+            Spacer(minLength: 0)
+        }
+        .padding(.leading, 62)
     }
 }
 

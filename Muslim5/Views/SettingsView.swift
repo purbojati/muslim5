@@ -8,6 +8,7 @@ struct SettingsView: View {
     @Environment(\.openURL) private var openURL
     @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject private var notificationService: PrayerNotificationService
+    @EnvironmentObject private var sharingService: SharingService
     @Query(sort: \TrackingPause.startDay, order: .reverse) private var pauses: [TrackingPause]
     @AppStorage("periodMode") private var periodMode = false
     @AppStorage("asrMethod") private var asrMethod = "standard"
@@ -121,9 +122,31 @@ struct SettingsView: View {
                     Text("Prayer times")
                 }
 
+                Section {
+                    NavigationLink {
+                        SharingSettingsView()
+                    } label: {
+                        Label {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Prayer Circle")
+                                Text(sharingStatus)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        } icon: {
+                            Image(systemName: "person.2.fill")
+                                .foregroundStyle(AppTheme.accent)
+                        }
+                    }
+                } header: {
+                    Text("Sharing")
+                } footer: {
+                    Text("Link with family using a private code and see their initials after they check in.")
+                }
+
                 Section("Privacy") {
-                    Label("Stored on this iPhone", systemImage: "iphone")
-                    Label("No account", systemImage: "person.crop.circle.badge.checkmark")
+                    Label("Prayer history stays on this iPhone", systemImage: "iphone")
+                    Label("Sharing is optional", systemImage: "person.crop.circle.badge.checkmark")
                     Label("No leaderboard", systemImage: "eye.slash")
                 }
 
@@ -166,6 +189,13 @@ struct SettingsView: View {
         case (nil, nil):
             return "—"
         }
+    }
+
+    private var sharingStatus: String {
+        guard sharingService.isConfigured else { return "Server not configured" }
+        guard let profile = sharingService.profile else { return "Not set up" }
+        let count = sharingService.linkedUsers.count
+        return "\(profile.nickname) · \(count) linked"
     }
 
     private var prayerNotificationsBinding: Binding<Bool> {

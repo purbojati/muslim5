@@ -32,7 +32,10 @@
 		A00000000000000000000117 /* QiblaCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000216 /* QiblaCalculator.swift */; };
 		A00000000000000000000118 /* HeadingProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000217 /* HeadingProvider.swift */; };
 		A00000000000000000000119 /* QiblaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000218 /* QiblaView.swift */; };
+		A0000000000000000000011A /* SharingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000219 /* SharingService.swift */; };
+		A0000000000000000000011B /* SharingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000021A /* SharingSettingsView.swift */; };
 		B00000000000000000000001 /* QiblaCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000002 /* QiblaCalculatorTests.swift */; };
+		B0000000000000000000000E /* SharingServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000F /* SharingServiceTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,8 +74,12 @@
 		A00000000000000000000216 /* QiblaCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaCalculator.swift; sourceTree = "<group>"; };
 		A00000000000000000000217 /* HeadingProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingProvider.swift; sourceTree = "<group>"; };
 		A00000000000000000000218 /* QiblaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaView.swift; sourceTree = "<group>"; };
+		A00000000000000000000219 /* SharingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingService.swift; sourceTree = "<group>"; };
+		A0000000000000000000021A /* SharingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingSettingsView.swift; sourceTree = "<group>"; };
+		A0000000000000000000021B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B00000000000000000000002 /* QiblaCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaCalculatorTests.swift; sourceTree = "<group>"; };
 		B00000000000000000000003 /* Muslim5Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Muslim5Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B0000000000000000000000F /* SharingServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingServiceTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				A00000000000000000000201 /* Muslim5App.swift */,
+				A0000000000000000000021B /* Info.plist */,
 				A00000000000000000000402 /* Models */,
 				A00000000000000000000403 /* Design */,
 				A00000000000000000000404 /* Services */,
@@ -145,6 +153,7 @@
 				A00000000000000000000216 /* QiblaCalculator.swift */,
 				A0000000000000000000020F /* PrayerScheduleService.swift */,
 				A00000000000000000000215 /* PrayerNotificationService.swift */,
+				A00000000000000000000219 /* SharingService.swift */,
 				A00000000000000000000210 /* LocationProvider.swift */,
 			);
 			path = Services;
@@ -159,6 +168,7 @@
 				A0000000000000000000020A /* JourneyView.swift */,
 				A0000000000000000000020B /* InsightsView.swift */,
 				A0000000000000000000020C /* SettingsView.swift */,
+				A0000000000000000000021A /* SharingSettingsView.swift */,
 				A00000000000000000000406 /* Components */,
 			);
 			path = Views;
@@ -187,6 +197,7 @@
 			isa = PBXGroup;
 			children = (
 				B00000000000000000000002 /* QiblaCalculatorTests.swift */,
+				B0000000000000000000000F /* SharingServiceTests.swift */,
 			);
 			path = Muslim5Tests;
 			sourceTree = "<group>";
@@ -321,6 +332,8 @@
 				A00000000000000000000117 /* QiblaCalculator.swift in Sources */,
 				A00000000000000000000118 /* HeadingProvider.swift in Sources */,
 				A00000000000000000000119 /* QiblaView.swift in Sources */,
+				A0000000000000000000011A /* SharingService.swift in Sources */,
+				A0000000000000000000011B /* SharingSettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -329,6 +342,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B00000000000000000000001 /* QiblaCalculatorTests.swift in Sources */,
+				B0000000000000000000000E /* SharingServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -467,7 +481,8 @@
 				DEVELOPMENT_TEAM = SYKPVZC9UP;
 				DEVELOPMENT_ASSET_PATHS = "";
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Muslim5/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Muslim 5";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
@@ -480,6 +495,7 @@
 				MARKETING_VERSION = 0.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.muslim5.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SALAH_API_BASE_URL = "http://127.0.0.1:8787";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -498,7 +514,8 @@
 				DEVELOPMENT_TEAM = SYKPVZC9UP;
 				DEVELOPMENT_ASSET_PATHS = "";
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Muslim5/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Muslim 5";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
@@ -511,6 +528,7 @@
 				MARKETING_VERSION = 0.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.muslim5.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SALAH_API_BASE_URL = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;

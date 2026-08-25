@@ -30,6 +30,16 @@ Muslim 5 is a private, local-first iPhone tracker for the five daily prayers. It
 
 The project requires iOS 17 or later and uses Adhan Swift for offline prayer-time calculations.
 
+## Optional sharing backend
+
+The Cloudflare Worker + D1 service for linking users and sharing completed-prayer
+initials lives in [`backend/`](backend/README.md). The core prayer tracker remains
+local-first; only the small social-sharing data set is synced.
+
+For simulator development, the Debug build uses `http://127.0.0.1:8787`. Start
+the backend with `cd backend && bun run dev`. Before an App Store build, set the
+Release `SALAH_API_BASE_URL` build setting to the deployed HTTPS Worker URL.
+
 ## Distribute to App Store Connect
 
 Run the distribution script from the project root:

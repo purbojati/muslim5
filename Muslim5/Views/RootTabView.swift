@@ -19,6 +19,7 @@ struct RootTabView: View {
     @State private var selectedTab = AppTab.today
     @StateObject private var locationProvider = LocationProvider()
     @StateObject private var notificationService = PrayerNotificationService()
+    @StateObject private var sharingService = SharingService()
 
     private enum AppTab: Hashable {
         case today
@@ -39,14 +40,19 @@ struct RootTabView: View {
         }
         .environmentObject(locationProvider)
         .environmentObject(notificationService)
+        .environmentObject(sharingService)
         .task {
             locationProvider.start()
+            await sharingService.start()
             await synchronizeNotifications()
         }
         .onChange(of: scenePhase) { _, newPhase in
             guard newPhase == .active else { return }
             locationProvider.requestLocation()
-            Task { await synchronizeNotifications() }
+            Task {
+                await sharingService.refreshLinks()
+                await synchronizeNotifications()
+            }
         }
         .onChange(of: locationFingerprint) {
             Task { await synchronizeNotifications() }

@@ -23,7 +23,9 @@ struct TodayView: View {
     @Environment(\.locale) private var locale
     @Environment(\.openURL) private var openURL
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject private var locationProvider: LocationProvider
+    @EnvironmentObject private var sharingService: SharingService
     @Query(sort: \PrayerRecord.day, order: .reverse) private var records: [PrayerRecord]
     @Query(sort: \TrackingPause.startDay, order: .reverse) private var pauses: [TrackingPause]
     @AppStorage("periodMode") private var periodMode = false
@@ -62,6 +64,13 @@ struct TodayView: View {
             default:
                 break
             }
+        }
+        .task(id: sharingSyncKey) {
+            await synchronizeSharing(at: selectedDate())
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            guard newPhase == .active else { return }
+            Task { await synchronizeSharing(at: selectedDate()) }
         }
     }
 
@@ -103,6 +112,9 @@ struct TodayView: View {
                 }
             }
             .scrollIndicators(.hidden)
+            .refreshable {
+                await synchronizeSharing(at: date)
+            }
             .background(Color(.systemGroupedBackground))
             .ignoresSafeArea(edges: .top)
         }
@@ -341,6 +353,7 @@ struct TodayView: View {
                             prayer: prayer,
                             prayerTime: schedule?.time(for: prayer),
                             record: metrics.record(for: prayer, on: date),
+                            linkedUsers: sharingService.users(for: prayer, on: date),
                             isEnabled: !periodMode,
                             onToggle: { toggle(prayer, on: date) },
                             onStatusChange: { setStatus($0, for: prayer, on: date) },
@@ -568,6 +581,28 @@ struct TodayView: View {
             at: date,
             calculationMethod: calculationMethod,
             asrMethod: asrMethod
+        )
+    }
+
+    private var sharingSyncKey: String {
+        let date = selectedDate()
+        let completionFingerprint = Prayer.allCases.map {
+            metrics.record(for: $0, on: date) == nil ? "0" : "1"
+        }.joined()
+        return "\(dayOffset)-\(completionFingerprint)-\(sharingService.profile?.id ?? "local")"
+    }
+
+    private func selectedDate() -> Date {
+        Calendar.autoupdatingCurrent.date(byAdding: .day, value: dayOffset, to: .now) ?? .now
+    }
+
+    private func synchronizeSharing(at date: Date) async {
+        let completedPrayers = Set(
+            Prayer.allCases.filter { metrics.record(for: $0, on: date) != nil }
+        )
+        await sharingService.synchronizeDay(
+            on: date,
+            completedPrayers: completedPrayers
         )
     }
 
