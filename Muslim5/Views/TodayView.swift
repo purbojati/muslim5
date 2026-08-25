@@ -87,6 +87,9 @@ struct TodayView: View {
                     VStack(alignment: .leading, spacing: 18) {
                         dailyCompanionCard(for: date)
 
+                        checklistDayNavigation
+                            .frame(maxWidth: .infinity, alignment: .center)
+
                         if periodMode {
                             pauseBanner
                         }
@@ -321,14 +324,8 @@ struct TodayView: View {
     private func prayerList(schedule: DailyPrayerSchedule?, on date: Date) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             VStack(alignment: .leading, spacing: 3) {
-                HStack {
-                    Text("Your five moments")
-                        .font(.title3.bold())
-
-                    Spacer()
-
-                    checklistDayNavigation
-                }
+                Text("Your five moments")
+                    .font(.title3.bold())
 
                 Text("Tap to complete. Touch and hold for more options.")
                     .font(.caption)
