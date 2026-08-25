@@ -42,7 +42,7 @@ struct SettingsView: View {
                             }
                         } icon: {
                             Image(systemName: "person.2.fill")
-                                .foregroundStyle(AppTheme.accent)
+                                .foregroundStyle(.black)
                         }
                     }
                 } header: {
@@ -57,7 +57,7 @@ struct SettingsView: View {
                             Text("Period Mode")
                         } icon: {
                             Image(systemName: "pause.circle.fill")
-                                .foregroundStyle(AppTheme.accent)
+                                .foregroundStyle(.black)
                         }
                     }
                 } header: {
@@ -70,7 +70,7 @@ struct SettingsView: View {
                             Text(isRequestingNotificationPermission ? "Requesting permission…" : "Prayer reminders")
                         } icon: {
                             Image(systemName: "bell.badge.fill")
-                                .foregroundStyle(AppTheme.accent)
+                                .foregroundStyle(.black)
                         }
                     }
                     .disabled(isRequestingNotificationPermission)
@@ -83,7 +83,7 @@ struct SettingsView: View {
                                 } icon: {
                                     Image(systemName: prayer.symbol)
                                         .symbolRenderingMode(.monochrome)
-                                        .foregroundStyle(AppTheme.prayerColor(for: prayer))
+                                        .foregroundStyle(.black)
                                 }
                             }
                             .disabled(!notificationService.canSchedule)
@@ -97,7 +97,7 @@ struct SettingsView: View {
                                 .foregroundStyle(.secondary)
                         } icon: {
                             Image(systemName: "bell.slash.fill")
-                                .foregroundStyle(.orange)
+                                .foregroundStyle(.black)
                         }
 
                         Button("Open iPhone Settings") {
@@ -106,9 +106,14 @@ struct SettingsView: View {
                     }
 
                     if let error = notificationService.lastSchedulingError {
-                        Label(error, systemImage: "exclamationmark.triangle.fill")
-                            .font(.footnote)
-                            .foregroundStyle(.orange)
+                        Label {
+                            Text(error)
+                                .foregroundStyle(.orange)
+                        } icon: {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundStyle(.black)
+                        }
+                        .font(.footnote)
                     }
                 } header: {
                     Text("Reminders")
@@ -124,7 +129,7 @@ struct SettingsView: View {
                             Text("Prayer Times")
                         } icon: {
                             Image(systemName: "clock.fill")
-                                .foregroundStyle(AppTheme.accent)
+                                .foregroundStyle(.black)
                         }
                     }
                 } header: {
@@ -132,9 +137,9 @@ struct SettingsView: View {
                 }
 
                 Section("Privacy") {
-                    Label("Your salah history stays on this iPhone", systemImage: "iphone")
-                    Label("Prayer Circle is optional", systemImage: "person.crop.circle.badge.checkmark")
-                    Label("No scores or leaderboards", systemImage: "eye.slash")
+                    youScreenLabel("Your salah history stays on this iPhone", systemImage: "iphone")
+                    youScreenLabel("Prayer Circle is optional", systemImage: "person.crop.circle.badge.checkmark")
+                    youScreenLabel("No scores or leaderboards", systemImage: "eye.slash")
                 }
 
                 Section {
@@ -179,6 +184,15 @@ struct SettingsView: View {
             return build
         case (nil, nil):
             return "—"
+        }
+    }
+
+    private func youScreenLabel(_ title: String, systemImage: String) -> some View {
+        Label {
+            Text(title)
+        } icon: {
+            Image(systemName: systemImage)
+                .foregroundStyle(.black)
         }
     }
 
@@ -335,7 +349,7 @@ private struct PeriodModeExplanationSheet: View {
             VStack(alignment: .leading, spacing: 10) {
                 Image(systemName: "pause.circle.fill")
                     .font(.system(size: 34))
-                    .foregroundStyle(AppTheme.accent)
+                    .foregroundStyle(.black)
 
                 Text("Pause tracking for your period?")
                     .font(.title2.bold())
