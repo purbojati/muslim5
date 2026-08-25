@@ -1,21 +1,53 @@
 import SwiftUI
 
 struct PrayerHeroView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     let phase: PrayerPhase?
     let date: Date
     let locationState: LocationProvider.State
     let onLocationAction: () -> Void
 
     var body: some View {
-        Group {
-            if let phase {
-                activeContent(phase)
-            } else {
-                locationContent
+        ZStack(alignment: .leading) {
+            Group {
+                if let phase {
+                    activeContent(phase)
+                } else {
+                    locationContent
+                }
             }
+            .id(contentIdentity)
+            .transition(contentTransition)
         }
+        .animation(contentAnimation, value: contentIdentity)
         .frame(maxWidth: .infinity, alignment: .leading)
         .frame(minHeight: 156)
+    }
+
+    private var contentIdentity: HeroContentIdentity {
+        guard phase == nil else { return .activePrayer }
+
+        return switch locationState {
+        case .requesting: .requesting
+        case .denied: .denied
+        case .idle: .idle
+        case .ready, .unavailable: .unavailable
+        }
+    }
+
+    private var contentTransition: AnyTransition {
+        let insertion = AnyTransition.opacity
+            .combined(with: reduceMotion ? .identity : .offset(y: 6))
+            .animation(contentAnimation)
+        let removal = AnyTransition.opacity
+            .animation(.easeOut(duration: reduceMotion ? 0.16 : 0.2))
+
+        return .asymmetric(insertion: insertion, removal: removal)
+    }
+
+    private var contentAnimation: Animation {
+        .easeOut(duration: reduceMotion ? 0.16 : 0.25)
     }
 
     private func activeContent(_ phase: PrayerPhase) -> some View {
@@ -108,6 +140,14 @@ struct PrayerHeroView: View {
         .foregroundStyle(.white)
         .frame(minHeight: 156)
     }
+}
+
+private enum HeroContentIdentity: Hashable {
+    case activePrayer
+    case requesting
+    case denied
+    case idle
+    case unavailable
 }
 
 private struct PrayerHeroButtonStyle: ButtonStyle {

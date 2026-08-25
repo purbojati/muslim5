@@ -22,6 +22,7 @@ struct TodayView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.locale) private var locale
     @Environment(\.openURL) private var openURL
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @EnvironmentObject private var locationProvider: LocationProvider
     @Query(sort: \PrayerRecord.day, order: .reverse) private var records: [PrayerRecord]
     @Query(sort: \TrackingPause.startDay, order: .reverse) private var pauses: [TrackingPause]
@@ -29,6 +30,8 @@ struct TodayView: View {
     @AppStorage("asrMethod") private var asrMethod = "standard"
     @AppStorage("calculationMethod") private var calculationMethod = "local"
     @State private var dayOffset = 0
+    @State private var navigationDirection = -1
+    @State private var completionCelebrationDay: Date?
     private let prayerScheduleService = PrayerScheduleService()
 
     private var metrics: ProgressMetrics { ProgressMetrics(records: records, pauses: pauses) }
@@ -114,16 +117,23 @@ struct TodayView: View {
             VStack(alignment: .leading, spacing: 26) {
                 dayHeader(at: hijriDate)
 
-                if dayOffset == 0 {
-                    PrayerHeroView(
-                        phase: phase,
-                        date: date,
-                        locationState: locationProvider.state,
-                        onLocationAction: handleLocationAction
-                    )
-                } else {
-                    historicalReviewPrompt
+                ZStack(alignment: .topLeading) {
+                    Group {
+                        if dayOffset == 0 {
+                            PrayerHeroView(
+                                phase: phase,
+                                date: date,
+                                locationState: locationProvider.state,
+                                onLocationAction: handleLocationAction
+                            )
+                        } else {
+                            historicalReviewPrompt
+                        }
+                    }
+                    .id(dayOffset)
+                    .transition(dayContentTransition)
                 }
+                .frame(maxWidth: .infinity, alignment: .topLeading)
             }
             .padding(.horizontal, 20)
             .padding(.top, topInset + 12)
@@ -155,12 +165,16 @@ struct TodayView: View {
 
     private func dayHeader(at date: Date) -> some View {
         HStack(alignment: .top) {
-            VStack(alignment: .leading, spacing: 3) {
-                Text(dayTitle)
-                    .font(.system(.title2, design: .rounded, weight: .bold))
-                Text(hijriDateText(for: date))
-                    .font(.footnote)
-                    .foregroundStyle(.white.opacity(0.72))
+            ZStack(alignment: .topLeading) {
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(dayTitle)
+                        .font(.system(.title2, design: .rounded, weight: .bold))
+                    Text(hijriDateText(for: date))
+                        .font(.footnote)
+                        .foregroundStyle(.white.opacity(0.72))
+                }
+                .id(dayOffset)
+                .transition(dayContentTransition)
             }
 
             Spacer()
@@ -181,10 +195,28 @@ struct TodayView: View {
     private func changeDay(by amount: Int) {
         guard dayOffset + amount <= 0 else { return }
 
-        withAnimation(.easeInOut(duration: 0.2)) {
+        completionCelebrationDay = nil
+        navigationDirection = amount
+        withAnimation(dayChangeAnimation) {
             dayOffset += amount
         }
         HapticFeedback.selection()
+    }
+
+    private var dayChangeAnimation: Animation {
+        .easeInOut(duration: reduceMotion ? 0.14 : 0.2)
+    }
+
+    private var dayContentTransition: AnyTransition {
+        guard !reduceMotion else {
+            return .opacity
+        }
+
+        let incomingOffset: CGFloat = navigationDirection < 0 ? -8 : 8
+        return .asymmetric(
+            insertion: .opacity.combined(with: .offset(x: incomingOffset)),
+            removal: .opacity.combined(with: .offset(x: -incomingOffset))
+        )
     }
 
     private func hijriDateText(for date: Date) -> String {
@@ -304,17 +336,24 @@ struct TodayView: View {
             .padding(.horizontal, 2)
             .padding(.bottom, 2)
 
-            ForEach(Prayer.allCases) { prayer in
-                PrayerRow(
-                    prayer: prayer,
-                    prayerTime: schedule?.time(for: prayer),
-                    record: metrics.record(for: prayer, on: date),
-                    isEnabled: !periodMode,
-                    onToggle: { toggle(prayer, on: date) },
-                    onStatusChange: { setStatus($0, for: prayer, on: date) },
-                    onAttendanceChange: { setAttendance($0, for: prayer, on: date) }
-                )
+            ZStack(alignment: .topLeading) {
+                VStack(spacing: 12) {
+                    ForEach(Prayer.allCases) { prayer in
+                        PrayerRow(
+                            prayer: prayer,
+                            prayerTime: schedule?.time(for: prayer),
+                            record: metrics.record(for: prayer, on: date),
+                            isEnabled: !periodMode,
+                            onToggle: { toggle(prayer, on: date) },
+                            onStatusChange: { setStatus($0, for: prayer, on: date) },
+                            onAttendanceChange: { setAttendance($0, for: prayer, on: date) }
+                        )
+                    }
+                }
+                .id(dayOffset)
+                .transition(dayContentTransition)
             }
+            .frame(maxWidth: .infinity, alignment: .topLeading)
         }
     }
 
@@ -386,10 +425,25 @@ struct TodayView: View {
 
     private func gentleFooter(for date: Date) -> some View {
         let isComplete = metrics.completedCount(on: date) == Prayer.allCases.count
+        let celebratesCompletion = isComplete && shouldCelebrateCompletion(on: date)
 
         return HStack(spacing: 14) {
-            Image(systemName: isComplete ? "sparkles" : "heart.fill")
-                .foregroundStyle(isComplete ? AppTheme.gold : AppTheme.accent)
+            ZStack {
+                if isComplete {
+                    Image(systemName: "sparkles")
+                        .foregroundStyle(AppTheme.gold)
+                        .transition(celebratesCompletion ? sparkleTransition : quietSymbolTransition)
+                } else {
+                    Image(systemName: "heart.fill")
+                        .foregroundStyle(AppTheme.accent)
+                        .transition(quietSymbolTransition)
+                }
+            }
+            .frame(width: 20, height: 20)
+            .animation(
+                completionSymbolAnimation(celebratesCompletion: celebratesCompletion),
+                value: isComplete
+            )
 
             Text("Every return counts—even the quiet ones.")
                 .font(.subheadline)
@@ -398,6 +452,29 @@ struct TodayView: View {
             Spacer()
         }
         .padding(.horizontal, 6)
+    }
+
+    private var sparkleTransition: AnyTransition {
+        let insertion = AnyTransition.opacity
+            .combined(with: .scale(scale: reduceMotion ? 0.98 : 0.94))
+            .animation(.easeOut(duration: reduceMotion ? 0.16 : 0.2))
+        let removal = AnyTransition.opacity
+            .animation(.easeOut(duration: 0.14))
+
+        return .asymmetric(insertion: insertion, removal: removal)
+    }
+
+    private var quietSymbolTransition: AnyTransition {
+        .opacity.animation(.easeOut(duration: 0.14))
+    }
+
+    private func completionSymbolAnimation(celebratesCompletion: Bool) -> Animation {
+        .easeOut(duration: celebratesCompletion ? (reduceMotion ? 0.16 : 0.2) : 0.14)
+    }
+
+    private func shouldCelebrateCompletion(on date: Date) -> Bool {
+        guard let completionCelebrationDay else { return false }
+        return Calendar.autoupdatingCurrent.isDate(completionCelebrationDay, inSameDayAs: date)
     }
 
     private var streakMessage: String {
@@ -410,6 +487,7 @@ struct TodayView: View {
         let existingRecord = metrics.record(for: prayer, on: date)
         let willCompleteDay = existingRecord == nil && metrics.completedCount(on: date) == Prayer.allCases.count - 1
 
+        completionCelebrationDay = willCompleteDay ? date : nil
         withAnimation(.easeOut(duration: 0.2)) {
             if let record = existingRecord {
                 modelContext.delete(record)
@@ -433,6 +511,10 @@ struct TodayView: View {
     }
 
     private func setStatus(_ status: PrayerStatus, for prayer: Prayer, on date: Date) {
+        let willCompleteDay = metrics.record(for: prayer, on: date) == nil
+            && metrics.completedCount(on: date) == Prayer.allCases.count - 1
+        completionCelebrationDay = willCompleteDay ? date : nil
+
         if let record = metrics.record(for: prayer, on: date) {
             record.status = status
             record.recordedAt = .now
@@ -447,6 +529,10 @@ struct TodayView: View {
     }
 
     private func setAttendance(_ attendance: PrayerAttendance, for prayer: Prayer, on date: Date) {
+        let willCompleteDay = metrics.record(for: prayer, on: date) == nil
+            && metrics.completedCount(on: date) == Prayer.allCases.count - 1
+        completionCelebrationDay = willCompleteDay ? date : nil
+
         if let record = metrics.record(for: prayer, on: date) {
             record.attendance = attendance
             record.recordedAt = .now
