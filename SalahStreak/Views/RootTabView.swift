@@ -23,11 +23,6 @@ struct RootTabView: View {
                     Label("Journey", systemImage: "square.grid.3x3.fill")
                 }
 
-            InsightsView()
-                .tabItem {
-                    Label("Reflect", systemImage: "sparkles")
-                }
-
             SettingsView()
                 .tabItem {
                     Label("You", systemImage: "person.crop.circle")

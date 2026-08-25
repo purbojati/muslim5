@@ -21,9 +21,9 @@ enum Prayer: String, CaseIterable, Codable, Identifiable {
 
     var symbol: String {
         switch self {
-        case .fajr: "sun.horizon.fill"
+        case .fajr: "sunrise.fill"
         case .dhuhr: "sun.max.fill"
-        case .asr: "sun.min.fill"
+        case .asr: "sun.haze.fill"
         case .maghrib: "sunset.fill"
         case .isha: "moon.stars.fill"
         }

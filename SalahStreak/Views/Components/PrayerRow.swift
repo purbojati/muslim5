@@ -78,14 +78,20 @@ struct PrayerRow: View {
     }
 
     private var prayerIcon: some View {
-        ZStack {
+        let color = AppTheme.prayerColor(for: prayer)
+
+        return ZStack {
             Circle()
-                .fill(record == nil ? AppTheme.accent.opacity(0.09) : AppTheme.gold.opacity(0.14))
+                .fill(color.opacity(record == nil ? 0.12 : 0.20))
+                .overlay {
+                    Circle()
+                        .strokeBorder(color.opacity(record == nil ? 0.16 : 0.28), lineWidth: 1)
+                }
                 .frame(width: 46, height: 46)
 
             Image(systemName: prayer.symbol)
                 .font(.system(size: 18, weight: .medium))
-                .foregroundStyle(record == nil ? AppTheme.accent : AppTheme.gold)
+                .foregroundStyle(color)
         }
     }
 
@@ -112,14 +118,16 @@ struct PrayerRow: View {
     }
 
     private var toggleIcon: some View {
-        ZStack {
+        let color = AppTheme.prayerColor(for: prayer)
+
+        return ZStack {
             Circle()
-                .fill(record == nil ? AppTheme.accent.opacity(0.08) : AppTheme.success)
+                .fill(record == nil ? color.opacity(0.11) : AppTheme.success)
                 .frame(width: 40, height: 40)
 
             Image(systemName: record == nil ? "plus" : "checkmark")
                 .font(.system(size: 15, weight: .bold))
-                .foregroundStyle(record == nil ? AppTheme.accent : .white)
+                .foregroundStyle(record == nil ? color : .white)
                 .contentTransition(.symbolEffect(.replace))
         }
     }

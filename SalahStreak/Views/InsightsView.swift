@@ -8,18 +8,10 @@ struct InsightsView: View {
     private var metrics: ProgressMetrics { ProgressMetrics(records: records, pauses: pauses) }
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 18) {
-                    consistencyCard
-                    prayerBreakdown
-                    privacyNote
-                }
-                .padding(.horizontal, 18)
-                .padding(.bottom, 28)
-            }
-            .background(Color(.systemGroupedBackground))
-            .navigationTitle("Reflection")
+        VStack(spacing: 18) {
+            consistencyCard
+            prayerBreakdown
+            privacyNote
         }
     }
 
@@ -63,7 +55,7 @@ struct InsightsView: View {
                 let count = recentCount(for: prayer)
                 HStack(spacing: 12) {
                     Image(systemName: prayer.symbol)
-                        .foregroundStyle(AppTheme.gold)
+                        .foregroundStyle(AppTheme.prayerColor(for: prayer))
                         .frame(width: 24)
                     Text(prayer.name)
                         .font(.subheadline.weight(.medium))

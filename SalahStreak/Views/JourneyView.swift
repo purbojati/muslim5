@@ -15,6 +15,7 @@ struct JourneyView: View {
                     summary
                     contributionCard
                     legend
+                    InsightsView()
                     reflectionCard
                 }
                 .padding(.horizontal, 18)

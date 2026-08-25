@@ -7,6 +7,21 @@ enum AppTheme {
     static let success = Color(red: 0.25, green: 0.67, blue: 0.50)
     static let gold = Color(red: 0.94, green: 0.65, blue: 0.28)
 
+    static func prayerColor(for prayer: Prayer) -> Color {
+        switch prayer {
+        case .fajr:
+            Color(red: 0.93, green: 0.47, blue: 0.27)
+        case .dhuhr:
+            Color(red: 0.83, green: 0.55, blue: 0.10)
+        case .asr:
+            Color(red: 0.35, green: 0.52, blue: 0.86)
+        case .maghrib:
+            Color(red: 0.82, green: 0.34, blue: 0.47)
+        case .isha:
+            Color(red: 0.48, green: 0.37, blue: 0.84)
+        }
+    }
+
     static let cardGradient = LinearGradient(
         colors: [deepIndigo, Color(red: 0.34, green: 0.27, blue: 0.50)],
         startPoint: .topLeading,
