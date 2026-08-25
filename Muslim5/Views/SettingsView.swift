@@ -25,6 +25,7 @@ struct SettingsView: View {
     @AppStorage(PrayerNotificationPreferences.StorageKey.isha)
     private var ishaNotificationEnabled = true
     @State private var isRequestingNotificationPermission = false
+    @State private var isShowingPeriodModeExplanation = false
 
     var body: some View {
         NavigationStack {
@@ -32,32 +33,20 @@ struct SettingsView: View {
                 Section {
                     Toggle(isOn: periodModeBinding) {
                         Label {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Period mode")
-                                Text("Pause tracking without breaking your streak")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
+                            Text("Period mode")
                         } icon: {
                             Image(systemName: "pause.circle.fill")
                                 .foregroundStyle(AppTheme.accent)
                         }
                     }
                 } header: {
-                    Text("Support for your life")
-                } footer: {
-                    Text("Period information is private and remains only on this device.")
+                    Text("Life")
                 }
 
                 Section {
                     Toggle(isOn: prayerNotificationsBinding) {
                         Label {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Prayer reminders")
-                                Text(notificationStatusText)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
+                            Text(isRequestingNotificationPermission ? "Requesting permission…" : "Prayer reminders")
                         } icon: {
                             Image(systemName: "bell.badge.fill")
                                 .foregroundStyle(AppTheme.accent)
@@ -68,7 +57,13 @@ struct SettingsView: View {
                     if prayerNotificationsEnabled {
                         ForEach(Prayer.allCases) { prayer in
                             Toggle(isOn: notificationBinding(for: prayer)) {
-                                Label(prayer.name, systemImage: prayer.symbol)
+                                Label {
+                                    Text(prayer.name)
+                                } icon: {
+                                    Image(systemName: prayer.symbol)
+                                        .symbolRenderingMode(.monochrome)
+                                        .foregroundStyle(AppTheme.prayerColor(for: prayer))
+                                }
                             }
                             .disabled(!notificationService.canSchedule)
                         }
@@ -95,9 +90,9 @@ struct SettingsView: View {
                             .foregroundStyle(.orange)
                     }
                 } header: {
-                    Text("Prayer reminders")
+                    Text("Reminders")
                 } footer: {
-                    Text("Reminders arrive at each selected prayer time using your location and calculation preferences.")
+                    Text("Sound and vibration follow your iPhone settings.")
                 }
 
                 Section {
@@ -109,6 +104,10 @@ struct SettingsView: View {
                         HapticFeedback.selection()
                     }
 
+                    Text("Standard is used by Shafi’i, Maliki, and Hanbali traditions. Hanafi calculates Asr later. Standard usually matches local practice in Indonesia.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+
                     Picker("Calculation method", selection: $calculationMethod) {
                         Text("Use local convention").tag("local")
                         Text("Muslim World League").tag("mwl")
@@ -119,21 +118,17 @@ struct SettingsView: View {
                         HapticFeedback.selection()
                     }
                 } header: {
-                    Text("Your prayer practice")
-                } footer: {
-                    Text("These preferences shape the offline prayer times shown on Today.")
+                    Text("Prayer times")
                 }
 
-                Section("Your privacy") {
-                    Label("On-device storage", systemImage: "iphone.and.arrow.forward")
-                    Label("No account required", systemImage: "person.crop.circle.badge.checkmark")
-                    Label("No public leaderboard", systemImage: "eye.slash")
+                Section("Privacy") {
+                    Label("Stored on this iPhone", systemImage: "iphone")
+                    Label("No account", systemImage: "person.crop.circle.badge.checkmark")
+                    Label("No leaderboard", systemImage: "eye.slash")
                 }
 
                 Section {
                     LabeledContent("Version", value: "0.1.0")
-                } footer: {
-                    Text("Five moments. Every day. Keep returning.")
                 }
             }
             .navigationTitle("You")
@@ -145,6 +140,14 @@ struct SettingsView: View {
                 Task {
                     await notificationService.refreshAuthorizationStatus()
                 }
+            }
+            .sheet(isPresented: $isShowingPeriodModeExplanation) {
+                PeriodModeExplanationSheet {
+                    setPeriodMode(true)
+                    isShowingPeriodModeExplanation = false
+                }
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
             }
         }
     }
@@ -206,25 +209,6 @@ struct SettingsView: View {
         }
     }
 
-    private var notificationStatusText: String {
-        if isRequestingNotificationPermission {
-            return "Waiting for permission"
-        }
-
-        switch notificationService.authorizationStatus {
-        case .authorized, .ephemeral:
-            return prayerNotificationsEnabled ? "On" : "Off"
-        case .provisional:
-            return prayerNotificationsEnabled ? "Delivered quietly" : "Off"
-        case .denied:
-            return "Permission required"
-        case .notDetermined:
-            return "Choose which prayers can remind you"
-        @unknown default:
-            return prayerNotificationsEnabled ? "On" : "Off"
-        }
-    }
-
     private func openNotificationSettings() {
         guard let settingsURL = URL(string: UIApplication.openNotificationSettingsURLString) else {
             return
@@ -236,24 +220,82 @@ struct SettingsView: View {
         Binding(
             get: { periodMode },
             set: { newValue in
-                periodMode = newValue
-                if newValue {
-                    if pauses.first(where: { $0.endDay == nil && $0.reason == "period" }) == nil {
-                        modelContext.insert(TrackingPause())
-                    }
+                if newValue && !periodMode {
+                    isShowingPeriodModeExplanation = true
                 } else {
-                    pauses
-                        .filter { $0.endDay == nil && $0.reason == "period" }
-                        .forEach { $0.endDay = Calendar.current.startOfDay(for: .now) }
-                }
-
-                do {
-                    try modelContext.save()
-                    HapticFeedback.impact(newValue ? .medium : .soft)
-                } catch {
-                    HapticFeedback.notification(.error)
+                    setPeriodMode(newValue)
                 }
             }
         )
+    }
+
+    private func setPeriodMode(_ enabled: Bool) {
+        periodMode = enabled
+        if enabled {
+            if pauses.first(where: { $0.endDay == nil && $0.reason == "period" }) == nil {
+                modelContext.insert(TrackingPause())
+            }
+        } else {
+            pauses
+                .filter { $0.endDay == nil && $0.reason == "period" }
+                .forEach { $0.endDay = Calendar.current.startOfDay(for: .now) }
+        }
+
+        do {
+            try modelContext.save()
+            HapticFeedback.impact(enabled ? .medium : .soft)
+        } catch {
+            HapticFeedback.notification(.error)
+        }
+    }
+}
+
+private struct PeriodModeExplanationSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    let onEnable: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 24) {
+            VStack(alignment: .leading, spacing: 10) {
+                Image(systemName: "pause.circle.fill")
+                    .font(.system(size: 34))
+                    .foregroundStyle(AppTheme.accent)
+
+                Text("Turn on Period Mode?")
+                    .font(.title2.bold())
+
+                Text("While it’s on:")
+                    .foregroundStyle(.secondary)
+            }
+
+            VStack(alignment: .leading, spacing: 16) {
+                explanationRow("Daily prayer tracking pauses", symbol: "pause.fill")
+                explanationRow("Paused days won’t break your streak", symbol: "flame.fill")
+                explanationRow("Everything stays on this iPhone", symbol: "lock.fill")
+            }
+
+            Spacer(minLength: 0)
+
+            VStack(spacing: 10) {
+                Button("Turn On Period Mode", action: onEnable)
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    .frame(maxWidth: .infinity)
+
+                Button("Not Now", role: .cancel) {
+                    dismiss()
+                }
+                .frame(maxWidth: .infinity)
+            }
+        }
+        .padding(24)
+    }
+
+    private func explanationRow(_ title: String, symbol: String) -> some View {
+        Label(title, systemImage: symbol)
+            .font(.body.weight(.medium))
+            .foregroundStyle(.primary)
+            .symbolRenderingMode(.hierarchical)
+            .accessibilityElement(children: .combine)
     }
 }
