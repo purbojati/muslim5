@@ -3,6 +3,16 @@
     {
       "filename" : "BrandMark.svg",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "BrandMarkDark.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

@@ -29,6 +29,7 @@ struct AppLaunchView: View {
 
 struct WelcomeView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.colorScheme) private var colorScheme
     @State private var hasAppeared = false
     @State private var backgroundDrift = false
     let onContinue: () -> Void
@@ -87,7 +88,7 @@ struct WelcomeView: View {
                 .scrollIndicators(.hidden)
             }
         }
-        .foregroundStyle(AppTheme.deepIndigo)
+        .foregroundStyle(primaryTextColor)
         .onAppear(perform: revealWelcome)
         .onChange(of: reduceMotion) { _, isReduced in
             if isReduced {
@@ -105,6 +106,8 @@ struct WelcomeView: View {
                     .resizable()
                     .scaledToFill()
                     .frame(width: geometry.size.width, height: geometry.size.height)
+                    .saturation(colorScheme == .dark ? 0.76 : 1)
+                    .brightness(colorScheme == .dark ? -0.24 : 0)
                     .scaleEffect(backgroundDrift ? 1.055 : 1.025)
                     .offset(
                         x: backgroundDrift ? -4 : 4,
@@ -114,15 +117,7 @@ struct WelcomeView: View {
 
                 ambientGlows(in: geometry.size)
 
-                LinearGradient(
-                    colors: [
-                        Color.white.opacity(0.44),
-                        Color.white.opacity(0.72),
-                        Color.white.opacity(0.90)
-                    ],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
+                backgroundOverlay
             }
         }
         .ignoresSafeArea()
@@ -132,7 +127,7 @@ struct WelcomeView: View {
     private func ambientGlows(in size: CGSize) -> some View {
         ZStack {
             Circle()
-                .fill(AppTheme.gold.opacity(0.15))
+                .fill(AppTheme.gold.opacity(colorScheme == .dark ? 0.10 : 0.15))
                 .frame(width: 210, height: 210)
                 .blur(radius: 46)
                 .position(
@@ -141,7 +136,7 @@ struct WelcomeView: View {
                 )
 
             Circle()
-                .fill(AppTheme.accent.opacity(0.11))
+                .fill(AppTheme.accent.opacity(colorScheme == .dark ? 0.17 : 0.11))
                 .frame(width: 260, height: 260)
                 .blur(radius: 60)
                 .position(
@@ -149,6 +144,48 @@ struct WelcomeView: View {
                     y: size.height * 0.72 + (backgroundDrift ? 10 : -8)
                 )
         }
+    }
+
+    private var backgroundOverlay: some View {
+        LinearGradient(
+            colors: colorScheme == .dark
+                ? [
+                    Color(red: 0.035, green: 0.028, blue: 0.07).opacity(0.62),
+                    Color(red: 0.035, green: 0.028, blue: 0.07).opacity(0.82),
+                    Color(red: 0.025, green: 0.02, blue: 0.05).opacity(0.95)
+                ]
+                : [
+                    Color.white.opacity(0.44),
+                    Color.white.opacity(0.72),
+                    Color.white.opacity(0.90)
+                ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+    }
+
+    private var primaryTextColor: Color {
+        colorScheme == .dark
+            ? Color(red: 0.94, green: 0.92, blue: 0.98)
+            : AppTheme.deepIndigo
+    }
+
+    private var cardColor: Color {
+        colorScheme == .dark
+            ? Color(red: 0.10, green: 0.08, blue: 0.16).opacity(0.84)
+            : Color.white.opacity(0.66)
+    }
+
+    private var cardBorderColor: Color {
+        colorScheme == .dark
+            ? Color.white.opacity(0.14)
+            : Color.white.opacity(0.72)
+    }
+
+    private var buttonColor: Color {
+        colorScheme == .dark
+            ? Color(red: 0.38, green: 0.30, blue: 0.74)
+            : AppTheme.deepIndigo
     }
 
     private func revealWelcome() {
@@ -201,7 +238,7 @@ struct WelcomeView: View {
 
             Text("A simple, private space to help us stay consistent with our five daily prayers.")
                 .font(.body)
-                .foregroundStyle(AppTheme.deepIndigo.opacity(0.70))
+                .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
                 .lineSpacing(3)
                 .frame(maxWidth: 330)
@@ -217,7 +254,7 @@ struct WelcomeView: View {
             )
 
             Divider()
-                .overlay(AppTheme.deepIndigo.opacity(0.10))
+                .overlay(primaryTextColor.opacity(colorScheme == .dark ? 0.14 : 0.10))
                 .padding(.leading, 58)
 
             WelcomeFeatureRow(
@@ -227,7 +264,7 @@ struct WelcomeView: View {
             )
 
             Divider()
-                .overlay(AppTheme.deepIndigo.opacity(0.10))
+                .overlay(primaryTextColor.opacity(colorScheme == .dark ? 0.14 : 0.10))
                 .padding(.leading, 58)
 
             WelcomeFeatureRow(
@@ -238,12 +275,18 @@ struct WelcomeView: View {
         }
         .frame(width: width - 32)
         .padding(.horizontal, 16)
-        .background(Color.white.opacity(0.66), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .background(cardColor, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         .overlay {
             RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .stroke(Color.white.opacity(0.72), lineWidth: 1)
+                .stroke(cardBorderColor, lineWidth: 1)
         }
-        .shadow(color: AppTheme.deepIndigo.opacity(0.08), radius: 22, y: 10)
+        .shadow(
+            color: colorScheme == .dark
+                ? Color.black.opacity(0.32)
+                : AppTheme.deepIndigo.opacity(0.08),
+            radius: 22,
+            y: 10
+        )
     }
 
     private func continueButton(width: CGFloat) -> some View {
@@ -255,7 +298,7 @@ struct WelcomeView: View {
             .font(.headline)
             .foregroundStyle(.white)
             .frame(width: width, height: 56)
-            .background(AppTheme.deepIndigo, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+            .background(buttonColor, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
         }
         .buttonStyle(WelcomeButtonStyle())
         .accessibilityHint("Opens the Today screen")
@@ -263,6 +306,7 @@ struct WelcomeView: View {
 }
 
 private struct WelcomeFeatureRow: View {
+    @Environment(\.colorScheme) private var colorScheme
     let title: String
     let message: String
     let systemImage: String
@@ -273,7 +317,10 @@ private struct WelcomeFeatureRow: View {
                 .font(.system(size: 20, weight: .semibold))
                 .foregroundStyle(AppTheme.accent)
                 .frame(width: 42, height: 42)
-                .background(AppTheme.accent.opacity(0.12), in: Circle())
+                .background(
+                    AppTheme.accent.opacity(colorScheme == .dark ? 0.22 : 0.12),
+                    in: Circle()
+                )
 
             VStack(alignment: .leading, spacing: 3) {
                 Text(title)
@@ -281,7 +328,7 @@ private struct WelcomeFeatureRow: View {
 
                 Text(message)
                     .font(.subheadline)
-                    .foregroundStyle(AppTheme.deepIndigo.opacity(0.66))
+                    .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
 
