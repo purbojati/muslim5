@@ -54,7 +54,7 @@ struct PrayerHeroView: View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(phase.title)
-                    .font(.system(.largeTitle, design: .rounded, weight: .bold))
+                    .font(.system(.largeTitle, design: .serif, weight: .bold))
 
                 Text(phase.countdownText(at: date))
                     .font(.title3.weight(.semibold))

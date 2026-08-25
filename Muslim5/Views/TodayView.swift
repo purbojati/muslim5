@@ -208,7 +208,7 @@ struct TodayView: View {
             ZStack(alignment: .topLeading) {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(dayTitle)
-                        .font(.system(.title2, design: .rounded, weight: .bold))
+                        .font(.system(.title2, design: .serif, weight: .bold))
                     Text(hijriDateText(for: date))
                         .font(.footnote)
                         .foregroundStyle(.white.opacity(0.72))
