@@ -80,13 +80,8 @@ struct QiblaView: View {
                 .frame(width: 34, height: 34)
                 .background(AppTheme.accent.opacity(0.12), in: Circle())
 
-            VStack(alignment: .leading, spacing: 2) {
-                Text(locationProvider.cityName ?? "Current location")
-                    .font(.headline)
-                Text("Calculated privately on this iPhone")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
+            Text(locationProvider.cityName ?? "Current location")
+                .font(.headline)
 
             Spacer()
 
@@ -141,7 +136,7 @@ struct QiblaView: View {
 
             sensorStatus
 
-            Label("Hold your iPhone flat with its top edge pointing forward.", systemImage: "iphone")
+            Label("Hold iPhone flat, with its top pointing forward.", systemImage: "iphone")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -162,13 +157,13 @@ struct QiblaView: View {
             .foregroundStyle(.secondary)
 
         case .unavailable:
-            Label("Live compass direction isn’t available on this device.", systemImage: "exclamationmark.compass")
+            Label("Compass unavailable on this device.", systemImage: "exclamationmark.compass")
                 .font(.footnote)
                 .foregroundStyle(.orange)
                 .multilineTextAlignment(.center)
 
         case .updating where hasLowAccuracy:
-            Label("Compass accuracy is low. Move away from metal or electronics and make a figure eight.", systemImage: "wave.3.right.circle")
+            Label("Low accuracy. Move away from metal and trace a figure eight.", systemImage: "wave.3.right.circle")
                 .font(.footnote)
                 .foregroundStyle(.orange)
                 .multilineTextAlignment(.center)
@@ -271,11 +266,11 @@ struct QiblaView: View {
     private var locationStateMessage: String {
         switch locationProvider.state {
         case .denied:
-            "Allow location access in Settings to calculate the Qibla direction."
+            "Allow location access in Settings to find the Qibla."
         case .unavailable:
-            "We couldn’t get your location. Check Location Services and try again."
+            "Check Location Services and try again."
         default:
-            "Your position is needed to calculate the direction toward the Kaaba."
+            "Location is needed to find the Qibla."
         }
     }
 

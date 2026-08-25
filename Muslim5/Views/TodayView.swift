@@ -131,17 +131,13 @@ struct TodayView: View {
         scene: PrayerScene,
         topInset: CGFloat
     ) -> some View {
-        VStack(spacing: 0) {
-            prayerHeader(
-                at: date,
-                hijriDate: hijriDate,
-                phase: phase,
-                scene: scene,
-                topInset: topInset
-            )
-
-            dailyProgressBar(for: date, scene: scene)
-        }
+        prayerHeader(
+            at: date,
+            hijriDate: hijriDate,
+            phase: phase,
+            scene: scene,
+            topInset: topInset
+        )
     }
 
     private func prayerHeader(
@@ -319,44 +315,6 @@ struct TodayView: View {
 
     private var locationSymbol: String {
         locationProvider.state == .denied ? "location.slash.fill" : "location.fill"
-    }
-
-    private func dailyProgressBar(for date: Date, scene: PrayerScene) -> some View {
-        let completedCount = metrics.completedCount(on: date)
-        let progress = Double(completedCount) / 5
-        let tint = completedCount == 5 ? AppTheme.success : progressTint(for: scene)
-
-        return GeometryReader { geometry in
-            ZStack(alignment: .leading) {
-                progressTint(for: scene).opacity(0.22)
-
-                tint
-                    .frame(width: geometry.size.width * progress)
-            }
-        }
-            .frame(maxWidth: .infinity)
-            .frame(height: 6)
-            .clipped()
-            .animation(.easeOut(duration: 0.2), value: completedCount)
-            .animation(.easeInOut(duration: 0.25), value: scene)
-            .accessibilityElement()
-            .accessibilityLabel("Prayer progress")
-            .accessibilityValue("\(completedCount) of 5 prayers completed")
-    }
-
-    private func progressTint(for scene: PrayerScene) -> Color {
-        switch scene {
-        case .dawn:
-            Color(red: 0.52, green: 0.39, blue: 0.48)
-        case .daylight:
-            Color(red: 0.43, green: 0.61, blue: 0.67)
-        case .goldenHour:
-            Color(red: 0.65, green: 0.46, blue: 0.38)
-        case .dusk:
-            Color(red: 0.48, green: 0.33, blue: 0.41)
-        case .night:
-            Color(red: 0.32, green: 0.30, blue: 0.48)
-        }
     }
 
     private var prayerCircleCard: some View {

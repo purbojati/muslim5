@@ -30,6 +30,28 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section {
+                    NavigationLink {
+                        SharingSettingsView()
+                    } label: {
+                        Label {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Prayer Circle")
+                                Text(sharingStatus)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        } icon: {
+                            Image(systemName: "person.2.fill")
+                                .foregroundStyle(AppTheme.accent)
+                        }
+                    }
+                } header: {
+                    Text("Sharing")
+                } footer: {
+                    Text("Link with family using a private code and see their initials after they check in.")
+                }
+
+                Section {
                     Toggle(isOn: periodModeBinding) {
                         Label {
                             Text("Period mode")
@@ -107,28 +129,6 @@ struct SettingsView: View {
                     }
                 } header: {
                     Text("Settings")
-                }
-
-                Section {
-                    NavigationLink {
-                        SharingSettingsView()
-                    } label: {
-                        Label {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Prayer Circle")
-                                Text(sharingStatus)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        } icon: {
-                            Image(systemName: "person.2.fill")
-                                .foregroundStyle(AppTheme.accent)
-                        }
-                    }
-                } header: {
-                    Text("Sharing")
-                } footer: {
-                    Text("Link with family using a private code and see their initials after they check in.")
                 }
 
                 Section("Privacy") {
