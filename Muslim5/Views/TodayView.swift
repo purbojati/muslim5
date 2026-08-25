@@ -86,17 +86,13 @@ struct TodayView: View {
         GeometryReader { geometry in
             ScrollView {
                 VStack(spacing: 0) {
-                    prayerHeader(
+                    prayerHeaderSection(
                         at: date,
                         hijriDate: hijriDate,
                         phase: phase,
                         scene: scene,
                         topInset: geometry.safeAreaInsets.top
                     )
-
-                    dailyProgressBar(for: date, scene: scene)
-                        .padding(.horizontal, 18)
-                        .padding(.top, 12)
 
                     VStack(alignment: .leading, spacing: 18) {
                         if sharingService.isConfigured, sharingService.profile == nil {
@@ -125,6 +121,26 @@ struct TodayView: View {
             }
             .background(Color(.systemGroupedBackground))
             .ignoresSafeArea(edges: .top)
+        }
+    }
+
+    private func prayerHeaderSection(
+        at date: Date,
+        hijriDate: Date,
+        phase: PrayerPhase?,
+        scene: PrayerScene,
+        topInset: CGFloat
+    ) -> some View {
+        VStack(spacing: 0) {
+            prayerHeader(
+                at: date,
+                hijriDate: hijriDate,
+                phase: phase,
+                scene: scene,
+                topInset: topInset
+            )
+
+            dailyProgressBar(for: date, scene: scene)
         }
     }
 
@@ -307,11 +323,23 @@ struct TodayView: View {
 
     private func dailyProgressBar(for date: Date, scene: PrayerScene) -> some View {
         let completedCount = metrics.completedCount(on: date)
+        let progress = Double(completedCount) / 5
+        let tint = completedCount == 5 ? AppTheme.success : progressTint(for: scene)
 
-        return ProgressView(value: Double(completedCount), total: 5)
-            .tint(completedCount == 5 ? AppTheme.success : progressTint(for: scene))
+        return GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                progressTint(for: scene).opacity(0.22)
+
+                tint
+                    .frame(width: geometry.size.width * progress)
+            }
+        }
+            .frame(maxWidth: .infinity)
+            .frame(height: 6)
+            .clipped()
+            .animation(.easeOut(duration: 0.2), value: completedCount)
             .animation(.easeInOut(duration: 0.25), value: scene)
-            .accessibilityElement(children: .combine)
+            .accessibilityElement()
             .accessibilityLabel("Prayer progress")
             .accessibilityValue("\(completedCount) of 5 prayers completed")
     }
@@ -386,9 +414,12 @@ struct TodayView: View {
                 Text("Your five moments")
                     .font(.title3.bold())
 
-                Text("Tap to complete. Touch and hold for more options.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                if metrics.completedCount(on: date) == 0 {
+                    Text("Tap to complete. Touch and hold for more options.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .transition(.opacity)
+                }
             }
             .padding(.horizontal, 2)
             .padding(.bottom, 2)
@@ -484,6 +515,7 @@ struct TodayView: View {
     private func gentleFooter(for date: Date) -> some View {
         let isComplete = metrics.completedCount(on: date) == Prayer.allCases.count
         let celebratesCompletion = isComplete && shouldCelebrateCompletion(on: date)
+        let message = gentleFooterMessage(for: date)
 
         return HStack(spacing: 14) {
             ZStack {
@@ -503,13 +535,44 @@ struct TodayView: View {
                 value: isComplete
             )
 
-            Text("Every return counts—even the quiet ones.")
+            Text(message)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
+                .id(message)
+                .transition(.opacity)
 
             Spacer()
         }
         .padding(.horizontal, 6)
+    }
+
+    private func gentleFooterMessage(for date: Date) -> String {
+        let completedCount = metrics.completedCount(on: date)
+
+        if metrics.isPaused(on: date) {
+            return "Rest belongs in a compassionate rhythm, too."
+        }
+
+        switch completedCount {
+        case 5:
+            return "Five prayers, one faithful day."
+        case 4:
+            return "One prayer remains—finish gently."
+        case 3:
+            return "More than halfway. Keep returning."
+        case 2:
+            return "Two moments kept, with more still ahead."
+        case 1:
+            return "One sincere return can shape the whole day."
+        default:
+            if dayOffset < 0 {
+                return "A quiet day does not erase the journey."
+            }
+            if metrics.currentStreak > 0 {
+                return "Your rhythm is still here. Begin when you’re ready."
+            }
+            return "The next prayer is always a place to begin."
+        }
     }
 
     private var sparkleTransition: AnyTransition {

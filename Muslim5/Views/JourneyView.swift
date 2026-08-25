@@ -93,21 +93,100 @@ struct JourneyView: View {
     }
 
     private var reflectionCard: some View {
-        HStack(alignment: .top, spacing: 14) {
+        let reflection = journeyReflection
+
+        return HStack(alignment: .top, spacing: 14) {
             Image(systemName: "quote.opening")
                 .font(.title2)
                 .foregroundStyle(AppTheme.accent)
 
             VStack(alignment: .leading, spacing: 5) {
-                Text("Your story keeps going")
+                Text(reflection.title)
                     .font(.headline)
-                Text("A quiet day never erases the days before it. The next prayer is always a new beginning.")
+                Text(reflection.body)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
         }
         .padding(20)
         .background(AppTheme.accent.opacity(0.08), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+    }
+
+    private var journeyReflection: (title: String, body: String) {
+        if metrics.isPaused(on: .now) {
+            return (
+                "Rest without losing your place",
+                "This pause is part of your journey, not a step away from it."
+            )
+        }
+
+        if records.isEmpty {
+            return (
+                "Your journey begins here",
+                "One prayer is enough to place the first mark on your path."
+            )
+        }
+
+        if metrics.currentStreak >= 30 {
+            return (
+                "A month held with care",
+                "Thirty days of returning have become something steady and deeply rooted."
+            )
+        }
+
+        if metrics.currentStreak >= 7 {
+            return (
+                "A rhythm is taking root",
+                "A full week of faithful days shows what gentle consistency can become."
+            )
+        }
+
+        if metrics.currentStreak >= 3 {
+            return (
+                "Keep the rhythm close",
+                "These steady days are becoming a pattern you can return to."
+            )
+        }
+
+        if metrics.last30DayConsistency >= 0.9 {
+            return (
+                "Quiet consistency, clearly seen",
+                "Your recent days show a strong rhythm, built one prayer at a time."
+            )
+        }
+
+        if metrics.perfectDays >= 10 {
+            return (
+                "You have returned many times",
+                "Every full prayer day is evidence of care, even when the path between them varies."
+            )
+        }
+
+        if metrics.last30DayConsistency >= 0.6 {
+            return (
+                "Steadiness grows gradually",
+                "Your recent pattern already holds momentum. Let the next prayer carry it forward."
+            )
+        }
+
+        if metrics.perfectDays > 0 {
+            return (
+                "You know the way back",
+                "You have completed a full day before. That path is still open to you."
+            )
+        }
+
+        if let prayer = metrics.strongestPrayer {
+            return (
+                "A strength is already forming",
+                "\(prayer.name) has been your steadiest moment. Let that strength support the others."
+            )
+        }
+
+        return (
+            "Your story keeps going",
+            "A quiet day never erases the days before it. The next prayer is always a new beginning."
+        )
     }
 
     private func summaryTile(value: String, label: String, symbol: String, color: Color) -> some View {
