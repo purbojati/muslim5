@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A00000000000000000000101 /* SalahStreakApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000201 /* SalahStreakApp.swift */; };
+		A00000000000000000000101 /* Muslim5App.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000201 /* Muslim5App.swift */; };
 		A00000000000000000000102 /* Prayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000202 /* Prayer.swift */; };
 		A00000000000000000000103 /* PrayerRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000203 /* PrayerRecord.swift */; };
 		A00000000000000000000104 /* TrackingPause.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000204 /* TrackingPause.swift */; };
@@ -26,12 +26,12 @@
 		A00000000000000000000111 /* PrayerHeroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000211 /* PrayerHeroView.swift */; };
 		A00000000000000000000112 /* PrayerSkyBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000212 /* PrayerSkyBackground.swift */; };
 		A00000000000000000000113 /* Adhan in Frameworks */ = {isa = PBXBuildFile; productRef = A00000000000000000000901 /* Adhan */; };
-		A00000000000000000000114 /* SalahStreakIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000213 /* SalahStreakIcon.icon */; };
+		A00000000000000000000114 /* Muslim5Icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000213 /* Muslim5Icon.icon */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A00000000000000000000200 /* Salah Streak.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Salah Streak.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A00000000000000000000201 /* SalahStreakApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalahStreakApp.swift; sourceTree = "<group>"; };
+		A00000000000000000000200 /* Muslim 5.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Muslim 5.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A00000000000000000000201 /* Muslim5App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Muslim5App.swift; sourceTree = "<group>"; };
 		A00000000000000000000202 /* Prayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prayer.swift; sourceTree = "<group>"; };
 		A00000000000000000000203 /* PrayerRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerRecord.swift; sourceTree = "<group>"; };
 		A00000000000000000000204 /* TrackingPause.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingPause.swift; sourceTree = "<group>"; };
@@ -49,7 +49,7 @@
 		A00000000000000000000210 /* LocationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationProvider.swift; sourceTree = "<group>"; };
 		A00000000000000000000211 /* PrayerHeroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerHeroView.swift; sourceTree = "<group>"; };
 		A00000000000000000000212 /* PrayerSkyBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerSkyBackground.swift; sourceTree = "<group>"; };
-		A00000000000000000000213 /* SalahStreakIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = SalahStreakIcon.icon; sourceTree = "<group>"; };
+		A00000000000000000000213 /* Muslim5Icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Muslim5Icon.icon; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,23 +67,23 @@
 		A00000000000000000000400 = {
 			isa = PBXGroup;
 			children = (
-				A00000000000000000000401 /* SalahStreak */,
+				A00000000000000000000401 /* Muslim5 */,
 				A00000000000000000000407 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		A00000000000000000000401 /* SalahStreak */ = {
+		A00000000000000000000401 /* Muslim5 */ = {
 			isa = PBXGroup;
 			children = (
-				A00000000000000000000201 /* SalahStreakApp.swift */,
+				A00000000000000000000201 /* Muslim5App.swift */,
 				A00000000000000000000402 /* Models */,
 				A00000000000000000000403 /* Design */,
 				A00000000000000000000404 /* Services */,
 				A00000000000000000000405 /* Views */,
-				A00000000000000000000213 /* SalahStreakIcon.icon */,
+				A00000000000000000000213 /* Muslim5Icon.icon */,
 				A0000000000000000000020D /* Assets.xcassets */,
 			);
-			path = SalahStreak;
+			path = Muslim5;
 			sourceTree = "<group>";
 		};
 		A00000000000000000000402 /* Models */ = {
@@ -141,7 +141,7 @@
 		A00000000000000000000407 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A00000000000000000000200 /* Salah Streak.app */,
+				A00000000000000000000200 /* Muslim 5.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -149,9 +149,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A00000000000000000000500 /* Salah Streak */ = {
+		A00000000000000000000500 /* Muslim 5 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A00000000000000000000801 /* Build configuration list for PBXNativeTarget "Salah Streak" */;
+			buildConfigurationList = A00000000000000000000801 /* Build configuration list for PBXNativeTarget "Muslim 5" */;
 			buildPhases = (
 				A00000000000000000000300 /* Sources */,
 				A00000000000000000000301 /* Frameworks */,
@@ -161,12 +161,12 @@
 			);
 			dependencies = (
 			);
-			name = "Salah Streak";
+			name = "Muslim 5";
 			packageProductDependencies = (
 				A00000000000000000000901 /* Adhan */,
 			);
-			productName = SalahStreak;
-			productReference = A00000000000000000000200 /* Salah Streak.app */;
+			productName = Muslim5;
+			productReference = A00000000000000000000200 /* Muslim 5.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -184,7 +184,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A00000000000000000000800 /* Build configuration list for PBXProject "SalahStreak" */;
+			buildConfigurationList = A00000000000000000000800 /* Build configuration list for PBXProject "Muslim5" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -200,7 +200,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A00000000000000000000500 /* Salah Streak */,
+				A00000000000000000000500 /* Muslim 5 */,
 			);
 		};
 /* End PBXProject section */
@@ -210,7 +210,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A00000000000000000000114 /* SalahStreakIcon.icon in Resources */,
+				A00000000000000000000114 /* Muslim5Icon.icon in Resources */,
 				A0000000000000000000010D /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -222,7 +222,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A00000000000000000000101 /* SalahStreakApp.swift in Sources */,
+				A00000000000000000000101 /* Muslim5App.swift in Sources */,
 				A00000000000000000000102 /* Prayer.swift in Sources */,
 				A00000000000000000000103 /* PrayerRecord.swift in Sources */,
 				A00000000000000000000104 /* TrackingPause.swift in Sources */,
@@ -363,13 +363,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_APPICON_NAME = SalahStreakIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Muslim5Icon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Salah Streak";
+				INFOPLIST_KEY_CFBundleDisplayName = "Muslim 5";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is used on this device to calculate local prayer times.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -378,7 +378,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.salahstreak.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.muslim5.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -392,13 +392,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_APPICON_NAME = SalahStreakIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Muslim5Icon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Salah Streak";
+				INFOPLIST_KEY_CFBundleDisplayName = "Muslim 5";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Your location is used on this device to calculate local prayer times.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -407,7 +407,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.salahstreak.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.muslim5.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -420,7 +420,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A00000000000000000000800 /* Build configuration list for PBXProject "SalahStreak" */ = {
+		A00000000000000000000800 /* Build configuration list for PBXProject "Muslim5" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A00000000000000000000700 /* Debug */,
@@ -429,7 +429,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A00000000000000000000801 /* Build configuration list for PBXNativeTarget "Salah Streak" */ = {
+		A00000000000000000000801 /* Build configuration list for PBXNativeTarget "Muslim 5" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A00000000000000000000702 /* Debug */,

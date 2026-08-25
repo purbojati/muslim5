@@ -1,6 +1,6 @@
-# Salah Streak
+# Muslim 5
 
-Salah Streak is a private, local-first iPhone tracker for the five daily prayers. It uses a gentle habit-building approach: progress is visible, while missed days never erase earlier effort.
+Muslim 5 is a private, local-first iPhone tracker for the five daily prayers. It uses a gentle habit-building approach: progress is visible, while missed days never erase earlier effort.
 
 ## Current MVP
 
@@ -22,8 +22,8 @@ Salah Streak is a private, local-first iPhone tracker for the five daily prayers
 
 ## Run locally
 
-1. Open `SalahStreak.xcodeproj` in Xcode.
-2. Select the **Salah Streak** scheme.
+1. Open `Muslim5.xcodeproj` in Xcode.
+2. Select the **Muslim 5** scheme.
 3. Choose an iPhone simulator or your signing-enabled iPhone.
 4. Press **Run**.
 

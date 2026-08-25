@@ -2,7 +2,7 @@ import SwiftData
 import SwiftUI
 
 @main
-struct SalahStreakApp: App {
+struct Muslim5App: App {
     private let modelContainer: ModelContainer = {
         do {
             return try ModelContainer(for: PrayerRecord.self, TrackingPause.self)
