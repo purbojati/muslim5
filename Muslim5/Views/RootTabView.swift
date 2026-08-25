@@ -62,13 +62,13 @@ struct RootTabView: View {
         TabView(selection: $selectedTab) {
             TodayView()
                 .tabItem {
-                    Label("Today", systemImage: "circle.grid.2x2.fill")
+                    Label("Today", systemImage: "sun.max.fill")
                 }
                 .tag(AppTab.today)
 
             JourneyView()
                 .tabItem {
-                    Label("Journey", systemImage: "square.grid.3x3.fill")
+                    Label("Journey", systemImage: "point.bottomleft.forward.to.point.topright.scurvepath")
                 }
                 .tag(AppTab.journey)
 
