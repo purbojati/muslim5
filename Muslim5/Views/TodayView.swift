@@ -19,7 +19,6 @@ struct TodayView: View {
     ]
 
     @Environment(\.modelContext) private var modelContext
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @Environment(\.locale) private var locale
     @Environment(\.openURL) private var openURL
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -78,6 +77,7 @@ struct TodayView: View {
     private func homepage(at date: Date) -> some View {
         let schedule = makeSchedule(at: date)
         let phase = schedule?.phase(at: date)
+        let scene = previewScene ?? phase?.scene ?? fallbackScene(at: date)
         let hijriDate = hijriDisplayDate(
             for: date,
             maghrib: schedule?.today.maghrib
@@ -90,12 +90,15 @@ struct TodayView: View {
                         at: date,
                         hijriDate: hijriDate,
                         phase: phase,
+                        scene: scene,
                         topInset: geometry.safeAreaInsets.top
                     )
 
-                    VStack(alignment: .leading, spacing: 18) {
-                        dailyCompanionCard(for: date)
+                    dailyProgressBar(for: date, scene: scene)
+                        .padding(.horizontal, 18)
+                        .padding(.top, 12)
 
+                    VStack(alignment: .leading, spacing: 18) {
                         if periodMode {
                             pauseBanner
                         }
@@ -108,7 +111,7 @@ struct TodayView: View {
                         gentleFooter(for: date)
                     }
                     .padding(.horizontal, 18)
-                    .padding(.top, 20)
+                    .padding(.top, 18)
                     .padding(.bottom, 28)
                 }
             }
@@ -125,10 +128,11 @@ struct TodayView: View {
         at date: Date,
         hijriDate: Date,
         phase: PrayerPhase?,
+        scene: PrayerScene,
         topInset: CGFloat
     ) -> some View {
         ZStack(alignment: .topLeading) {
-            PrayerSkyBackground(scene: previewScene ?? phase?.scene ?? fallbackScene(at: date))
+            PrayerSkyBackground(scene: scene)
 
             VStack(alignment: .leading, spacing: 26) {
                 dayHeader(at: hijriDate)
@@ -297,41 +301,30 @@ struct TodayView: View {
         locationProvider.state == .denied ? "location.slash.fill" : "location.fill"
     }
 
-    private func dailyCompanionCard(for date: Date) -> some View {
+    private func dailyProgressBar(for date: Date, scene: PrayerScene) -> some View {
         let completedCount = metrics.completedCount(on: date)
 
-        return VStack(alignment: .leading, spacing: 10) {
-            if dynamicTypeSize.isAccessibilitySize {
-                VStack(alignment: .leading, spacing: 4) {
-                    completionCount(on: date)
-                    streakStatus
-                }
-            } else {
-                HStack {
-                    completionCount(on: date)
-                    Spacer()
-                    streakStatus
-                }
-            }
+        return ProgressView(value: Double(completedCount), total: 5)
+            .tint(completedCount == 5 ? AppTheme.success : progressTint(for: scene))
+            .animation(.easeInOut(duration: 0.25), value: scene)
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("Prayer progress")
+            .accessibilityValue("\(completedCount) of 5 prayers completed")
+    }
 
-            ProgressView(value: Double(completedCount), total: 5)
-                .tint(completedCount == 5 ? AppTheme.success : AppTheme.accent)
+    private func progressTint(for scene: PrayerScene) -> Color {
+        switch scene {
+        case .dawn:
+            Color(red: 0.52, green: 0.39, blue: 0.48)
+        case .daylight:
+            Color(red: 0.43, green: 0.61, blue: 0.67)
+        case .goldenHour:
+            Color(red: 0.65, green: 0.46, blue: 0.38)
+        case .dusk:
+            Color(red: 0.48, green: 0.33, blue: 0.41)
+        case .night:
+            Color(red: 0.32, green: 0.30, blue: 0.48)
         }
-        .padding(.horizontal, 2)
-        .accessibilityElement(children: .combine)
-    }
-
-    private func completionCount(on date: Date) -> some View {
-        Text("\(metrics.completedCount(on: date)) of 5 \(dayOffset == 0 ? "today" : "on this day")")
-            .font(.headline)
-            .monospacedDigit()
-            .contentTransition(.numericText())
-    }
-
-    private var streakStatus: some View {
-        Text(dayOffset == 0 ? streakMessage : "Reviewing past day")
-            .font(.footnote)
-            .foregroundStyle(.secondary)
     }
 
     private func prayerList(schedule: DailyPrayerSchedule?, on date: Date) -> some View {
@@ -487,12 +480,6 @@ struct TodayView: View {
     private func shouldCelebrateCompletion(on date: Date) -> Bool {
         guard let completionCelebrationDay else { return false }
         return Calendar.autoupdatingCurrent.isDate(completionCelebrationDay, inSameDayAs: date)
-    }
-
-    private var streakMessage: String {
-        metrics.currentStreak == 0
-            ? "Today is a fresh start"
-            : "\(metrics.currentStreak) days in rhythm"
     }
 
     private func toggle(_ prayer: Prayer, on date: Date) {
