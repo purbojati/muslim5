@@ -139,6 +139,10 @@ struct SettingsView: View {
 
                 Section {
                     LabeledContent("Version", value: appVersion)
+                } footer: {
+                    Text("Made in Indonesia 🇮🇩")
+                        .frame(maxWidth: .infinity)
+                        .multilineTextAlignment(.center)
                 }
             }
             .navigationTitle("You")
