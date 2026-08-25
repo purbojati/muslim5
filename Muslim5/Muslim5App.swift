@@ -13,7 +13,7 @@ struct Muslim5App: App {
 
     var body: some Scene {
         WindowGroup {
-            RootTabView()
+            AppLaunchView()
                 .tint(AppTheme.accent)
         }
         .modelContainer(modelContainer)

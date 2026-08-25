@@ -34,6 +34,7 @@
 		A00000000000000000000119 /* QiblaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000218 /* QiblaView.swift */; };
 		A0000000000000000000011A /* SharingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000219 /* SharingService.swift */; };
 		A0000000000000000000011B /* SharingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000021A /* SharingSettingsView.swift */; };
+		A0000000000000000000011C /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000021C /* WelcomeView.swift */; };
 		B00000000000000000000001 /* QiblaCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000002 /* QiblaCalculatorTests.swift */; };
 		B0000000000000000000000E /* SharingServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000F /* SharingServiceTests.swift */; };
 /* End PBXBuildFile section */
@@ -77,6 +78,7 @@
 		A00000000000000000000219 /* SharingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingService.swift; sourceTree = "<group>"; };
 		A0000000000000000000021A /* SharingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingSettingsView.swift; sourceTree = "<group>"; };
 		A0000000000000000000021B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A0000000000000000000021C /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		B00000000000000000000002 /* QiblaCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaCalculatorTests.swift; sourceTree = "<group>"; };
 		B00000000000000000000003 /* Muslim5Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Muslim5Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0000000000000000000000F /* SharingServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingServiceTests.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 		A00000000000000000000405 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				A0000000000000000000021C /* WelcomeView.swift */,
 				A00000000000000000000207 /* RootTabView.swift */,
 				A00000000000000000000209 /* TodayView.swift */,
 				A00000000000000000000218 /* QiblaView.swift */,
@@ -334,6 +337,7 @@
 				A00000000000000000000119 /* QiblaView.swift in Sources */,
 				A0000000000000000000011A /* SharingService.swift in Sources */,
 				A0000000000000000000011B /* SharingSettingsView.swift in Sources */,
+				A0000000000000000000011C /* WelcomeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
