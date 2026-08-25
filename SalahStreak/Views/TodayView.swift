@@ -76,7 +76,7 @@ struct TodayView: View {
 
     private func prayerHeader(at date: Date, phase: PrayerPhase?, topInset: CGFloat) -> some View {
         ZStack {
-            PrayerSkyBackground(scene: phase?.scene ?? fallbackScene(at: date))
+            PrayerSkyBackground(scene: previewScene ?? phase?.scene ?? fallbackScene(at: date))
 
             VStack(alignment: .leading, spacing: 26) {
                 todayHeader(at: date)
@@ -305,5 +305,16 @@ struct TodayView: View {
         case 18..<20: .dusk
         default: .night
         }
+    }
+
+    private var previewScene: PrayerScene? {
+#if DEBUG
+        guard let rawValue = ProcessInfo.processInfo.environment["SALAH_PREVIEW_SCENE"] else {
+            return nil
+        }
+        return PrayerScene(rawValue: rawValue)
+#else
+        return nil
+#endif
     }
 }
