@@ -225,10 +225,14 @@ struct TodayView: View {
         Button(action: handleLocationAction) {
             Label(locationLabel, systemImage: locationSymbol)
                 .font(.footnote.weight(.semibold))
+                .lineLimit(2)
+                .truncationMode(.tail)
+                .frame(maxWidth: 160)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
         }
         .buttonStyle(.plain)
+        .accessibilityLabel("Prayer time location: \(locationLabel)")
         .accessibilityHint("Updates the location used for prayer times")
     }
 
