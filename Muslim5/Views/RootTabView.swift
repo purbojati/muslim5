@@ -87,7 +87,7 @@ struct RootTabView: View {
 
             SettingsView()
                 .tabItem {
-                    Label("You", systemImage: "person.crop.circle")
+                    Label("Others", systemImage: "ellipsis.circle")
                 }
                 .tag(AppTab.settings)
         }

@@ -11,7 +11,6 @@ struct InsightsView: View {
         VStack(spacing: 18) {
             consistencyCard
             prayerBreakdown
-            privacyNote
         }
     }
 
@@ -75,18 +74,6 @@ struct InsightsView: View {
         }
         .padding(22)
         .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 24, style: .continuous))
-    }
-
-    private var privacyNote: some View {
-        Label {
-            Text("Your salah history is private and stays on this iPhone.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
-        } icon: {
-            Image(systemName: "lock.shield.fill")
-                .foregroundStyle(AppTheme.success)
-        }
-        .padding(.horizontal, 6)
     }
 
     private var consistencyMessage: String {

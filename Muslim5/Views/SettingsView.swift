@@ -42,7 +42,7 @@ struct SettingsView: View {
                             }
                         } icon: {
                             Image(systemName: "person.2.fill")
-                                .foregroundStyle(.black)
+                                .foregroundStyle(AppTheme.accent)
                         }
                     }
                 } header: {
@@ -57,7 +57,7 @@ struct SettingsView: View {
                             Text("Period Mode")
                         } icon: {
                             Image(systemName: "pause.circle.fill")
-                                .foregroundStyle(.black)
+                                .foregroundStyle(.pink)
                         }
                     }
                 } header: {
@@ -65,12 +65,23 @@ struct SettingsView: View {
                 }
 
                 Section {
+                    NavigationLink {
+                        PrayerTimesSettingsView()
+                    } label: {
+                        Label {
+                            Text("Prayer Times")
+                        } icon: {
+                            Image(systemName: "clock.fill")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+
                     Toggle(isOn: prayerNotificationsBinding) {
                         Label {
                             Text(isRequestingNotificationPermission ? "Requesting permission…" : "Prayer reminders")
                         } icon: {
                             Image(systemName: "bell.badge.fill")
-                                .foregroundStyle(.black)
+                                .foregroundStyle(.secondary)
                         }
                     }
                     .disabled(isRequestingNotificationPermission)
@@ -83,7 +94,7 @@ struct SettingsView: View {
                                 } icon: {
                                     Image(systemName: prayer.symbol)
                                         .symbolRenderingMode(.monochrome)
-                                        .foregroundStyle(.black)
+                                        .foregroundStyle(AppTheme.prayerColor(for: prayer))
                                 }
                             }
                             .disabled(!notificationService.canSchedule)
@@ -97,7 +108,7 @@ struct SettingsView: View {
                                 .foregroundStyle(.secondary)
                         } icon: {
                             Image(systemName: "bell.slash.fill")
-                                .foregroundStyle(.black)
+                                .foregroundStyle(.orange)
                         }
 
                         Button("Open iPhone Settings") {
@@ -111,35 +122,14 @@ struct SettingsView: View {
                                 .foregroundStyle(.orange)
                         } icon: {
                             Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundStyle(.black)
+                                .foregroundStyle(.orange)
                         }
                         .font(.footnote)
                     }
                 } header: {
-                    Text("Reminders")
+                    Text("Settings")
                 } footer: {
                     Text("A gentle reminder at each selected prayer time. Sound and vibration follow your iPhone settings.")
-                }
-
-                Section {
-                    NavigationLink {
-                        PrayerTimesSettingsView()
-                    } label: {
-                        Label {
-                            Text("Prayer Times")
-                        } icon: {
-                            Image(systemName: "clock.fill")
-                                .foregroundStyle(.black)
-                        }
-                    }
-                } header: {
-                    Text("Settings")
-                }
-
-                Section("Privacy") {
-                    youScreenLabel("Your salah history stays on this iPhone", systemImage: "iphone")
-                    youScreenLabel("Prayer Circle is optional", systemImage: "person.crop.circle.badge.checkmark")
-                    youScreenLabel("No scores or leaderboards", systemImage: "eye.slash")
                 }
 
                 Section {
@@ -150,7 +140,7 @@ struct SettingsView: View {
                         .multilineTextAlignment(.center)
                 }
             }
-            .navigationTitle("You")
+            .navigationTitle("Others")
             .task {
                 await notificationService.refreshAuthorizationStatus()
             }
@@ -184,15 +174,6 @@ struct SettingsView: View {
             return build
         case (nil, nil):
             return "—"
-        }
-    }
-
-    private func youScreenLabel(_ title: String, systemImage: String) -> some View {
-        Label {
-            Text(title)
-        } icon: {
-            Image(systemName: systemImage)
-                .foregroundStyle(.black)
         }
     }
 
@@ -349,7 +330,7 @@ private struct PeriodModeExplanationSheet: View {
             VStack(alignment: .leading, spacing: 10) {
                 Image(systemName: "pause.circle.fill")
                     .font(.system(size: 34))
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.pink)
 
                 Text("Pause tracking for your period?")
                     .font(.title2.bold())
