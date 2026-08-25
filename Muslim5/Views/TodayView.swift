@@ -189,9 +189,9 @@ struct TodayView: View {
 
     private var historicalReviewPrompt: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Label("Complete this day’s checklist", systemImage: "clock.arrow.circlepath")
+            Label("Missed a check-in?", systemImage: "clock.arrow.circlepath")
                 .font(.title3.bold())
-            Text("Add any prayers you completed but forgot to record.")
+            Text("Record any salah you prayed on this day.")
                 .font(.subheadline)
                 .foregroundStyle(.white.opacity(0.72))
         }
@@ -369,11 +369,11 @@ struct TodayView: View {
     private func prayerList(schedule: DailyPrayerSchedule?, on date: Date) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             VStack(alignment: .leading, spacing: 3) {
-                Text("Your five moments")
+                Text("Your five daily prayers")
                     .font(.title3.bold())
 
                 if metrics.completedCount(on: date) == 0 {
-                    Text("Tap to complete. Touch and hold for more options.")
+                    Text("Tap after you pray. Touch and hold for more options.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .transition(.opacity)
@@ -455,9 +455,9 @@ struct TodayView: View {
     private var pauseBanner: some View {
         Label {
             VStack(alignment: .leading, spacing: 2) {
-                Text("Tracking is respectfully paused")
+                Text("Period Mode is on")
                     .font(.subheadline.weight(.semibold))
-                Text("These days won’t be treated as missed days.")
+                Text("Salah tracking is paused, and these days won’t affect your streak.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -508,28 +508,28 @@ struct TodayView: View {
         let completedCount = metrics.completedCount(on: date)
 
         if metrics.isPaused(on: date) {
-            return "Rest belongs in a compassionate rhythm, too."
+            return "Take care of yourself. Your salah journey will be here when you return."
         }
 
         switch completedCount {
         case 5:
-            return "Five prayers, one faithful day."
+            return "Alhamdulillah — all five prayers recorded."
         case 4:
-            return "One prayer remains—finish gently."
+            return "One prayer left. May Allah make it easy."
         case 3:
-            return "More than halfway. Keep returning."
+            return "Three prayers recorded. Keep going, one salah at a time."
         case 2:
-            return "Two moments kept, with more still ahead."
+            return "Two prayers recorded. The next salah is another chance."
         case 1:
-            return "One sincere return can shape the whole day."
+            return "Alhamdulillah for this one. Keep the next prayer close."
         default:
             if dayOffset < 0 {
-                return "A quiet day does not erase the journey."
+                return "Nothing recorded for this day. You can still update it."
             }
             if metrics.currentStreak > 0 {
-                return "Your rhythm is still here. Begin when you’re ready."
+                return "Bismillah. Continue with the next prayer."
             }
-            return "The next prayer is always a place to begin."
+            return "Every salah is a fresh chance to return to Allah."
         }
     }
 

@@ -46,22 +46,22 @@ struct SettingsView: View {
                         }
                     }
                 } header: {
-                    Text("Sharing")
+                    Text("Pray with family")
                 } footer: {
-                    Text("Link with family using a private code and see their initials after they check in.")
+                    Text("Encourage one another in salah using a private linking code. Only completed-prayer check-ins are shared.")
                 }
 
                 Section {
                     Toggle(isOn: periodModeBinding) {
                         Label {
-                            Text("Period mode")
+                            Text("Period Mode")
                         } icon: {
                             Image(systemName: "pause.circle.fill")
                                 .foregroundStyle(AppTheme.accent)
                         }
                     }
                 } header: {
-                    Text("Life")
+                    Text("For sisters")
                 }
 
                 Section {
@@ -113,7 +113,7 @@ struct SettingsView: View {
                 } header: {
                     Text("Reminders")
                 } footer: {
-                    Text("Sound and vibration follow your iPhone settings.")
+                    Text("A gentle reminder at each selected prayer time. Sound and vibration follow your iPhone settings.")
                 }
 
                 Section {
@@ -132,15 +132,15 @@ struct SettingsView: View {
                 }
 
                 Section("Privacy") {
-                    Label("Prayer history stays on this iPhone", systemImage: "iphone")
-                    Label("Sharing is optional", systemImage: "person.crop.circle.badge.checkmark")
-                    Label("No leaderboard", systemImage: "eye.slash")
+                    Label("Your salah history stays on this iPhone", systemImage: "iphone")
+                    Label("Prayer Circle is optional", systemImage: "person.crop.circle.badge.checkmark")
+                    Label("No scores or leaderboards", systemImage: "eye.slash")
                 }
 
                 Section {
                     LabeledContent("Version", value: appVersion)
                 } footer: {
-                    Text("Made by a Muslim in Indonesia 🇮🇩")
+                    Text("Made with care by a fellow Muslim in Indonesia 🇮🇩")
                         .frame(maxWidth: .infinity)
                         .multilineTextAlignment(.center)
                 }
@@ -337,17 +337,17 @@ private struct PeriodModeExplanationSheet: View {
                     .font(.system(size: 34))
                     .foregroundStyle(AppTheme.accent)
 
-                Text("Turn on Period Mode?")
+                Text("Pause tracking for your period?")
                     .font(.title2.bold())
 
-                Text("While it’s on:")
+                Text("While Period Mode is on:")
                     .foregroundStyle(.secondary)
             }
 
             VStack(alignment: .leading, spacing: 16) {
-                explanationRow("Daily prayer tracking pauses", symbol: "pause.fill")
-                explanationRow("Paused days won’t break your streak", symbol: "flame.fill")
-                explanationRow("Everything stays on this iPhone", symbol: "lock.fill")
+                explanationRow("Salah tracking will pause", symbol: "pause.fill")
+                explanationRow("These days won’t affect your streak", symbol: "flame.fill")
+                explanationRow("Your data remains on this iPhone", symbol: "lock.fill")
             }
 
             Spacer(minLength: 0)

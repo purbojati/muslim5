@@ -19,7 +19,7 @@ struct InsightsView: View {
         VStack(alignment: .leading, spacing: 18) {
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Your month so far")
+                    Text("Your last 30 days")
                         .font(.headline)
                     Text(consistencyMessage)
                         .font(.subheadline)
@@ -38,7 +38,7 @@ struct InsightsView: View {
                 .tint(AppTheme.accent)
                 .scaleEffect(x: 1, y: 1.6)
 
-            Text("\(metrics.last30DayConsistency, format: .percent.precision(.fractionLength(0))) of your prayer moments were recorded")
+            Text("You recorded \(metrics.last30DayConsistency, format: .percent.precision(.fractionLength(0))) of your prayers")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -48,7 +48,7 @@ struct InsightsView: View {
 
     private var prayerBreakdown: some View {
         VStack(alignment: .leading, spacing: 18) {
-                Text("The moments you return to")
+                Text("Prayer by prayer")
                     .font(.headline)
 
             ForEach(Prayer.allCases) { prayer in
@@ -68,7 +68,7 @@ struct InsightsView: View {
 
             if let strongest = strongestRecentPrayer {
                 Divider()
-                Label("\(strongest.name) has been your steadiest moment lately.", systemImage: "heart.fill")
+                Label("\(strongest.name) has been your most consistent prayer lately.", systemImage: "heart.fill")
                     .font(.caption)
                     .foregroundStyle(AppTheme.success)
             }
@@ -79,7 +79,7 @@ struct InsightsView: View {
 
     private var privacyNote: some View {
         Label {
-            Text("This reflection belongs to you. Your prayer history never leaves this iPhone.")
+            Text("Your salah history is private and stays on this iPhone.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         } icon: {
@@ -91,19 +91,19 @@ struct InsightsView: View {
 
     private var consistencyMessage: String {
         switch metrics.last30DayConsistency {
-        case 0: "Your story will take shape as you begin."
-        case 0..<0.4: "Small steps are becoming a rhythm."
-        case 0.4..<0.8: "You’ve been making space to return."
-        default: "Your prayer rhythm has felt beautifully steady."
+        case 0: "Bismillah. Start by recording your next prayer."
+        case 0..<0.4: "Every prayer you record is a step forward."
+        case 0.4..<0.8: "Your consistency is growing, one salah at a time."
+        default: "MashaAllah, you’ve been consistent with your salah."
         }
     }
 
     private var monthRhythmTitle: String {
         switch metrics.last30DayConsistency {
-        case 0: "Ready to begin"
-        case 0..<0.4: "Taking root"
+        case 0: "Ready when you are"
+        case 0..<0.4: "A start, Alhamdulillah"
         case 0.4..<0.8: "Growing steadily"
-        default: "Feeling grounded"
+        default: "Steady, MashaAllah"
         }
     }
 
@@ -124,10 +124,10 @@ struct InsightsView: View {
 
     private func rhythmLabel(for count: Int) -> String {
         switch count {
-        case 0: "Ready to begin"
-        case 1..<10: "Taking root"
-        case 10..<22: "Growing"
-        default: "Steady"
+        case 0: "Not recorded yet"
+        case 1..<10: "A few times"
+        case 10..<22: "Often"
+        default: "Consistent"
         }
     }
 

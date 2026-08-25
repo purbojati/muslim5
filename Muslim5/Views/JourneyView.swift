@@ -22,23 +22,23 @@ struct JourneyView: View {
                 .padding(.bottom, 28)
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("Your journey")
+            .navigationTitle("Your salah journey")
         }
     }
 
     private var summary: some View {
         HStack(spacing: 12) {
-            summaryTile(value: "\(metrics.currentStreak)", label: "days in rhythm", symbol: "flame.fill", color: AppTheme.gold)
-            summaryTile(value: "\(metrics.perfectDays)", label: "full prayer days", symbol: "sparkles", color: AppTheme.success)
+            summaryTile(value: "\(metrics.currentStreak)", label: "current streak", symbol: "flame.fill", color: AppTheme.gold)
+            summaryTile(value: "\(metrics.perfectDays)", label: "days with all five", symbol: "sparkles", color: AppTheme.success)
         }
     }
 
     private var contributionCard: some View {
         VStack(alignment: .leading, spacing: 18) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("A season of returning")
+                Text("Your days in salah")
                     .font(.headline)
-                Text("Every square holds one day from your journey.")
+                Text("Each square shows how many prayers you recorded that day.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -74,18 +74,18 @@ struct JourneyView: View {
 
     private var legend: some View {
         HStack(spacing: 6) {
-            Text("Started")
+            Text("1 prayer")
             ForEach(0...5, id: \.self) { count in
                 RoundedRectangle(cornerRadius: 3)
                     .fill(AppTheme.contributionColor(for: count))
                     .frame(width: 14, height: 14)
             }
-            Text("All five")
+            Text("All 5")
             Spacer()
             Circle()
                 .stroke(AppTheme.accent, lineWidth: 1.5)
                 .frame(width: 13, height: 13)
-            Text("Rested")
+            Text("Paused")
         }
         .font(.caption2)
         .foregroundStyle(.secondary)
@@ -115,77 +115,77 @@ struct JourneyView: View {
     private var journeyReflection: (title: String, body: String) {
         if metrics.isPaused(on: .now) {
             return (
-                "Rest without losing your place",
-                "This pause is part of your journey, not a step away from it."
+                "Your pause is protected",
+                "Period Mode keeps these days from affecting your streak. Take care of yourself."
             )
         }
 
         if records.isEmpty {
             return (
-                "Your journey begins here",
-                "One prayer is enough to place the first mark on your path."
+                "Bismillah, begin with one",
+                "Record your next salah after you pray. Your journey can start there."
             )
         }
 
         if metrics.currentStreak >= 30 {
             return (
-                "A month held with care",
-                "Thirty days of returning have become something steady and deeply rooted."
+                "MashaAllah — 30 days",
+                "May Allah keep you steadfast and make salah beloved to your heart."
             )
         }
 
         if metrics.currentStreak >= 7 {
             return (
-                "A rhythm is taking root",
-                "A full week of faithful days shows what gentle consistency can become."
+                "MashaAllah — one full week",
+                "Seven days of showing up for salah. Keep asking Allah for steadfastness."
             )
         }
 
         if metrics.currentStreak >= 3 {
             return (
-                "Keep the rhythm close",
-                "These steady days are becoming a pattern you can return to."
+                "A good start, Alhamdulillah",
+                "You’re building consistency day by day. Keep the next salah close."
             )
         }
 
         if metrics.last30DayConsistency >= 0.9 {
             return (
-                "Quiet consistency, clearly seen",
-                "Your recent days show a strong rhythm, built one prayer at a time."
+                "MashaAllah, you’ve been consistent",
+                "Your last 30 days show real care for salah. May Allah help you continue."
             )
         }
 
         if metrics.perfectDays >= 10 {
             return (
-                "You have returned many times",
-                "Every full prayer day is evidence of care, even when the path between them varies."
+                "Ten complete days and counting",
+                "You’ve recorded all five prayers on many days. That effort still matters."
             )
         }
 
         if metrics.last30DayConsistency >= 0.6 {
             return (
-                "Steadiness grows gradually",
-                "Your recent pattern already holds momentum. Let the next prayer carry it forward."
+                "Consistency grows one salah at a time",
+                "You’ve built a good foundation. Let the next prayer carry you forward."
             )
         }
 
         if metrics.perfectDays > 0 {
             return (
-                "You know the way back",
-                "You have completed a full day before. That path is still open to you."
+                "You’ve done all five before",
+                "That means you can do it again, inshaAllah. Begin with the next prayer."
             )
         }
 
         if let prayer = metrics.strongestPrayer {
             return (
-                "A strength is already forming",
-                "\(prayer.name) has been your steadiest moment. Let that strength support the others."
+                "\(prayer.name) is your strongest prayer",
+                "Alhamdulillah for that consistency. Let it help you strengthen the other prayers too."
             )
         }
 
         return (
-            "Your story keeps going",
-            "A quiet day never erases the days before it. The next prayer is always a new beginning."
+            "The door is always open",
+            "A missed day doesn’t erase your effort. Begin again with the next salah."
         )
     }
 

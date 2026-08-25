@@ -136,7 +136,7 @@ struct QiblaView: View {
 
             sensorStatus
 
-            Label("Hold iPhone flat, with its top pointing forward.", systemImage: "iphone")
+            Label("Keep your iPhone flat, with the top pointing in front of you.", systemImage: "iphone")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -236,7 +236,7 @@ struct QiblaView: View {
         let amount = Int(abs(turn).rounded())
 
         if abs(turn) <= alignmentTolerance {
-            return "You’re facing the Qibla"
+            return "You’re facing the Qibla, Alhamdulillah"
         }
 
         return "Turn \(amount)° \(turn > 0 ? "right" : "left")"
@@ -266,11 +266,11 @@ struct QiblaView: View {
     private var locationStateMessage: String {
         switch locationProvider.state {
         case .denied:
-            "Allow location access in Settings to find the Qibla."
+            "Allow location access so we can calculate the Qibla from where you are."
         case .unavailable:
-            "Check Location Services and try again."
+            "Please check Location Services, then try again."
         default:
-            "Location is needed to find the Qibla."
+            "We use your location to calculate the Qibla from where you are."
         }
     }
 
