@@ -536,7 +536,7 @@ private struct SalahFocusShieldPreview: View {
 
             Image(systemName: "sun.max.fill")
                 .font(.system(size: 42, weight: .semibold))
-                .foregroundStyle(Color(red: 0.78, green: 0.57, blue: 0.27))
+                .foregroundStyle(Color(red: 0.91, green: 0.64, blue: 0.25))
 
             Text("Make space for \(prayerName)")
                 .font(.system(.title3, design: .rounded, weight: .bold))
@@ -560,10 +560,10 @@ private struct SalahFocusShieldPreview: View {
 
             Text("I’ve prayed — open Muslim 5")
                 .font(.footnote.weight(.bold))
-                .foregroundStyle(.white)
+                .foregroundStyle(Color(red: 0.025, green: 0.035, blue: 0.035))
                 .frame(maxWidth: .infinity)
                 .frame(height: 44)
-                .background(Color(red: 0.78, green: 0.57, blue: 0.27), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .background(Color(red: 0.91, green: 0.64, blue: 0.25), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
                 .padding(.horizontal, 18)
 
             Text("Not yet — close this app")
@@ -577,8 +577,8 @@ private struct SalahFocusShieldPreview: View {
         .background(
             LinearGradient(
                 colors: [
-                    Color(red: 0.035, green: 0.105, blue: 0.09),
-                    Color(red: 0.02, green: 0.055, blue: 0.05)
+                    Color(red: 0.16, green: 0.095, blue: 0.035),
+                    Color(red: 0.07, green: 0.035, blue: 0.015)
                 ],
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
