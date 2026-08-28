@@ -107,7 +107,6 @@ final class SalahFocusDecisionTests: XCTestCase {
     ) -> SalahFocusDecision {
         SalahFocusDecision.resolve(
             isEnabled: isEnabled,
-            hasSelection: true,
             enabledAt: enabledAt,
             activeRequirement: activeRequirement,
             occurrences: occurrences,

@@ -8,7 +8,6 @@ final class SalahFocusMonitorExtension: DeviceActivityMonitor {
         var state = SalahFocusSharedStorage.load()
         guard
             state.isEnabled,
-            state.hasSelection,
             let requirement = state.scheduledRequirement,
             !state.completedRecordIdentifiers.contains(requirement.recordIdentifier),
             !state.pausedDayIdentifiers.contains(requirement.dayIdentifier),
@@ -23,12 +22,11 @@ final class SalahFocusMonitorExtension: DeviceActivityMonitor {
 
         do {
             try SalahFocusSharedStorage.save(state)
-            SalahFocusShieldStore.apply(state.selection)
+            SalahFocusShieldStore.apply()
         } catch {
             SalahFocusShieldStore.clear()
-        }
     }
-
+}
     private func expectedActivityName(
         requirement: SalahFocusRequirement,
         revision: Int
@@ -36,4 +34,3 @@ final class SalahFocusMonitorExtension: DeviceActivityMonitor {
         "\(SalahFocusConstants.activityPrefix).\(revision).\(requirement.dayIdentifier).\(requirement.prayerRawValue)"
     }
 }
-

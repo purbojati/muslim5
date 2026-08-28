@@ -35,7 +35,6 @@ enum SalahFocusDecision: Equatable {
     ) -> SalahFocusDecision {
         resolve(
             isEnabled: state.isEnabled,
-            hasSelection: state.hasSelection,
             enabledAt: state.enabledAt,
             activeRequirement: state.activeRequirement,
             occurrences: occurrences,
@@ -47,7 +46,6 @@ enum SalahFocusDecision: Equatable {
 
     static func resolve(
         isEnabled: Bool,
-        hasSelection: Bool,
         enabledAt: Date?,
         activeRequirement: SalahFocusRequirement?,
         occurrences: [SalahFocusRequirement],
@@ -55,7 +53,7 @@ enum SalahFocusDecision: Equatable {
         pausedDayIdentifiers: Set<String>,
         now: Date
     ) -> SalahFocusDecision {
-        guard isEnabled, hasSelection, let enabledAt else {
+        guard isEnabled, let enabledAt else {
             return .clear
         }
 
@@ -86,7 +84,6 @@ enum SalahFocusDecision: Equatable {
 @MainActor
 final class SalahFocusService: ObservableObject {
     @Published private(set) var isEnabled: Bool
-    @Published private(set) var selection: FamilyActivitySelection
     @Published private(set) var authorizationStatus: FamilyControls.AuthorizationStatus
     @Published private(set) var activePrayerName: String?
     @Published private(set) var lastError: String?
@@ -101,13 +98,10 @@ final class SalahFocusService: ObservableObject {
         let stored = SalahFocusSharedStorage.load()
         state = stored
         isEnabled = stored.isEnabled
-        selection = stored.selection
         authorizationStatus = AuthorizationCenter.shared.authorizationStatus
         activePrayerName = stored.activeRequirement?.prayerName
     }
 
-    var hasSelection: Bool { state.hasSelection }
-    var selectionCount: Int { state.selectionCount }
     var isAuthorized: Bool {
         if #available(iOS 26.4, *) {
             authorizationStatus == .approved || authorizationStatus == .approvedWithDataAccess
@@ -152,21 +146,6 @@ final class SalahFocusService: ObservableObject {
         }
     }
 
-    func updateSelection(_ newSelection: FamilyActivitySelection) {
-        selection = newSelection
-        state.selection = newSelection
-        state.revision += 1
-
-        if !state.hasSelection, state.isEnabled {
-            disable(clearError: false)
-            lastError = "Choose at least one app, category, or website before turning on Salah Focus."
-            return
-        }
-
-        persistState()
-        configurationRevision += 1
-    }
-
     @discardableResult
     func enable(now: Date = .now) -> Bool {
         refreshAuthorizationStatus()
@@ -174,11 +153,6 @@ final class SalahFocusService: ObservableObject {
             lastError = "Allow Screen Time access before turning on Salah Focus."
             return false
         }
-        guard state.hasSelection else {
-            lastError = "Choose at least one app, category, or website first."
-            return false
-        }
-
         state.isEnabled = true
         state.enabledAt = now
         state.activeRequirement = nil
@@ -220,6 +194,7 @@ final class SalahFocusService: ObservableObject {
         timeZone: TimeZone = .autoupdatingCurrent
     ) {
         refreshAuthorizationStatus()
+        state.selection = FamilyActivitySelection()
 
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = timeZone
@@ -237,7 +212,7 @@ final class SalahFocusService: ObservableObject {
             calendar: calendar
         )
 
-        guard state.isEnabled, isAuthorized, state.hasSelection, !periodMode else {
+        guard state.isEnabled, isAuthorized, !periodMode else {
             stopMuslim5Monitoring()
             SalahFocusShieldStore.clear()
             state.activeRequirement = nil
@@ -282,7 +257,7 @@ final class SalahFocusService: ObservableObject {
             state.activeRequirement = requirement
             state.scheduledRequirement = nil
             activePrayerName = requirement.prayerName
-            SalahFocusShieldStore.apply(state.selection)
+            SalahFocusShieldStore.apply()
 
         case .schedule(let requirement):
             SalahFocusShieldStore.clear()

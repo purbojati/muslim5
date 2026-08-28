@@ -38,24 +38,13 @@ struct SalahFocusSharedState: Codable, Equatable {
     var version = currentVersion
     var isEnabled = false
     var enabledAt: Date?
+    // Retained so existing version-1 state created by the app-picker build remains decodable.
     var selection = FamilyActivitySelection()
     var activeRequirement: SalahFocusRequirement?
     var scheduledRequirement: SalahFocusRequirement?
     var completedRecordIdentifiers: Set<String> = []
     var pausedDayIdentifiers: Set<String> = []
     var revision = 0
-
-    var hasSelection: Bool {
-        !selection.applicationTokens.isEmpty
-            || !selection.categoryTokens.isEmpty
-            || !selection.webDomainTokens.isEmpty
-    }
-
-    var selectionCount: Int {
-        selection.applicationTokens.count
-            + selection.categoryTokens.count
-            + selection.webDomainTokens.count
-    }
 }
 
 enum SalahFocusSharedStorage {
@@ -93,24 +82,17 @@ private enum SalahFocusSharedStorageError: LocalizedError {
 }
 
 enum SalahFocusShieldStore {
-    static func apply(_ selection: FamilyActivitySelection) {
-        let store = ManagedSettingsStore(named: SalahFocusConstants.storeName)
-
-        store.shield.applications = selection.applicationTokens.isEmpty
-            ? nil
-            : selection.applicationTokens
-        store.shield.applicationCategories = selection.categoryTokens.isEmpty
-            ? nil
-            : .specific(selection.categoryTokens)
-        store.shield.webDomains = selection.webDomainTokens.isEmpty
-            ? nil
-            : selection.webDomainTokens
-        store.shield.webDomainCategories = selection.categoryTokens.isEmpty
-            ? nil
-            : .specific(selection.categoryTokens)
+    static func apply() {
+        ManagedSettingsStore(named: SalahFocusConstants.storeName).clearAllSettings()
+        let store = ManagedSettingsStore()
+        store.shield.applications = nil
+        store.shield.applicationCategories = .all()
+        store.shield.webDomains = nil
+        store.shield.webDomainCategories = .all()
     }
 
     static func clear() {
+        ManagedSettingsStore().clearAllSettings()
         ManagedSettingsStore(named: SalahFocusConstants.storeName).clearAllSettings()
     }
 }

@@ -1,12 +1,9 @@
-import FamilyControls
 import SwiftUI
 import UIKit
 
 struct SalahFocusSettingsView: View {
     @Environment(\.openURL) private var openURL
     @EnvironmentObject private var salahFocusService: SalahFocusService
-    @State private var draftSelection = FamilyActivitySelection()
-    @State private var isPickerPresented = false
     @State private var isRequestingAuthorization = false
 
     var body: some View {
@@ -16,7 +13,7 @@ struct SalahFocusSettingsView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Pause distractions for salah")
                             .font(.headline)
-                        Text("At prayer time, selected apps stay paused until you record that salah in Muslim 5.")
+                        Text("At prayer time, apps stay paused until you record that salah in Muslim 5.")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
@@ -27,25 +24,14 @@ struct SalahFocusSettingsView: View {
                 }
                 .padding(.vertical, 6)
             } footer: {
-                Text("Salah Focus does not lock your whole iPhone. Calls, emergency access, system features, Muslim 5, and apps you do not select remain available.")
+                Text("Salah Focus does not lock your whole iPhone. Calls, emergency access, system features, and Muslim 5 remain available.")
             }
 
             Section {
                 if salahFocusService.isAuthorized {
                     Toggle("Salah Focus", isOn: enabledBinding)
 
-                    Button {
-                        draftSelection = salahFocusService.selection
-                        isPickerPresented = true
-                    } label: {
-                        LabeledContent {
-                            Text(selectionValue)
-                                .foregroundStyle(.secondary)
-                        } label: {
-                            Label("Apps & Websites", systemImage: "square.grid.2x2.fill")
-                        }
-                    }
-                    .foregroundStyle(.primary)
+                    LabeledContent("Coverage", value: "All apps")
                 } else {
                     Button {
                         requestAuthorization()
@@ -61,12 +47,11 @@ struct SalahFocusSettingsView: View {
                 Text("Screen Time")
             } footer: {
                 if salahFocusService.isAuthorized {
-                    Text("Your selections are represented by private on-device tokens. Muslim 5 does not receive or upload their names.")
+                    Text("All ordinary apps and websites are paused at salah time. Apple keeps calls, emergency access, essential system functions, and Muslim 5 available.")
                 } else {
                     Text("Apple asks for Face ID or Touch ID permission before an app can use Screen Time controls.")
-                }
-            }
-
+    }
+}
             if let activePrayerName = salahFocusService.activePrayerName,
                salahFocusService.isEnabled {
                 Section("Active") {
@@ -106,24 +91,9 @@ struct SalahFocusSettingsView: View {
         }
         .navigationTitle("Salah Focus")
         .navigationBarTitleDisplayMode(.inline)
-        .familyActivityPicker(
-            headerText: "Choose distractions to pause during salah",
-            footerText: "Muslim 5 cannot see or upload the names of your selections.",
-            isPresented: $isPickerPresented,
-            selection: $draftSelection
-        )
-        .onChange(of: draftSelection) { _, newSelection in
-            salahFocusService.updateSelection(newSelection)
-        }
         .onAppear {
             salahFocusService.refreshAuthorizationStatus()
-            draftSelection = salahFocusService.selection
         }
-    }
-
-    private var selectionValue: String {
-        let count = salahFocusService.selectionCount
-        return count == 0 ? "Choose" : "\(count) selected"
     }
 
     private var enabledBinding: Binding<Bool> {
@@ -150,8 +120,7 @@ struct SalahFocusSettingsView: View {
             let allowed = await salahFocusService.requestAuthorization()
             isRequestingAuthorization = false
             if allowed {
-                draftSelection = salahFocusService.selection
-                isPickerPresented = true
+                _ = salahFocusService.enable()
                 HapticFeedback.notification(.success)
             } else {
                 HapticFeedback.notification(.warning)
@@ -159,4 +128,3 @@ struct SalahFocusSettingsView: View {
         }
     }
 }
-
