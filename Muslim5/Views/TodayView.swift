@@ -211,24 +211,19 @@ struct TodayView: View {
     }
 
     private func dayHeader(at date: Date) -> some View {
-        HStack(alignment: .top) {
-            ZStack(alignment: .topLeading) {
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(dayTitle)
-                        .font(.system(.title2, design: .serif, weight: .bold))
-                    Text(hijriDateText(for: date))
-                        .font(.footnote)
-                        .foregroundStyle(.white.opacity(0.72))
-                }
-                .id(dayOffset)
-                .transition(dayContentTransition)
+        ZStack(alignment: .topLeading) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text(dayTitle)
+                    .font(.system(.title2, design: .serif, weight: .bold))
+                Text(hijriDateText(for: date))
+                    .font(.footnote)
+                    .foregroundStyle(.white.opacity(0.72))
             }
-
-            Spacer()
-
-            locationControl
+            .id(dayOffset)
+            .transition(dayContentTransition)
         }
         .foregroundStyle(.white)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var dayTitle: String {
@@ -287,45 +282,6 @@ struct TodayView: View {
         }
 
         return "\(day) \(Self.hijriMonthNames[month - 1])"
-    }
-
-    @ViewBuilder
-    private var locationControl: some View {
-        if #available(iOS 26.0, *) {
-            locationButton
-                .glassEffect(.regular.interactive(), in: Capsule())
-        } else {
-            locationButton
-                .background(.thinMaterial, in: Capsule())
-        }
-    }
-
-    private var locationButton: some View {
-        Button(action: handleLocationAction) {
-            Label(locationLabel, systemImage: locationSymbol)
-                .font(.footnote.weight(.semibold))
-                .foregroundStyle(.primary)
-                .lineLimit(2)
-                .truncationMode(.tail)
-                .frame(maxWidth: 160)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel("Prayer time location: \(locationLabel)")
-        .accessibilityHint("Updates the location used for prayer times")
-    }
-
-    private var locationLabel: String {
-        switch locationProvider.state {
-        case .requesting: "Locating"
-        case .denied: "Location off"
-        default: locationProvider.cityName ?? "Locating"
-        }
-    }
-
-    private var locationSymbol: String {
-        locationProvider.state == .denied ? "location.slash.fill" : "location.fill"
     }
 
     private var prayerCircleCard: some View {

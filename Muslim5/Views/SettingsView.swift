@@ -10,6 +10,7 @@ struct SettingsView: View {
     @EnvironmentObject private var notificationService: PrayerNotificationService
     @EnvironmentObject private var salahFocusService: SalahFocusService
     @EnvironmentObject private var sharingService: SharingService
+    @EnvironmentObject private var locationProvider: LocationProvider
     @Query(sort: \TrackingPause.startDay, order: .reverse) private var pauses: [TrackingPause]
     @AppStorage("periodMode") private var periodMode = false
     @AppStorage(PrayerNotificationPreferences.StorageKey.enabled)
@@ -61,16 +62,11 @@ struct SettingsView: View {
                             )
                         }
 
-                        Button {
-                            selectedFeature = .salahFocus
-                        } label: {
-                            FeatureCard(
-                                title: "Salah Focus",
-                                detail: salahFocusStatus,
-                                symbol: "lock.shield.fill",
-                                tint: AppTheme.salahFocusFeature
-                            )
-                        }
+                        SalahFocusFeatureCard(
+                            isOn: salahFocusToggleBinding,
+                            detail: salahFocusStatus,
+                            onOpen: { selectedFeature = .salahFocus }
+                        )
 
                         PeriodModeFeatureCard(
                             isOn: periodModeBinding,
@@ -85,6 +81,24 @@ struct SettingsView: View {
                 }
 
                 Section {
+                    Button(action: handleLocationAction) {
+                        LabeledContent {
+                            Text(locationLabel)
+                                .foregroundStyle(.secondary)
+                                .lineLimit(1)
+                        } label: {
+                            Label {
+                                Text("Prayer location")
+                                    .foregroundStyle(.primary)
+                            } icon: {
+                                Image(systemName: locationSymbol)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                    .accessibilityLabel("Prayer location: \(locationLabel)")
+                    .accessibilityHint("Updates the location used for prayer times")
+
                     NavigationLink {
                         PrayerTimesSettingsView()
                     } label: {
@@ -207,6 +221,23 @@ struct SettingsView: View {
         }
     }
 
+    private var locationLabel: String {
+        switch locationProvider.state {
+        case .requesting:
+            return "Locating…"
+        case .denied:
+            return "Location off"
+        case .unavailable where locationProvider.cityName == nil:
+            return "Unavailable"
+        default:
+            return locationProvider.cityName ?? "Current location"
+        }
+    }
+
+    private var locationSymbol: String {
+        locationProvider.state == .denied ? "location.slash.fill" : "location.fill"
+    }
+
     private var featureColumns: [GridItem] {
         [
             GridItem(.flexible(), spacing: 12),
@@ -228,6 +259,28 @@ struct SettingsView: View {
             return "Waiting for \(prayer)"
         }
         return "Ready for the next salah"
+    }
+
+    private var salahFocusToggleBinding: Binding<Bool> {
+        Binding(
+            get: { salahFocusService.isEnabled },
+            set: { newValue in
+                guard newValue else {
+                    salahFocusService.disable()
+                    HapticFeedback.impact(.soft)
+                    return
+                }
+
+                guard salahFocusService.isAuthorized else {
+                    selectedFeature = .salahFocus
+                    HapticFeedback.impact(.soft)
+                    return
+                }
+
+                let enabled = salahFocusService.enable()
+                HapticFeedback.notification(enabled ? .success : .warning)
+            }
+        )
     }
 
     private var prayerNotificationsBinding: Binding<Bool> {
@@ -292,6 +345,17 @@ struct SettingsView: View {
             return
         }
         openURL(settingsURL)
+    }
+
+    private func handleLocationAction() {
+        HapticFeedback.impact(.light)
+
+        if locationProvider.state == .denied,
+           let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+            openURL(settingsURL)
+        } else {
+            locationProvider.requestLocation()
+        }
     }
 
     private var periodModeBinding: Binding<Bool> {
@@ -412,6 +476,67 @@ private struct PeriodModeFeatureCard: View {
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
             }
+        }
+        .frame(maxWidth: .infinity, minHeight: 124, alignment: .leading)
+        .padding(14)
+        .background(
+            Color(.secondarySystemGroupedBackground),
+            in: RoundedRectangle(cornerRadius: 18)
+        )
+        .accessibilityElement(children: .contain)
+    }
+}
+
+private struct SalahFocusFeatureCard: View {
+    @Binding var isOn: Bool
+    let detail: String
+    let onOpen: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .top) {
+                Image(systemName: "lock.shield.fill")
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(AppTheme.salahFocusFeature)
+                    .frame(width: 38, height: 38)
+                    .background(
+                        AppTheme.salahFocusFeature.opacity(0.12),
+                        in: RoundedRectangle(cornerRadius: 12)
+                    )
+
+                Spacer(minLength: 4)
+
+                Toggle("Salah Focus", isOn: $isOn)
+                    .labelsHidden()
+                    .controlSize(.mini)
+                    .tint(AppTheme.salahFocusFeature)
+            }
+
+            Spacer(minLength: 0)
+
+            Button(action: onOpen) {
+                HStack(alignment: .bottom, spacing: 6) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Salah Focus")
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+
+                        Text(detail)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(2)
+                    }
+
+                    Spacer(minLength: 0)
+
+                    Image(systemName: "chevron.right")
+                        .font(.caption.bold())
+                        .foregroundStyle(.tertiary)
+                        .padding(.bottom, 4)
+                }
+            }
+            .buttonStyle(.plain)
+            .accessibilityHint("Opens Salah Focus settings")
         }
         .frame(maxWidth: .infinity, minHeight: 124, alignment: .leading)
         .padding(14)
