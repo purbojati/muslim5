@@ -259,21 +259,15 @@ private struct SalahFocusOnboardingView: View {
                 SalahFocusFlowIllustration()
 
                 VStack(spacing: 9) {
-                    Text("A pause that brings you back")
+                    Text("Pause distractions for salah")
                         .font(.system(.title, design: .serif, weight: .bold))
                         .multilineTextAlignment(.center)
 
-                    Text("When salah begins, ordinary apps wait. Muslim 5 stays open so you can mark the prayer complete afterward.")
+                    Text("Other apps pause until you record your prayer in Muslim 5.")
                         .font(.body)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                         .fixedSize(horizontal: false, vertical: true)
-                }
-
-                HStack(spacing: 8) {
-                    onboardingPill("All apps", icon: "square.grid.2x2.fill")
-                    onboardingPill("Automatic", icon: "clock.badge.checkmark.fill")
-                    onboardingPill("Optional", icon: "switch.2")
                 }
             }
         }
@@ -283,9 +277,9 @@ private struct SalahFocusOnboardingView: View {
         OnboardingPage {
             VStack(spacing: 14) {
                 VStack(spacing: 6) {
-                    Text("What you’ll see")
+                    Text("A simple reminder")
                         .font(.system(.title2, design: .serif, weight: .bold))
-                    Text("A calm reminder that names the prayer and tells you exactly how to unlock your apps.")
+                    Text("It names the prayer and opens Muslim 5 when you’re ready.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
@@ -293,10 +287,6 @@ private struct SalahFocusOnboardingView: View {
                 }
 
                 SalahFocusShieldPreview(prayerName: "Dhuhr")
-
-                Text("Preview shown for Dhuhr")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
         }
     }
@@ -310,27 +300,18 @@ private struct SalahFocusOnboardingView: View {
                     .foregroundStyle(AppTheme.salahFocusFeature)
 
                 VStack(spacing: 8) {
-                    Text("One iPhone permission")
+                    Text("Allow Screen Time")
                         .font(.system(.title2, design: .serif, weight: .bold))
-                    Text("Muslim 5 uses Apple’s Screen Time feature to pause apps. It cannot see your Screen Time history or what you do inside other apps.")
+                    Text("Apple requires this permission to pause apps. Muslim 5 cannot see your Screen Time activity.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                         .fixedSize(horizontal: false, vertical: true)
                 }
 
-                VStack(alignment: .leading, spacing: 15) {
-                    onboardingStep(number: 1, text: "Tap Turn On Salah Focus below.")
-                    onboardingStep(number: 2, text: "Approve Apple’s Screen Time request.")
-                    onboardingStep(number: 3, text: "Use Face ID or your passcode if asked. That’s it.")
-                }
-                .padding(18)
-                .salahFocusCard()
-
                 VStack(alignment: .leading, spacing: 10) {
-                    safetyRow("Muslim 5 remains available", icon: "checkmark.circle.fill")
-                    safetyRow("Calls and emergency access remain available", icon: "phone.fill")
-                    safetyRow("You can turn this off at any time", icon: "switch.2")
+                    safetyRow("Muslim 5, calls, and emergency access stay available", icon: "checkmark.circle.fill")
+                    safetyRow("Turn Salah Focus off anytime", icon: "switch.2")
                 }
                 .padding(.horizontal, 4)
 
@@ -417,29 +398,6 @@ private struct SalahFocusOnboardingView: View {
         .background(AppTheme.salahFocusFeature, in: RoundedRectangle(cornerRadius: 17, style: .continuous))
     }
 
-    private func onboardingPill(_ title: String, icon: String) -> some View {
-        Label(title, systemImage: icon)
-            .font(.caption2.weight(.semibold))
-            .lineLimit(1)
-            .padding(.horizontal, 10)
-            .frame(height: 32)
-            .background(AppTheme.salahFocusFeature.opacity(0.10), in: Capsule())
-    }
-
-    private func onboardingStep(number: Int, text: String) -> some View {
-        HStack(alignment: .top, spacing: 12) {
-            Text("\(number)")
-                .font(.caption.weight(.bold))
-                .foregroundStyle(.white)
-                .frame(width: 26, height: 26)
-                .background(AppTheme.salahFocusFeature, in: Circle())
-            Text(text)
-                .font(.subheadline)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .accessibilityElement(children: .combine)
-    }
-
     private func safetyRow(_ text: String, icon: String) -> some View {
         Label {
             Text(text).font(.subheadline)
@@ -500,7 +458,7 @@ private struct SalahFocusFlowIllustration: View {
                 RoundedRectangle(cornerRadius: 24, style: .continuous)
                     .fill(AppTheme.salahFocusFeature.opacity(0.12))
                     .frame(width: 92, height: 106)
-                Image(systemName: "hands.sparkles.fill")
+                Image(systemName: "moon.stars.fill")
                     .font(.system(size: 38, weight: .semibold))
                     .symbolRenderingMode(.hierarchical)
                     .foregroundStyle(AppTheme.salahFocusFeature)
