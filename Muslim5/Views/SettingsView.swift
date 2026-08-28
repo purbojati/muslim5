@@ -84,7 +84,7 @@ struct SettingsView: View {
                 } header: {
                     Text("Focus")
                 } footer: {
-                    Text("Optionally pause selected apps at prayer time until you record your salah.")
+                    Text("Optionally pause ordinary apps at prayer time until you record your salah. Calls, essential iPhone features, and Muslim 5 remain available.")
                 }
 
                 Section {
@@ -213,7 +213,7 @@ struct SettingsView: View {
         if let prayer = salahFocusService.activePrayerName {
             return "Waiting for \(prayer)"
         }
-        return "On"
+        return "Ready for the next salah"
     }
 
     private var prayerNotificationsBinding: Binding<Bool> {

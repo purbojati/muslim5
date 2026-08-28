@@ -27,24 +27,25 @@ final class SalahFocusShieldConfiguration: ShieldConfigurationDataSource {
 
     private func makeConfiguration() -> ShieldConfiguration {
         let state = SalahFocusSharedStorage.load()
-        let prayerName = state.activeRequirement?.prayerName ?? "salah"
-        let foreground = UIColor.label
-        let secondary = UIColor.secondaryLabel
-        let accent = UIColor(red: 0.16, green: 0.45, blue: 0.38, alpha: 1)
+        let requirement = state.activeRequirement
+        let prayerName = requirement?.prayerName ?? "salah"
+        let foreground = UIColor(red: 0.97, green: 0.95, blue: 0.88, alpha: 1)
+        let secondary = UIColor(red: 0.82, green: 0.84, blue: 0.78, alpha: 1)
+        let accent = UIColor(red: 0.78, green: 0.57, blue: 0.27, alpha: 1)
 
         return ShieldConfiguration(
-            backgroundBlurStyle: .systemMaterial,
-            backgroundColor: UIColor.systemBackground.withAlphaComponent(0.94),
-            icon: UIImage(systemName: "lock.shield.fill"),
-            title: .init(text: "It’s time for \(prayerName)", color: foreground),
+            backgroundBlurStyle: .systemChromeMaterialDark,
+            backgroundColor: UIColor(red: 0.035, green: 0.105, blue: 0.09, alpha: 0.96),
+            icon: prayerIcon(for: requirement, color: accent),
+            title: .init(text: "Make space for \(prayerName)", color: foreground),
             subtitle: .init(
-                text: "Complete your salah, then record it in Muslim 5 to continue.",
+                text: "“Prayer at its proper time.” — Sahih al-Bukhari 527\n\nPray \(prayerName), then mark it complete in Muslim 5 to unlock your apps.",
                 color: secondary
             ),
             primaryButtonLabel: .init(text: primaryButtonTitle, color: .white),
             primaryButtonBackgroundColor: accent,
             secondaryButtonLabel: .init(
-                text: "Muslim 5 remains available from your Home Screen.",
+                text: "Not yet — close this app",
                 color: secondary
             )
         )
@@ -52,9 +53,34 @@ final class SalahFocusShieldConfiguration: ShieldConfigurationDataSource {
 
     private var primaryButtonTitle: String {
         if #available(iOS 26.5, *) {
-            return "Open Muslim 5"
+            return "I’ve prayed — open Muslim 5"
         }
-        return "Close App"
+        return "Return to Home Screen"
+    }
+
+    private func symbolName(for requirement: SalahFocusRequirement?) -> String {
+        switch requirement?.prayerRawValue {
+        case "fajr": "sun.horizon.fill"
+        case "dhuhr": "sun.max.fill"
+        case "asr": "sun.min.fill"
+        case "maghrib": "sunset.fill"
+        case "isha": "moon.stars.fill"
+        default: "hands.sparkles.fill"
+        }
+    }
+
+    private func prayerIcon(
+        for requirement: SalahFocusRequirement?,
+        color: UIColor
+    ) -> UIImage? {
+        let configuration = UIImage.SymbolConfiguration(
+            pointSize: 44,
+            weight: .semibold,
+            scale: .large
+        )
+        return UIImage(
+            systemName: symbolName(for: requirement),
+            withConfiguration: configuration
+        )?.withTintColor(color, renderingMode: .alwaysOriginal)
     }
 }
-

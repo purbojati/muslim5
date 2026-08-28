@@ -257,6 +257,7 @@ final class SalahFocusService: ObservableObject {
             state.activeRequirement = requirement
             state.scheduledRequirement = nil
             activePrayerName = requirement.prayerName
+            persistState()
             SalahFocusShieldStore.apply()
 
         case .schedule(let requirement):
