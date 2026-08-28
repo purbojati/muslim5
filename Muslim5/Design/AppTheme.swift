@@ -7,6 +7,10 @@ enum AppTheme {
     static let warmOrange = Color(red: 0.96, green: 0.43, blue: 0.18)
     static let success = Color(red: 0.17, green: 0.53, blue: 0.46)
     static let gold = Color(red: 0.94, green: 0.64, blue: 0.29)
+    static let qiblaFeature = accent
+    static let prayerCircleFeature = Color(red: 0.20, green: 0.48, blue: 0.78)
+    static let salahFocusFeature = Color(red: 0.42, green: 0.32, blue: 0.72)
+    static let periodModeFeature = Color(red: 0.86, green: 0.29, blue: 0.52)
 
     static func prayerColor(for prayer: Prayer) -> Color {
         switch prayer {

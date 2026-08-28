@@ -26,65 +26,62 @@ struct SettingsView: View {
     private var ishaNotificationEnabled = true
     @State private var isRequestingNotificationPermission = false
     @State private var isShowingPeriodModeExplanation = false
+    @State private var selectedFeature: FeatureDestination?
+
+    private enum FeatureDestination: Hashable {
+        case qibla
+        case prayerCircle
+        case salahFocus
+    }
 
     var body: some View {
         NavigationStack {
             Form {
                 Section {
-                    NavigationLink {
-                        SharingSettingsView()
-                    } label: {
-                        Label {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Prayer Circle")
-                                Text(sharingStatus)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        } icon: {
-                            Image(systemName: "person.2.fill")
-                                .foregroundStyle(AppTheme.accent)
+                    LazyVGrid(columns: featureColumns, spacing: 12) {
+                        Button {
+                            selectedFeature = .qibla
+                        } label: {
+                            FeatureCard(
+                                title: "Qibla",
+                                detail: "Find the prayer direction",
+                                symbol: "location.north.circle.fill",
+                                tint: AppTheme.qiblaFeature
+                            )
                         }
-                    }
-                } header: {
-                    Text("Pray with family")
-                } footer: {
-                    Text("Encourage one another in salah using a private linking code. Only completed-prayer check-ins are shared.")
-                }
 
-                Section {
-                    Toggle(isOn: periodModeBinding) {
-                        Label {
-                            Text("Period Mode")
-                        } icon: {
-                            Image(systemName: "pause.circle.fill")
-                                .foregroundStyle(.pink)
+                        Button {
+                            selectedFeature = .prayerCircle
+                        } label: {
+                            FeatureCard(
+                                title: "Prayer Circle",
+                                detail: sharingStatus,
+                                symbol: "person.2.fill",
+                                tint: AppTheme.prayerCircleFeature
+                            )
                         }
-                    }
-                } header: {
-                    Text("For sisters")
-                }
 
-                Section {
-                    NavigationLink {
-                        SalahFocusSettingsView()
-                    } label: {
-                        Label {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Salah Focus")
-                                Text(salahFocusStatus)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        } icon: {
-                            Image(systemName: "lock.shield.fill")
-                                .foregroundStyle(AppTheme.accent)
+                        Button {
+                            selectedFeature = .salahFocus
+                        } label: {
+                            FeatureCard(
+                                title: "Salah Focus",
+                                detail: salahFocusStatus,
+                                symbol: "lock.shield.fill",
+                                tint: AppTheme.salahFocusFeature
+                            )
                         }
+
+                        PeriodModeFeatureCard(
+                            isOn: periodModeBinding,
+                            detail: periodMode ? "Tracking is paused" : "Pause tracking when needed"
+                        )
                     }
+                    .buttonStyle(.plain)
+                    .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 12, trailing: 0))
+                    .listRowBackground(Color.clear)
                 } header: {
-                    Text("Focus")
-                } footer: {
-                    Text("Optionally pause ordinary apps at prayer time until you record your salah. Calls, essential iPhone features, and Muslim 5 remain available.")
+                    Text("Features")
                 }
 
                 Section {
@@ -164,6 +161,16 @@ struct SettingsView: View {
                 }
             }
             .navigationTitle("Others")
+            .navigationDestination(item: $selectedFeature) { feature in
+                switch feature {
+                case .qibla:
+                    QiblaView()
+                case .prayerCircle:
+                    SharingSettingsView()
+                case .salahFocus:
+                    SalahFocusSettingsView()
+                }
+            }
             .task {
                 await notificationService.refreshAuthorizationStatus()
             }
@@ -198,6 +205,13 @@ struct SettingsView: View {
         case (nil, nil):
             return "—"
         }
+    }
+
+    private var featureColumns: [GridItem] {
+        [
+            GridItem(.flexible(), spacing: 12),
+            GridItem(.flexible(), spacing: 12)
+        ]
     }
 
     private var sharingStatus: String {
@@ -315,6 +329,100 @@ struct SettingsView: View {
     }
 }
 
+private struct FeatureCard: View {
+    let title: String
+    let detail: String
+    let symbol: String
+    let tint: Color
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .top) {
+                Image(systemName: symbol)
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(tint)
+                    .frame(width: 38, height: 38)
+                    .background(tint.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
+
+                Spacer(minLength: 8)
+
+                Image(systemName: "chevron.right")
+                    .font(.caption.bold())
+                    .foregroundStyle(.tertiary)
+                    .padding(.top, 5)
+            }
+
+            Spacer(minLength: 0)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+
+                Text(detail)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(2)
+            }
+        }
+        .frame(maxWidth: .infinity, minHeight: 124, alignment: .leading)
+        .padding(14)
+        .background(
+            Color(.secondarySystemGroupedBackground),
+            in: RoundedRectangle(cornerRadius: 18)
+        )
+        .contentShape(RoundedRectangle(cornerRadius: 18))
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isButton)
+    }
+}
+
+private struct PeriodModeFeatureCard: View {
+    @Binding var isOn: Bool
+    let detail: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .top) {
+                Image(systemName: "pause.circle.fill")
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(AppTheme.periodModeFeature)
+                    .frame(width: 38, height: 38)
+                    .background(
+                        AppTheme.periodModeFeature.opacity(0.12),
+                        in: RoundedRectangle(cornerRadius: 12)
+                    )
+
+                Spacer(minLength: 4)
+
+                Toggle("Period Mode", isOn: $isOn)
+                    .labelsHidden()
+                    .controlSize(.mini)
+                    .tint(AppTheme.periodModeFeature)
+            }
+
+            Spacer(minLength: 0)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Period Mode")
+                    .font(.headline)
+
+                Text(detail)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(2)
+            }
+        }
+        .frame(maxWidth: .infinity, minHeight: 124, alignment: .leading)
+        .padding(14)
+        .background(
+            Color(.secondarySystemGroupedBackground),
+            in: RoundedRectangle(cornerRadius: 18)
+        )
+        .accessibilityElement(children: .contain)
+    }
+}
+
 private struct PrayerTimesSettingsView: View {
     @AppStorage("asrMethod") private var asrMethod = "standard"
     @AppStorage("calculationMethod") private var calculationMethod = "local"
@@ -363,7 +471,7 @@ private struct PeriodModeExplanationSheet: View {
             VStack(alignment: .leading, spacing: 10) {
                 Image(systemName: "pause.circle.fill")
                     .font(.system(size: 34))
-                    .foregroundStyle(.pink)
+                    .foregroundStyle(AppTheme.periodModeFeature)
 
                 Text("Pause tracking for your period?")
                     .font(.title2.bold())

@@ -17,27 +17,26 @@ struct QiblaView: View {
     private let alignmentTolerance = 3.0
 
     var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(spacing: 22) {
-                    locationHeader
+        ScrollView {
+            VStack(spacing: 22) {
+                locationHeader
 
-                    if let coordinate = locationProvider.coordinate {
-                        compassContent(for: coordinate)
-                            .transition(compassTransition)
-                    } else {
-                        locationStateContent
-                            .transition(locationStateTransition)
-                    }
+                if let coordinate = locationProvider.coordinate {
+                    compassContent(for: coordinate)
+                        .transition(compassTransition)
+                } else {
+                    locationStateContent
+                        .transition(locationStateTransition)
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 12)
-                .padding(.bottom, 32)
             }
-            .scrollIndicators(.hidden)
-            .background(Color(.systemGroupedBackground))
-            .navigationTitle("Qibla")
+            .padding(.horizontal, 20)
+            .padding(.top, 12)
+            .padding(.bottom, 32)
         }
+        .scrollIndicators(.hidden)
+        .background(Color(.systemGroupedBackground))
+        .navigationTitle("Qibla")
+        .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             locationProvider.start()
             headingProvider.start()
@@ -76,9 +75,9 @@ struct QiblaView: View {
     private var locationHeader: some View {
         HStack(spacing: 12) {
             Image(systemName: "location.fill")
-                .foregroundStyle(AppTheme.accent)
+                .foregroundStyle(AppTheme.qiblaFeature)
                 .frame(width: 34, height: 34)
-                .background(AppTheme.accent.opacity(0.12), in: Circle())
+                .background(AppTheme.qiblaFeature.opacity(0.12), in: Circle())
 
             Text(locationProvider.cityName ?? "Current location")
                 .font(.headline)
@@ -178,7 +177,7 @@ struct QiblaView: View {
         VStack(spacing: 18) {
             Image(systemName: locationProvider.state == .denied ? "location.slash.fill" : "location.circle.fill")
                 .font(.system(size: 54))
-                .foregroundStyle(AppTheme.accent)
+                .foregroundStyle(AppTheme.qiblaFeature)
 
             VStack(spacing: 8) {
                 Text(locationStateTitle)
@@ -352,7 +351,7 @@ private struct QiblaCompass: View {
                     .shadow(color: .black.opacity(0.08), radius: 18, y: 8)
 
                 Circle()
-                    .stroke(AppTheme.accent.opacity(0.12), lineWidth: 12)
+                    .stroke(AppTheme.qiblaFeature.opacity(0.12), lineWidth: 12)
                     .padding(8)
 
                 compassRose
@@ -370,7 +369,7 @@ private struct QiblaCompass: View {
                         .allowsHitTesting(false)
 
                     Circle()
-                        .fill(isAligned ? AppTheme.success : AppTheme.accent)
+                        .fill(isAligned ? AppTheme.success : AppTheme.qiblaFeature)
                         .frame(width: 22, height: 22)
                         .overlay(Circle().stroke(.white, lineWidth: 4))
                         .shadow(color: .black.opacity(0.12), radius: 4, y: 2)
@@ -409,7 +408,7 @@ private struct QiblaCompass: View {
             }
 
             VStack {
-                cardinalLabel("N", color: AppTheme.accent)
+                cardinalLabel("N", color: AppTheme.qiblaFeature)
                 Spacer()
                 cardinalLabel("S")
             }

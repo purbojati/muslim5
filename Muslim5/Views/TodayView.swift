@@ -102,6 +102,10 @@ struct TodayView: View {
                             prayerCircleCard
                         }
 
+                        if !salahFocusService.isEnabled {
+                            salahFocusCard
+                        }
+
                         if periodMode {
                             pauseBanner
                         }
@@ -325,26 +329,65 @@ struct TodayView: View {
     }
 
     private var prayerCircleCard: some View {
-        NavigationLink {
+        featureAdoptionCard(
+            title: "Prayer Circle",
+            message: "Pray together, even when apart",
+            actionTitle: "Set up",
+            symbol: "person.2.fill",
+            tint: AppTheme.prayerCircleFeature
+        ) {
             SharingSettingsView()
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Set up Prayer Circle")
+        .accessibilityHint("Opens Prayer Circle setup")
+    }
+
+    private var salahFocusCard: some View {
+        featureAdoptionCard(
+            title: "Salah Focus",
+            message: "Pause apps at prayer time",
+            actionTitle: salahFocusService.isAuthorized ? "Turn on" : "Set up",
+            symbol: "lock.shield.fill",
+            tint: AppTheme.salahFocusFeature
+        ) {
+            SalahFocusSettingsView()
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(
+            salahFocusService.isAuthorized ? "Turn on Salah Focus" : "Set up Salah Focus"
+        )
+        .accessibilityHint("Opens Salah Focus setup")
+    }
+
+    private func featureAdoptionCard<Destination: View>(
+        title: String,
+        message: String,
+        actionTitle: String,
+        symbol: String,
+        tint: Color,
+        @ViewBuilder destination: () -> Destination
+    ) -> some View {
+        NavigationLink {
+            destination()
         } label: {
             HStack(spacing: 12) {
                 ZStack {
                     Circle()
-                        .fill(AppTheme.accent.opacity(0.14))
+                        .fill(tint.opacity(0.14))
 
-                    Image(systemName: "person.2.fill")
+                    Image(systemName: symbol)
                         .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(AppTheme.accent)
+                        .foregroundStyle(tint)
                 }
                 .frame(width: 38, height: 38)
 
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("Prayer Circle")
+                    Text(title)
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(.primary)
 
-                    Text("Pray together, even when apart")
+                    Text(message)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
@@ -352,9 +395,9 @@ struct TodayView: View {
 
                 Spacer(minLength: 8)
 
-                Text("Set up")
+                Text(actionTitle)
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(AppTheme.accent)
+                    .foregroundStyle(tint)
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 12)
@@ -364,13 +407,10 @@ struct TodayView: View {
             )
             .overlay {
                 RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .strokeBorder(AppTheme.accent.opacity(0.12), lineWidth: 1)
+                    .strokeBorder(tint.opacity(0.12), lineWidth: 1)
             }
         }
         .buttonStyle(.plain)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("Set up Prayer Circle")
-        .accessibilityHint("Opens Prayer Circle setup")
     }
 
     private func prayerList(

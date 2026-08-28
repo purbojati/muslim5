@@ -111,11 +111,11 @@ struct SharingSettingsView: View {
                 VStack(spacing: 16) {
                     ZStack {
                         Circle()
-                            .fill(AppTheme.accent.opacity(0.14))
+                            .fill(AppTheme.prayerCircleFeature.opacity(0.14))
 
                         Image(systemName: "person.2.fill")
                             .font(.system(size: 30, weight: .semibold))
-                            .foregroundStyle(AppTheme.accent)
+                            .foregroundStyle(AppTheme.prayerCircleFeature)
                     }
                     .frame(width: 74, height: 74)
                     .accessibilityHidden(true)
@@ -165,7 +165,7 @@ struct SharingSettingsView: View {
             }
             .buttonStyle(.borderedProminent)
             .controlSize(.large)
-            .tint(AppTheme.accent)
+            .tint(AppTheme.prayerCircleFeature)
             .padding(.horizontal, 20)
             .padding(.vertical, 12)
             .background(.regularMaterial)
@@ -180,7 +180,7 @@ struct SharingSettingsView: View {
         HStack(alignment: .top, spacing: 14) {
             Image(systemName: systemImage)
                 .font(.title3)
-                .foregroundStyle(AppTheme.accent)
+                .foregroundStyle(AppTheme.prayerCircleFeature)
                 .frame(width: 28)
                 .accessibilityHidden(true)
 
@@ -220,7 +220,7 @@ struct SharingSettingsView: View {
             }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
-                .tint(AppTheme.accent)
+                .tint(AppTheme.prayerCircleFeature)
                 .disabled(nickname.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
         } header: {
             Text("Your profile")
@@ -247,7 +247,7 @@ struct SharingSettingsView: View {
             }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
-                .tint(AppTheme.accent)
+                .tint(AppTheme.prayerCircleFeature)
                 .disabled(
                     nickname.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                         || nickname == profile.nickname
@@ -461,7 +461,7 @@ private struct PrayerCircleOnboardingIllustration: View {
         )
         .overlay {
             RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .strokeBorder(AppTheme.accent.opacity(0.14), lineWidth: 1)
+                .strokeBorder(AppTheme.prayerCircleFeature.opacity(0.14), lineWidth: 1)
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Maghrib completed. Family initials A Y, O M, and S R appear beneath the prayer.")
@@ -475,10 +475,10 @@ struct SharingAvatarView: View {
     var body: some View {
         ZStack {
             Circle()
-                .fill(AppTheme.accent.opacity(0.14))
+                .fill(AppTheme.prayerCircleFeature.opacity(0.14))
             Text(user.initials)
                 .font(.system(size: size * 0.34, weight: .bold, design: .rounded))
-                .foregroundStyle(AppTheme.accent)
+                .foregroundStyle(AppTheme.prayerCircleFeature)
         }
         .frame(width: size, height: size)
         .accessibilityHidden(true)

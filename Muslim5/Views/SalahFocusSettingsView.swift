@@ -52,7 +52,7 @@ private struct SalahFocusControlView: View {
                         .frame(height: 50)
                 }
                 .buttonStyle(.bordered)
-                .tint(AppTheme.accent)
+                .tint(AppTheme.salahFocusFeature)
 
                 if let error = salahFocusService.lastError {
                     errorCard(message: error)
@@ -71,13 +71,13 @@ private struct SalahFocusControlView: View {
         VStack(spacing: 13) {
             ZStack {
                 Circle()
-                    .fill(AppTheme.accent.opacity(0.12))
+                    .fill(AppTheme.salahFocusFeature.opacity(0.12))
                     .frame(width: 78, height: 78)
 
                 Image(systemName: salahFocusService.isEnabled ? "checkmark.shield.fill" : "lock.slash.fill")
                     .font(.system(size: 36, weight: .semibold))
                     .symbolRenderingMode(.hierarchical)
-                    .foregroundStyle(AppTheme.accent)
+                    .foregroundStyle(AppTheme.salahFocusFeature)
                     .contentTransition(.symbolEffect(.replace))
             }
             .accessibilityHidden(true)
@@ -112,7 +112,7 @@ private struct SalahFocusControlView: View {
                         .foregroundStyle(.secondary)
                 }
             }
-            .tint(AppTheme.accent)
+            .tint(AppTheme.salahFocusFeature)
 
             Divider()
 
@@ -163,7 +163,7 @@ private struct SalahFocusControlView: View {
         VStack(alignment: .leading, spacing: 10) {
             Label("A gentle reminder", systemImage: "quote.opening")
                 .font(.caption.weight(.semibold))
-                .foregroundStyle(AppTheme.accent)
+                .foregroundStyle(AppTheme.salahFocusFeature)
 
             Text("“The most beloved deed to Allah is prayer at its proper time.”")
                 .font(.system(.body, design: .serif, weight: .semibold))
@@ -307,7 +307,7 @@ private struct SalahFocusOnboardingView: View {
                 Image(systemName: "checkmark.shield.fill")
                     .font(.system(size: 48, weight: .semibold))
                     .symbolRenderingMode(.hierarchical)
-                    .foregroundStyle(AppTheme.accent)
+                    .foregroundStyle(AppTheme.salahFocusFeature)
 
                 VStack(spacing: 8) {
                     Text("One iPhone permission")
@@ -348,7 +348,7 @@ private struct SalahFocusOnboardingView: View {
         HStack(spacing: 7) {
             ForEach(0..<3, id: \.self) { index in
                 Capsule()
-                    .fill(index == page ? AppTheme.accent : Color.secondary.opacity(0.22))
+                    .fill(index == page ? AppTheme.salahFocusFeature : Color.secondary.opacity(0.22))
                     .frame(width: index == page ? 22 : 7, height: 7)
             }
         }
@@ -414,7 +414,7 @@ private struct SalahFocusOnboardingView: View {
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 18)
         .frame(height: 56)
-        .background(AppTheme.accent, in: RoundedRectangle(cornerRadius: 17, style: .continuous))
+        .background(AppTheme.salahFocusFeature, in: RoundedRectangle(cornerRadius: 17, style: .continuous))
     }
 
     private func onboardingPill(_ title: String, icon: String) -> some View {
@@ -423,7 +423,7 @@ private struct SalahFocusOnboardingView: View {
             .lineLimit(1)
             .padding(.horizontal, 10)
             .frame(height: 32)
-            .background(AppTheme.accent.opacity(0.10), in: Capsule())
+            .background(AppTheme.salahFocusFeature.opacity(0.10), in: Capsule())
     }
 
     private func onboardingStep(number: Int, text: String) -> some View {
@@ -432,7 +432,7 @@ private struct SalahFocusOnboardingView: View {
                 .font(.caption.weight(.bold))
                 .foregroundStyle(.white)
                 .frame(width: 26, height: 26)
-                .background(AppTheme.accent, in: Circle())
+                .background(AppTheme.salahFocusFeature, in: Circle())
             Text(text)
                 .font(.subheadline)
                 .fixedSize(horizontal: false, vertical: true)
@@ -445,7 +445,7 @@ private struct SalahFocusOnboardingView: View {
             Text(text).font(.subheadline)
         } icon: {
             Image(systemName: icon)
-                .foregroundStyle(AppTheme.accent)
+                .foregroundStyle(AppTheme.salahFocusFeature)
                 .frame(width: 22)
         }
     }
@@ -498,12 +498,12 @@ private struct SalahFocusFlowIllustration: View {
 
             ZStack {
                 RoundedRectangle(cornerRadius: 24, style: .continuous)
-                    .fill(AppTheme.accent.opacity(0.12))
+                    .fill(AppTheme.salahFocusFeature.opacity(0.12))
                     .frame(width: 92, height: 106)
                 Image(systemName: "hands.sparkles.fill")
                     .font(.system(size: 38, weight: .semibold))
                     .symbolRenderingMode(.hierarchical)
-                    .foregroundStyle(AppTheme.accent)
+                    .foregroundStyle(AppTheme.salahFocusFeature)
             }
         }
         .padding(.vertical, 24)
