@@ -98,13 +98,7 @@ struct TodayView: View {
                     )
 
                     VStack(alignment: .leading, spacing: 18) {
-                        if sharingService.isConfigured, sharingService.profile == nil {
-                            prayerCircleCard
-                        }
-
-                        if !salahFocusService.isEnabled {
-                            salahFocusCard
-                        }
+                        featurePromotions
 
                         if periodMode {
                             pauseBanner
@@ -284,10 +278,34 @@ struct TodayView: View {
         return "\(day) \(Self.hijriMonthNames[month - 1])"
     }
 
+    @ViewBuilder
+    private var featurePromotions: some View {
+        let showsPrayerCircle = sharingService.isConfigured && sharingService.profile == nil
+        let showsSalahFocus = !salahFocusService.isEnabled
+
+        if showsPrayerCircle && showsSalahFocus {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    prayerCircleCard
+                        .frame(width: 280)
+
+                    salahFocusCard
+                        .frame(width: 280)
+                }
+                .scrollTargetLayout()
+            }
+            .scrollTargetBehavior(.viewAligned)
+        } else if showsPrayerCircle {
+            prayerCircleCard
+        } else if showsSalahFocus {
+            salahFocusCard
+        }
+    }
+
     private var prayerCircleCard: some View {
         featureAdoptionCard(
             title: "Salah Circle",
-            message: "Pray together, even when apart",
+            message: "Pray together, anywhere",
             actionTitle: "Set up",
             symbol: "person.2.fill",
             tint: AppTheme.prayerCircleFeature
@@ -302,7 +320,7 @@ struct TodayView: View {
     private var salahFocusCard: some View {
         featureAdoptionCard(
             title: "Salah Focus",
-            message: "Pause apps at prayer time",
+            message: "Pause apps for salah",
             actionTitle: salahFocusService.isAuthorized ? "Turn on" : "Set up",
             symbol: "lock.shield.fill",
             tint: AppTheme.salahFocusFeature
@@ -505,41 +523,29 @@ struct TodayView: View {
         schedule: PrayerSchedule?,
         currentDate: Date
     ) -> some View {
-        let isComplete = metrics.completedCount(on: date) == Prayer.allCases.count
-        let celebratesCompletion = isComplete && shouldCelebrateCompletion(on: date)
         let message = gentleFooterMessage(
             for: date,
             schedule: schedule,
             currentDate: currentDate
         )
 
-        return HStack(spacing: 14) {
-            ZStack {
-                if isComplete {
-                    Image(systemName: "sparkles")
-                        .foregroundStyle(AppTheme.gold)
-                        .transition(celebratesCompletion ? sparkleTransition : quietSymbolTransition)
-                } else {
-                    Image(systemName: "heart.fill")
-                        .foregroundStyle(AppTheme.accent)
-                        .transition(quietSymbolTransition)
-                }
-            }
-            .frame(width: 20, height: 20)
-            .animation(
-                completionSymbolAnimation(celebratesCompletion: celebratesCompletion),
-                value: isComplete
-            )
+        return HStack(alignment: .top, spacing: 14) {
+            Image(systemName: "quote.opening")
+                .font(.title2)
+                .foregroundStyle(AppTheme.accent)
 
             Text(message)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .id(message)
                 .transition(.opacity)
-
-            Spacer()
         }
-        .padding(.horizontal, 6)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(20)
+        .background(
+            AppTheme.accent.opacity(0.08),
+            in: RoundedRectangle(cornerRadius: 22, style: .continuous)
+        )
     }
 
     private func gentleFooterMessage(
