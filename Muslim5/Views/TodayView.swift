@@ -286,7 +286,7 @@ struct TodayView: View {
 
     private var prayerCircleCard: some View {
         featureAdoptionCard(
-            title: "Prayer Circle",
+            title: "Salah Circle",
             message: "Pray together, even when apart",
             actionTitle: "Set up",
             symbol: "person.2.fill",
@@ -295,8 +295,8 @@ struct TodayView: View {
             SharingSettingsView()
         }
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("Set up Prayer Circle")
-        .accessibilityHint("Opens Prayer Circle setup")
+        .accessibilityLabel("Set up Salah Circle")
+        .accessibilityHint("Opens Salah Circle setup")
     }
 
     private var salahFocusCard: some View {

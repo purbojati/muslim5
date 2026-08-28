@@ -24,7 +24,7 @@ This is the closest App Store-compliant version of “lock the phone.” A norma
 - If the user removes the active prayer record while its window is still due, reconcile and reapply the shield.
 - Turning Salah Focus off is always allowed from Muslim 5 Settings and clears the shield immediately. Do not add a cooldown, PIN, remote approval, or shame copy.
 - Period Mode suspends Salah Focus, cancels monitoring, and clears active shields. Turning Period Mode off runs a fresh reconciliation from the next applicable prayer; it does not lock for prayers within the paused range.
-- Keep all Salah Focus state on-device. Do not add it to Prayer Circle or the backend.
+- Keep all Salah Focus state on-device. Do not add it to Salah Circle or the backend.
 
 ## User flow
 
@@ -247,7 +247,7 @@ The iOS Simulator is useful for unit tests but does not replace enforcement test
 - preventing the device owner from disabling Salah Focus;
 - parent-controlled or remote unlocking;
 - proof that a prayer physically occurred beyond the user’s existing check-in;
-- Prayer Circle sharing of focus status;
+- Salah Circle sharing of focus status;
 - configurable grace periods, temporary snooze, per-prayer app selections, or per-prayer enable switches;
 - Android device administration.
 

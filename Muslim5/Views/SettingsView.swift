@@ -55,7 +55,7 @@ struct SettingsView: View {
                             selectedFeature = .prayerCircle
                         } label: {
                             FeatureCard(
-                                title: "Prayer Circle",
+                                title: "Salah Circle",
                                 detail: sharingStatus,
                                 symbol: "person.2.fill",
                                 tint: AppTheme.prayerCircleFeature

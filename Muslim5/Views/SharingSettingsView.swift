@@ -22,7 +22,7 @@ struct SharingSettingsView: View {
                 settingsForm
             }
         }
-        .navigationTitle("Prayer Circle")
+        .navigationTitle("Salah Circle")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.visible, for: .navigationBar)
         .disabled(sharingService.isWorking)
@@ -125,7 +125,7 @@ struct SharingSettingsView: View {
                             .font(.title2.bold())
                             .multilineTextAlignment(.center)
 
-                        Text("Prayer Circle lets family members share simple prayer check-ins using a private linking code.")
+                        Text("Salah Circle lets family members share simple prayer check-ins using a private linking code.")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
@@ -199,7 +199,7 @@ struct SharingSettingsView: View {
     private var unavailableSection: some View {
         Section {
             Label("Sharing server not configured", systemImage: "icloud.slash")
-            Text("Add a SalahAPIBaseURL build setting before using Prayer Circle.")
+            Text("Add a SalahAPIBaseURL build setting before using Salah Circle.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
