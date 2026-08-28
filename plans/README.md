@@ -1,4 +1,12 @@
-# Animation plans
+# Plans
+
+## Product features
+
+| # | Plan | Status |
+|---|---|---|
+| 004 | Salah Focus app shield | IMPLEMENTED — DEVICE VERIFICATION PENDING |
+
+## Animation improvements
 
 | # | Plan | Severity | Status |
 |---|---|---|---|

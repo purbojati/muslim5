@@ -8,6 +8,7 @@ struct SettingsView: View {
     @Environment(\.openURL) private var openURL
     @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject private var notificationService: PrayerNotificationService
+    @EnvironmentObject private var salahFocusService: SalahFocusService
     @EnvironmentObject private var sharingService: SharingService
     @Query(sort: \TrackingPause.startDay, order: .reverse) private var pauses: [TrackingPause]
     @AppStorage("periodMode") private var periodMode = false
@@ -62,6 +63,28 @@ struct SettingsView: View {
                     }
                 } header: {
                     Text("For sisters")
+                }
+
+                Section {
+                    NavigationLink {
+                        SalahFocusSettingsView()
+                    } label: {
+                        Label {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Salah Focus")
+                                Text(salahFocusStatus)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        } icon: {
+                            Image(systemName: "lock.shield.fill")
+                                .foregroundStyle(AppTheme.accent)
+                        }
+                    }
+                } header: {
+                    Text("Focus")
+                } footer: {
+                    Text("Optionally pause selected apps at prayer time until you record your salah.")
                 }
 
                 Section {
@@ -184,6 +207,15 @@ struct SettingsView: View {
         return "\(profile.nickname) · \(count) linked"
     }
 
+    private var salahFocusStatus: String {
+        guard salahFocusService.isAuthorized else { return "Not set up" }
+        guard salahFocusService.isEnabled else { return "Off" }
+        if let prayer = salahFocusService.activePrayerName {
+            return "Waiting for \(prayer)"
+        }
+        return "On"
+    }
+
     private var prayerNotificationsBinding: Binding<Bool> {
         Binding(
             get: { prayerNotificationsEnabled },
@@ -263,6 +295,7 @@ struct SettingsView: View {
 
     private func setPeriodMode(_ enabled: Bool) {
         periodMode = enabled
+        salahFocusService.setPeriodMode(enabled)
         if enabled {
             if pauses.first(where: { $0.endDay == nil && $0.reason == "period" }) == nil {
                 modelContext.insert(TrackingPause())

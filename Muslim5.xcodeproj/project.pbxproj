@@ -35,8 +35,21 @@
 		A0000000000000000000011A /* SharingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000219 /* SharingService.swift */; };
 		A0000000000000000000011B /* SharingSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000021A /* SharingSettingsView.swift */; };
 		A0000000000000000000011C /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000021C /* WelcomeView.swift */; };
+		A0000000000000000000011D /* SalahFocusSharedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000021D /* SalahFocusSharedState.swift */; };
+		A0000000000000000000011E /* SalahFocusService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000021E /* SalahFocusService.swift */; };
+		A0000000000000000000011F /* SalahFocusSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000021F /* SalahFocusSettingsView.swift */; };
 		B00000000000000000000001 /* QiblaCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000002 /* QiblaCalculatorTests.swift */; };
 		B0000000000000000000000E /* SharingServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000F /* SharingServiceTests.swift */; };
+		B00000000000000000000010 /* SalahFocusDecisionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000011 /* SalahFocusDecisionTests.swift */; };
+		C00000000000000000000101 /* SalahFocusMonitorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000201 /* SalahFocusMonitorExtension.swift */; };
+		C00000000000000000000102 /* SalahFocusSharedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000021D /* SalahFocusSharedState.swift */; };
+		C00000000000000000000103 /* SalahFocusMonitor.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = C00000000000000000000200 /* SalahFocusMonitor.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D00000000000000000000101 /* SalahFocusShieldConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000201 /* SalahFocusShieldConfiguration.swift */; };
+		D00000000000000000000102 /* SalahFocusSharedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000021D /* SalahFocusSharedState.swift */; };
+		D00000000000000000000103 /* SalahFocusShieldConfiguration.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D00000000000000000000200 /* SalahFocusShieldConfiguration.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E00000000000000000000101 /* SalahFocusShieldAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00000000000000000000201 /* SalahFocusShieldAction.swift */; };
+		E00000000000000000000102 /* SalahFocusSharedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000021D /* SalahFocusSharedState.swift */; };
+		E00000000000000000000103 /* SalahFocusShieldAction.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E00000000000000000000200 /* SalahFocusShieldAction.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,7 +60,44 @@
 			remoteGlobalIDString = A00000000000000000000500;
 			remoteInfo = "Muslim 5";
 		};
+		C00000000000000000000009 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A00000000000000000000600 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C00000000000000000000500;
+			remoteInfo = SalahFocusMonitor;
+		};
+		D00000000000000000000009 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A00000000000000000000600 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D00000000000000000000500;
+			remoteInfo = SalahFocusShieldConfiguration;
+		};
+		E00000000000000000000009 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A00000000000000000000600 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E00000000000000000000500;
+			remoteInfo = SalahFocusShieldAction;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A00000000000000000000303 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				C00000000000000000000103 /* SalahFocusMonitor.appex in Embed App Extensions */,
+				D00000000000000000000103 /* SalahFocusShieldConfiguration.appex in Embed App Extensions */,
+				E00000000000000000000103 /* SalahFocusShieldAction.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		A00000000000000000000200 /* Muslim 5.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Muslim 5.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,9 +129,26 @@
 		A0000000000000000000021A /* SharingSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingSettingsView.swift; sourceTree = "<group>"; };
 		A0000000000000000000021B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A0000000000000000000021C /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		A0000000000000000000021D /* SalahFocusSharedState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalahFocusSharedState.swift; sourceTree = "<group>"; };
+		A0000000000000000000021E /* SalahFocusService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalahFocusService.swift; sourceTree = "<group>"; };
+		A0000000000000000000021F /* SalahFocusSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalahFocusSettingsView.swift; sourceTree = "<group>"; };
+		A00000000000000000000220 /* Muslim5.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Muslim5.entitlements; sourceTree = "<group>"; };
 		B00000000000000000000002 /* QiblaCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaCalculatorTests.swift; sourceTree = "<group>"; };
 		B00000000000000000000003 /* Muslim5Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Muslim5Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0000000000000000000000F /* SharingServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingServiceTests.swift; sourceTree = "<group>"; };
+		B00000000000000000000011 /* SalahFocusDecisionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalahFocusDecisionTests.swift; sourceTree = "<group>"; };
+		C00000000000000000000200 /* SalahFocusMonitor.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SalahFocusMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		C00000000000000000000201 /* SalahFocusMonitorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalahFocusMonitorExtension.swift; sourceTree = "<group>"; };
+		C00000000000000000000202 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C00000000000000000000203 /* SalahFocusMonitor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SalahFocusMonitor.entitlements; sourceTree = "<group>"; };
+		D00000000000000000000200 /* SalahFocusShieldConfiguration.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SalahFocusShieldConfiguration.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D00000000000000000000201 /* SalahFocusShieldConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalahFocusShieldConfiguration.swift; sourceTree = "<group>"; };
+		D00000000000000000000202 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D00000000000000000000203 /* SalahFocusShieldConfiguration.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SalahFocusShieldConfiguration.entitlements; sourceTree = "<group>"; };
+		E00000000000000000000200 /* SalahFocusShieldAction.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SalahFocusShieldAction.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		E00000000000000000000201 /* SalahFocusShieldAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalahFocusShieldAction.swift; sourceTree = "<group>"; };
+		E00000000000000000000202 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E00000000000000000000203 /* SalahFocusShieldAction.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SalahFocusShieldAction.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +167,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C00000000000000000000301 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D00000000000000000000301 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E00000000000000000000301 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -107,6 +195,9 @@
 			isa = PBXGroup;
 			children = (
 				A00000000000000000000401 /* Muslim5 */,
+				C00000000000000000000400 /* SalahFocusMonitor */,
+				D00000000000000000000400 /* SalahFocusShieldConfiguration */,
+				E00000000000000000000400 /* SalahFocusShieldAction */,
 				B00000000000000000000004 /* Muslim5Tests */,
 				A00000000000000000000407 /* Products */,
 			);
@@ -117,6 +208,7 @@
 			children = (
 				A00000000000000000000201 /* Muslim5App.swift */,
 				A0000000000000000000021B /* Info.plist */,
+				A00000000000000000000220 /* Muslim5.entitlements */,
 				A00000000000000000000402 /* Models */,
 				A00000000000000000000403 /* Design */,
 				A00000000000000000000404 /* Services */,
@@ -156,6 +248,8 @@
 				A0000000000000000000020F /* PrayerScheduleService.swift */,
 				A00000000000000000000215 /* PrayerNotificationService.swift */,
 				A00000000000000000000219 /* SharingService.swift */,
+				A0000000000000000000021D /* SalahFocusSharedState.swift */,
+				A0000000000000000000021E /* SalahFocusService.swift */,
 				A00000000000000000000210 /* LocationProvider.swift */,
 			);
 			path = Services;
@@ -171,6 +265,7 @@
 				A0000000000000000000020A /* JourneyView.swift */,
 				A0000000000000000000020B /* InsightsView.swift */,
 				A0000000000000000000020C /* SettingsView.swift */,
+				A0000000000000000000021F /* SalahFocusSettingsView.swift */,
 				A0000000000000000000021A /* SharingSettingsView.swift */,
 				A00000000000000000000406 /* Components */,
 			);
@@ -192,6 +287,9 @@
 			children = (
 				A00000000000000000000200 /* Muslim 5.app */,
 				B00000000000000000000003 /* Muslim5Tests.xctest */,
+				C00000000000000000000200 /* SalahFocusMonitor.appex */,
+				D00000000000000000000200 /* SalahFocusShieldConfiguration.appex */,
+				E00000000000000000000200 /* SalahFocusShieldAction.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -201,8 +299,39 @@
 			children = (
 				B00000000000000000000002 /* QiblaCalculatorTests.swift */,
 				B0000000000000000000000F /* SharingServiceTests.swift */,
+				B00000000000000000000011 /* SalahFocusDecisionTests.swift */,
 			);
 			path = Muslim5Tests;
+			sourceTree = "<group>";
+		};
+		C00000000000000000000400 /* SalahFocusMonitor */ = {
+			isa = PBXGroup;
+			children = (
+				C00000000000000000000201 /* SalahFocusMonitorExtension.swift */,
+				C00000000000000000000202 /* Info.plist */,
+				C00000000000000000000203 /* SalahFocusMonitor.entitlements */,
+			);
+			path = SalahFocusMonitor;
+			sourceTree = "<group>";
+		};
+		D00000000000000000000400 /* SalahFocusShieldConfiguration */ = {
+			isa = PBXGroup;
+			children = (
+				D00000000000000000000201 /* SalahFocusShieldConfiguration.swift */,
+				D00000000000000000000202 /* Info.plist */,
+				D00000000000000000000203 /* SalahFocusShieldConfiguration.entitlements */,
+			);
+			path = SalahFocusShieldConfiguration;
+			sourceTree = "<group>";
+		};
+		E00000000000000000000400 /* SalahFocusShieldAction */ = {
+			isa = PBXGroup;
+			children = (
+				E00000000000000000000201 /* SalahFocusShieldAction.swift */,
+				E00000000000000000000202 /* Info.plist */,
+				E00000000000000000000203 /* SalahFocusShieldAction.entitlements */,
+			);
+			path = SalahFocusShieldAction;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -215,10 +344,14 @@
 				A00000000000000000000300 /* Sources */,
 				A00000000000000000000301 /* Frameworks */,
 				A00000000000000000000302 /* Resources */,
+				A00000000000000000000303 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C0000000000000000000000A /* PBXTargetDependency */,
+				D0000000000000000000000A /* PBXTargetDependency */,
+				E0000000000000000000000A /* PBXTargetDependency */,
 			);
 			name = "Muslim 5";
 			packageProductDependencies = (
@@ -248,6 +381,63 @@
 			productReference = B00000000000000000000003 /* Muslim5Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		C00000000000000000000500 /* SalahFocusMonitor */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C00000000000000000000800 /* Build configuration list for PBXNativeTarget "SalahFocusMonitor" */;
+			buildPhases = (
+				C00000000000000000000300 /* Sources */,
+				C00000000000000000000301 /* Frameworks */,
+				C00000000000000000000302 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SalahFocusMonitor;
+			packageProductDependencies = (
+			);
+			productName = SalahFocusMonitor;
+			productReference = C00000000000000000000200 /* SalahFocusMonitor.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		D00000000000000000000500 /* SalahFocusShieldConfiguration */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D00000000000000000000800 /* Build configuration list for PBXNativeTarget "SalahFocusShieldConfiguration" */;
+			buildPhases = (
+				D00000000000000000000300 /* Sources */,
+				D00000000000000000000301 /* Frameworks */,
+				D00000000000000000000302 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SalahFocusShieldConfiguration;
+			packageProductDependencies = (
+			);
+			productName = SalahFocusShieldConfiguration;
+			productReference = D00000000000000000000200 /* SalahFocusShieldConfiguration.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		E00000000000000000000500 /* SalahFocusShieldAction */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E00000000000000000000800 /* Build configuration list for PBXNativeTarget "SalahFocusShieldAction" */;
+			buildPhases = (
+				E00000000000000000000300 /* Sources */,
+				E00000000000000000000301 /* Frameworks */,
+				E00000000000000000000302 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SalahFocusShieldAction;
+			packageProductDependencies = (
+			);
+			productName = SalahFocusShieldAction;
+			productReference = E00000000000000000000200 /* SalahFocusShieldAction.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -264,6 +454,15 @@
 					B00000000000000000000008 = {
 						CreatedOnToolsVersion = 26.6;
 						TestTargetID = A00000000000000000000500;
+					};
+					C00000000000000000000500 = {
+						CreatedOnToolsVersion = 26.6;
+					};
+					D00000000000000000000500 = {
+						CreatedOnToolsVersion = 26.6;
+					};
+					E00000000000000000000500 = {
+						CreatedOnToolsVersion = 26.6;
 					};
 				};
 			};
@@ -285,6 +484,9 @@
 			targets = (
 				A00000000000000000000500 /* Muslim 5 */,
 				B00000000000000000000008 /* Muslim5Tests */,
+				C00000000000000000000500 /* SalahFocusMonitor */,
+				D00000000000000000000500 /* SalahFocusShieldConfiguration */,
+				E00000000000000000000500 /* SalahFocusShieldAction */,
 			);
 		};
 /* End PBXProject section */
@@ -300,6 +502,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B00000000000000000000007 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C00000000000000000000302 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D00000000000000000000302 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E00000000000000000000302 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -338,6 +561,9 @@
 				A0000000000000000000011A /* SharingService.swift in Sources */,
 				A0000000000000000000011B /* SharingSettingsView.swift in Sources */,
 				A0000000000000000000011C /* WelcomeView.swift in Sources */,
+				A0000000000000000000011D /* SalahFocusSharedState.swift in Sources */,
+				A0000000000000000000011E /* SalahFocusService.swift in Sources */,
+				A0000000000000000000011F /* SalahFocusSettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,6 +573,34 @@
 			files = (
 				B00000000000000000000001 /* QiblaCalculatorTests.swift in Sources */,
 				B0000000000000000000000E /* SharingServiceTests.swift in Sources */,
+				B00000000000000000000010 /* SalahFocusDecisionTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C00000000000000000000300 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C00000000000000000000101 /* SalahFocusMonitorExtension.swift in Sources */,
+				C00000000000000000000102 /* SalahFocusSharedState.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D00000000000000000000300 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D00000000000000000000101 /* SalahFocusShieldConfiguration.swift in Sources */,
+				D00000000000000000000102 /* SalahFocusSharedState.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E00000000000000000000300 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E00000000000000000000101 /* SalahFocusShieldAction.swift in Sources */,
+				E00000000000000000000102 /* SalahFocusSharedState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,6 +611,21 @@
 			isa = PBXTargetDependency;
 			target = A00000000000000000000500 /* Muslim 5 */;
 			targetProxy = B00000000000000000000009 /* PBXContainerItemProxy */;
+		};
+		C0000000000000000000000A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C00000000000000000000500 /* SalahFocusMonitor */;
+			targetProxy = C00000000000000000000009 /* PBXContainerItemProxy */;
+		};
+		D0000000000000000000000A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D00000000000000000000500 /* SalahFocusShieldConfiguration */;
+			targetProxy = D00000000000000000000009 /* PBXContainerItemProxy */;
+		};
+		E0000000000000000000000A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E00000000000000000000500 /* SalahFocusShieldAction */;
+			targetProxy = E00000000000000000000009 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -481,6 +750,7 @@
 				ASSETCATALOG_COMPILER_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_APPICON_NAME = Muslim5Icon;
 				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = Muslim5/Muslim5.entitlements;
 				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = SYKPVZC9UP;
 				DEVELOPMENT_ASSET_PATHS = "";
@@ -514,6 +784,7 @@
 				ASSETCATALOG_COMPILER_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_APPICON_NAME = Muslim5Icon;
 				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = Muslim5/Muslim5.entitlements;
 				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = SYKPVZC9UP;
 				DEVELOPMENT_ASSET_PATHS = "";
@@ -577,6 +848,144 @@
 			};
 			name = Release;
 		};
+		C00000000000000000000700 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = SalahFocusMonitor/SalahFocusMonitor.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 9;
+				DEVELOPMENT_TEAM = SYKPVZC9UP;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = SalahFocusMonitor/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 0.1.8;
+				PRODUCT_BUNDLE_IDENTIFIER = com.muslim5.app.SalahFocusMonitor;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		C00000000000000000000701 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = SalahFocusMonitor/SalahFocusMonitor.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 9;
+				DEVELOPMENT_TEAM = SYKPVZC9UP;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = SalahFocusMonitor/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 0.1.8;
+				PRODUCT_BUNDLE_IDENTIFIER = com.muslim5.app.SalahFocusMonitor;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		D00000000000000000000700 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = SalahFocusShieldConfiguration/SalahFocusShieldConfiguration.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 9;
+				DEVELOPMENT_TEAM = SYKPVZC9UP;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = SalahFocusShieldConfiguration/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 0.1.8;
+				PRODUCT_BUNDLE_IDENTIFIER = com.muslim5.app.SalahFocusShieldConfiguration;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		D00000000000000000000701 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = SalahFocusShieldConfiguration/SalahFocusShieldConfiguration.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 9;
+				DEVELOPMENT_TEAM = SYKPVZC9UP;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = SalahFocusShieldConfiguration/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 0.1.8;
+				PRODUCT_BUNDLE_IDENTIFIER = com.muslim5.app.SalahFocusShieldConfiguration;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		E00000000000000000000700 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = SalahFocusShieldAction/SalahFocusShieldAction.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 9;
+				DEVELOPMENT_TEAM = SYKPVZC9UP;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = SalahFocusShieldAction/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 0.1.8;
+				PRODUCT_BUNDLE_IDENTIFIER = com.muslim5.app.SalahFocusShieldAction;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		E00000000000000000000701 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = SalahFocusShieldAction/SalahFocusShieldAction.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 9;
+				DEVELOPMENT_TEAM = SYKPVZC9UP;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = SalahFocusShieldAction/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 0.1.8;
+				PRODUCT_BUNDLE_IDENTIFIER = com.muslim5.app.SalahFocusShieldAction;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -603,6 +1012,33 @@
 			buildConfigurations = (
 				B0000000000000000000000B /* Debug */,
 				B0000000000000000000000C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C00000000000000000000800 /* Build configuration list for PBXNativeTarget "SalahFocusMonitor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C00000000000000000000700 /* Debug */,
+				C00000000000000000000701 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D00000000000000000000800 /* Build configuration list for PBXNativeTarget "SalahFocusShieldConfiguration" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D00000000000000000000700 /* Debug */,
+				D00000000000000000000701 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E00000000000000000000800 /* Build configuration list for PBXNativeTarget "SalahFocusShieldAction" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E00000000000000000000700 /* Debug */,
+				E00000000000000000000701 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

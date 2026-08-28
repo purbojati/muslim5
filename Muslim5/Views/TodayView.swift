@@ -24,6 +24,7 @@ struct TodayView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject private var locationProvider: LocationProvider
+    @EnvironmentObject private var salahFocusService: SalahFocusService
     @EnvironmentObject private var sharingService: SharingService
     @Query(sort: \PrayerRecord.day, order: .reverse) private var records: [PrayerRecord]
     @Query(sort: \TrackingPause.startDay, order: .reverse) private var pauses: [TrackingPause]
@@ -33,6 +34,8 @@ struct TodayView: View {
     @State private var dayOffset = 0
     @State private var navigationDirection = -1
     @State private var completionCelebrationDay: Date?
+    @State private var focusReleaseConfirmationPrayer: Prayer?
+    @State private var focusReleaseConfirmationTask: Task<Void, Never>?
     private let prayerScheduleService = PrayerScheduleService()
 
     private var metrics: ProgressMetrics { ProgressMetrics(records: records, pauses: pauses) }
@@ -409,6 +412,15 @@ struct TodayView: View {
                             onAttendanceChange: { setAttendance($0, for: prayer, on: date) }
                         )
                     }
+
+                    if let prayer = focusReleaseConfirmationPrayer {
+                        Label("Apps available again after \(prayer.name)", systemImage: "lock.open.fill")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(AppTheme.success)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 4)
+                            .transition(.opacity)
+                    }
                 }
                 .id(dayOffset)
                 .transition(dayContentTransition)
@@ -629,6 +641,12 @@ struct TodayView: View {
             return
         }
 
+        synchronizeSalahFocus(
+            prayer: prayer,
+            on: date,
+            isCompleted: existingRecord == nil
+        )
+
         if existingRecord != nil {
             HapticFeedback.impact(.soft, intensity: 0.7)
         } else if willCompleteDay {
@@ -650,6 +668,7 @@ struct TodayView: View {
             modelContext.insert(PrayerRecord(day: date, prayer: prayer, status: status))
         }
         if save() {
+            synchronizeSalahFocus(prayer: prayer, on: date, isCompleted: true)
             HapticFeedback.selection()
         } else {
             HapticFeedback.notification(.error)
@@ -675,6 +694,7 @@ struct TodayView: View {
             )
         }
         if save() {
+            synchronizeSalahFocus(prayer: prayer, on: date, isCompleted: true)
             HapticFeedback.selection()
         } else {
             HapticFeedback.notification(.error)
@@ -699,6 +719,45 @@ struct TodayView: View {
             calculationMethod: calculationMethod,
             asrMethod: asrMethod
         )
+    }
+
+    private func synchronizeSalahFocus(
+        prayer: Prayer,
+        on date: Date,
+        isCompleted: Bool
+    ) {
+        let identifier = PrayerRecord.identifier(for: date, prayer: prayer)
+        let wasActiveRequirement = salahFocusService.activePrayerName == prayer.name
+        salahFocusService.synchronize(
+            coordinate: locationProvider.coordinate,
+            records: records,
+            pauses: pauses,
+            periodMode: periodMode,
+            calculationMethod: calculationMethod,
+            asrMethod: asrMethod,
+            completionOverride: (identifier, isCompleted)
+        )
+
+        if isCompleted,
+           wasActiveRequirement,
+           salahFocusService.activePrayerName == nil {
+            showFocusReleaseConfirmation(for: prayer)
+        }
+    }
+
+    private func showFocusReleaseConfirmation(for prayer: Prayer) {
+        focusReleaseConfirmationTask?.cancel()
+        withAnimation(.easeOut(duration: reduceMotion ? 0.1 : 0.18)) {
+            focusReleaseConfirmationPrayer = prayer
+        }
+
+        focusReleaseConfirmationTask = Task {
+            try? await Task.sleep(for: .seconds(3))
+            guard !Task.isCancelled else { return }
+            withAnimation(.easeOut(duration: reduceMotion ? 0.1 : 0.18)) {
+                focusReleaseConfirmationPrayer = nil
+            }
+        }
     }
 
     private var sharingSyncKey: String {

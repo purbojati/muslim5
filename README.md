@@ -39,6 +39,7 @@ iPhone.
 - Dawn, daylight, golden-hour, dusk, and night homepage scenes
 - Calculation-method and Asr-method preferences
 - Configurable on-device reminders for each prayer time
+- Optional Salah Focus Screen Time shields for user-selected apps and websites
 - Subtle prayer-phase color transitions
 - Dark Mode and accessibility labels
 
