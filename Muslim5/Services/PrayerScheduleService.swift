@@ -3,6 +3,24 @@ import CoreLocation
 import Foundation
 
 struct PrayerScheduleService {
+    func focusOccurrences(
+        from schedule: PrayerSchedule,
+        calendar: Calendar = .autoupdatingCurrent
+    ) -> [SalahFocusOccurrence] {
+        [schedule.previous, schedule.today, schedule.tomorrow]
+            .flatMap { day in
+                Prayer.allCases.map { prayer in
+                    let start = day.time(for: prayer)
+                    return SalahFocusOccurrence(
+                        prayer: prayer,
+                        day: calendar.startOfDay(for: start),
+                        start: start
+                    )
+                }
+            }
+            .sorted { $0.start < $1.start }
+    }
+
     func dailySchedule(
         for coordinate: CLLocationCoordinate2D,
         at date: Date,

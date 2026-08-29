@@ -232,7 +232,7 @@ struct WelcomeView: View {
             HStack(spacing: 8) {
                 highlight("Only 3 MB", systemImage: "arrow.down.circle.fill")
                 highlight("No ads", systemImage: "eye.slash.fill")
-                highlight("Prayer Circle", systemImage: "person.2.fill")
+                highlight("Salah Circle", systemImage: "person.2.fill")
             }
 
             VStack(spacing: 8) {
@@ -241,7 +241,7 @@ struct WelcomeView: View {
                     highlight("No ads", systemImage: "eye.slash.fill")
                 }
 
-                highlight("Prayer Circle", systemImage: "person.2.fill")
+                highlight("Salah Circle", systemImage: "person.2.fill")
             }
         }
     }

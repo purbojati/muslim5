@@ -24,6 +24,7 @@ struct TodayView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject private var locationProvider: LocationProvider
+    @EnvironmentObject private var salahFocusService: SalahFocusService
     @EnvironmentObject private var sharingService: SharingService
     @Query(sort: \PrayerRecord.day, order: .reverse) private var records: [PrayerRecord]
     @Query(sort: \TrackingPause.startDay, order: .reverse) private var pauses: [TrackingPause]
@@ -33,6 +34,8 @@ struct TodayView: View {
     @State private var dayOffset = 0
     @State private var navigationDirection = -1
     @State private var completionCelebrationDay: Date?
+    @State private var focusReleaseConfirmationPrayer: Prayer?
+    @State private var focusReleaseConfirmationTask: Task<Void, Never>?
     private let prayerScheduleService = PrayerScheduleService()
 
     private var metrics: ProgressMetrics { ProgressMetrics(records: records, pauses: pauses) }
@@ -95,9 +98,7 @@ struct TodayView: View {
                     )
 
                     VStack(alignment: .leading, spacing: 18) {
-                        if sharingService.isConfigured, sharingService.profile == nil {
-                            prayerCircleCard
-                        }
+                        featurePromotions
 
                         if periodMode {
                             pauseBanner
@@ -204,24 +205,19 @@ struct TodayView: View {
     }
 
     private func dayHeader(at date: Date) -> some View {
-        HStack(alignment: .top) {
-            ZStack(alignment: .topLeading) {
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(dayTitle)
-                        .font(.system(.title2, design: .serif, weight: .bold))
-                    Text(hijriDateText(for: date))
-                        .font(.footnote)
-                        .foregroundStyle(.white.opacity(0.72))
-                }
-                .id(dayOffset)
-                .transition(dayContentTransition)
+        ZStack(alignment: .topLeading) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text(dayTitle)
+                    .font(.system(.title2, design: .serif, weight: .bold))
+                Text(hijriDateText(for: date))
+                    .font(.footnote)
+                    .foregroundStyle(.white.opacity(0.72))
             }
-
-            Spacer()
-
-            locationControl
+            .id(dayOffset)
+            .transition(dayContentTransition)
         }
         .foregroundStyle(.white)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var dayTitle: String {
@@ -283,65 +279,89 @@ struct TodayView: View {
     }
 
     @ViewBuilder
-    private var locationControl: some View {
-        if #available(iOS 26.0, *) {
-            locationButton
-                .glassEffect(.regular.interactive(), in: Capsule())
-        } else {
-            locationButton
-                .background(.thinMaterial, in: Capsule())
-        }
-    }
+    private var featurePromotions: some View {
+        let showsPrayerCircle = sharingService.isConfigured && sharingService.profile == nil
+        let showsSalahFocus = !salahFocusService.isEnabled
 
-    private var locationButton: some View {
-        Button(action: handleLocationAction) {
-            Label(locationLabel, systemImage: locationSymbol)
-                .font(.footnote.weight(.semibold))
-                .foregroundStyle(.primary)
-                .lineLimit(2)
-                .truncationMode(.tail)
-                .frame(maxWidth: 160)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 8)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel("Prayer time location: \(locationLabel)")
-        .accessibilityHint("Updates the location used for prayer times")
-    }
+        if showsPrayerCircle && showsSalahFocus {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 12) {
+                    prayerCircleCard
+                        .frame(width: 280)
 
-    private var locationLabel: String {
-        switch locationProvider.state {
-        case .requesting: "Locating"
-        case .denied: "Location off"
-        default: locationProvider.cityName ?? "Locating"
+                    salahFocusCard
+                        .frame(width: 280)
+                }
+                .scrollTargetLayout()
+            }
+            .scrollTargetBehavior(.viewAligned)
+        } else if showsPrayerCircle {
+            prayerCircleCard
+        } else if showsSalahFocus {
+            salahFocusCard
         }
-    }
-
-    private var locationSymbol: String {
-        locationProvider.state == .denied ? "location.slash.fill" : "location.fill"
     }
 
     private var prayerCircleCard: some View {
-        NavigationLink {
+        featureAdoptionCard(
+            title: "Salah Circle",
+            message: "Pray together, anywhere",
+            actionTitle: "Set up",
+            symbol: "person.2.fill",
+            tint: AppTheme.prayerCircleFeature
+        ) {
             SharingSettingsView()
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Set up Salah Circle")
+        .accessibilityHint("Opens Salah Circle setup")
+    }
+
+    private var salahFocusCard: some View {
+        featureAdoptionCard(
+            title: "Salah Focus",
+            message: "Pause apps for salah",
+            actionTitle: salahFocusService.isAuthorized ? "Turn on" : "Set up",
+            symbol: "lock.shield.fill",
+            tint: AppTheme.salahFocusFeature
+        ) {
+            SalahFocusSettingsView()
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(
+            salahFocusService.isAuthorized ? "Turn on Salah Focus" : "Set up Salah Focus"
+        )
+        .accessibilityHint("Opens Salah Focus setup")
+    }
+
+    private func featureAdoptionCard<Destination: View>(
+        title: String,
+        message: String,
+        actionTitle: String,
+        symbol: String,
+        tint: Color,
+        @ViewBuilder destination: () -> Destination
+    ) -> some View {
+        NavigationLink {
+            destination()
         } label: {
             HStack(spacing: 12) {
                 ZStack {
                     Circle()
-                        .fill(AppTheme.accent.opacity(0.14))
+                        .fill(tint.opacity(0.14))
 
-                    Image(systemName: "person.2.fill")
+                    Image(systemName: symbol)
                         .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(AppTheme.accent)
+                        .foregroundStyle(tint)
                 }
                 .frame(width: 38, height: 38)
 
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("Prayer Circle")
+                    Text(title)
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(.primary)
 
-                    Text("Pray together, even when apart")
+                    Text(message)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
@@ -349,9 +369,9 @@ struct TodayView: View {
 
                 Spacer(minLength: 8)
 
-                Text("Set up")
+                Text(actionTitle)
                     .font(.caption.weight(.semibold))
-                    .foregroundStyle(AppTheme.accent)
+                    .foregroundStyle(tint)
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 12)
@@ -361,13 +381,10 @@ struct TodayView: View {
             )
             .overlay {
                 RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .strokeBorder(AppTheme.accent.opacity(0.12), lineWidth: 1)
+                    .strokeBorder(tint.opacity(0.12), lineWidth: 1)
             }
         }
         .buttonStyle(.plain)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("Set up Prayer Circle")
-        .accessibilityHint("Opens Prayer Circle setup")
     }
 
     private func prayerList(
@@ -408,6 +425,15 @@ struct TodayView: View {
                             onStatusChange: { setStatus($0, for: prayer, on: date) },
                             onAttendanceChange: { setAttendance($0, for: prayer, on: date) }
                         )
+                    }
+
+                    if let prayer = focusReleaseConfirmationPrayer {
+                        Label("Apps available again after \(prayer.name)", systemImage: "lock.open.fill")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(AppTheme.success)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 4)
+                            .transition(.opacity)
                     }
                 }
                 .id(dayOffset)
@@ -497,41 +523,29 @@ struct TodayView: View {
         schedule: PrayerSchedule?,
         currentDate: Date
     ) -> some View {
-        let isComplete = metrics.completedCount(on: date) == Prayer.allCases.count
-        let celebratesCompletion = isComplete && shouldCelebrateCompletion(on: date)
         let message = gentleFooterMessage(
             for: date,
             schedule: schedule,
             currentDate: currentDate
         )
 
-        return HStack(spacing: 14) {
-            ZStack {
-                if isComplete {
-                    Image(systemName: "sparkles")
-                        .foregroundStyle(AppTheme.gold)
-                        .transition(celebratesCompletion ? sparkleTransition : quietSymbolTransition)
-                } else {
-                    Image(systemName: "heart.fill")
-                        .foregroundStyle(AppTheme.accent)
-                        .transition(quietSymbolTransition)
-                }
-            }
-            .frame(width: 20, height: 20)
-            .animation(
-                completionSymbolAnimation(celebratesCompletion: celebratesCompletion),
-                value: isComplete
-            )
+        return HStack(alignment: .top, spacing: 14) {
+            Image(systemName: "quote.opening")
+                .font(.title2)
+                .foregroundStyle(AppTheme.accent)
 
             Text(message)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .id(message)
                 .transition(.opacity)
-
-            Spacer()
         }
-        .padding(.horizontal, 6)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(20)
+        .background(
+            AppTheme.accent.opacity(0.08),
+            in: RoundedRectangle(cornerRadius: 22, style: .continuous)
+        )
     }
 
     private func gentleFooterMessage(
@@ -629,6 +643,12 @@ struct TodayView: View {
             return
         }
 
+        synchronizeSalahFocus(
+            prayer: prayer,
+            on: date,
+            isCompleted: existingRecord == nil
+        )
+
         if existingRecord != nil {
             HapticFeedback.impact(.soft, intensity: 0.7)
         } else if willCompleteDay {
@@ -650,6 +670,7 @@ struct TodayView: View {
             modelContext.insert(PrayerRecord(day: date, prayer: prayer, status: status))
         }
         if save() {
+            synchronizeSalahFocus(prayer: prayer, on: date, isCompleted: true)
             HapticFeedback.selection()
         } else {
             HapticFeedback.notification(.error)
@@ -675,6 +696,7 @@ struct TodayView: View {
             )
         }
         if save() {
+            synchronizeSalahFocus(prayer: prayer, on: date, isCompleted: true)
             HapticFeedback.selection()
         } else {
             HapticFeedback.notification(.error)
@@ -699,6 +721,45 @@ struct TodayView: View {
             calculationMethod: calculationMethod,
             asrMethod: asrMethod
         )
+    }
+
+    private func synchronizeSalahFocus(
+        prayer: Prayer,
+        on date: Date,
+        isCompleted: Bool
+    ) {
+        let identifier = PrayerRecord.identifier(for: date, prayer: prayer)
+        let wasActiveRequirement = salahFocusService.activePrayerName == prayer.name
+        salahFocusService.synchronize(
+            coordinate: locationProvider.coordinate,
+            records: records,
+            pauses: pauses,
+            periodMode: periodMode,
+            calculationMethod: calculationMethod,
+            asrMethod: asrMethod,
+            completionOverride: (identifier, isCompleted)
+        )
+
+        if isCompleted,
+           wasActiveRequirement,
+           salahFocusService.activePrayerName == nil {
+            showFocusReleaseConfirmation(for: prayer)
+        }
+    }
+
+    private func showFocusReleaseConfirmation(for prayer: Prayer) {
+        focusReleaseConfirmationTask?.cancel()
+        withAnimation(.easeOut(duration: reduceMotion ? 0.1 : 0.18)) {
+            focusReleaseConfirmationPrayer = prayer
+        }
+
+        focusReleaseConfirmationTask = Task {
+            try? await Task.sleep(for: .seconds(3))
+            guard !Task.isCancelled else { return }
+            withAnimation(.easeOut(duration: reduceMotion ? 0.1 : 0.18)) {
+                focusReleaseConfirmationPrayer = nil
+            }
+        }
     }
 
     private var sharingSyncKey: String {

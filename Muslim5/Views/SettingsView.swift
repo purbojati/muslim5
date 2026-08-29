@@ -8,7 +8,9 @@ struct SettingsView: View {
     @Environment(\.openURL) private var openURL
     @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject private var notificationService: PrayerNotificationService
+    @EnvironmentObject private var salahFocusService: SalahFocusService
     @EnvironmentObject private var sharingService: SharingService
+    @EnvironmentObject private var locationProvider: LocationProvider
     @Query(sort: \TrackingPause.startDay, order: .reverse) private var pauses: [TrackingPause]
     @AppStorage("periodMode") private var periodMode = false
     @AppStorage(PrayerNotificationPreferences.StorageKey.enabled)
@@ -25,46 +27,78 @@ struct SettingsView: View {
     private var ishaNotificationEnabled = true
     @State private var isRequestingNotificationPermission = false
     @State private var isShowingPeriodModeExplanation = false
+    @State private var selectedFeature: FeatureDestination?
+
+    private enum FeatureDestination: Hashable {
+        case qibla
+        case prayerCircle
+        case salahFocus
+    }
 
     var body: some View {
         NavigationStack {
             Form {
                 Section {
-                    NavigationLink {
-                        SharingSettingsView()
-                    } label: {
-                        Label {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Prayer Circle")
-                                Text(sharingStatus)
-                                    .font(.caption)
+                    LazyVGrid(columns: featureColumns, spacing: 12) {
+                        Button {
+                            selectedFeature = .qibla
+                        } label: {
+                            FeatureCard(
+                                title: "Qibla",
+                                detail: "Find the prayer direction",
+                                symbol: "location.north.circle.fill",
+                                tint: AppTheme.qiblaFeature
+                            )
+                        }
+
+                        Button {
+                            selectedFeature = .prayerCircle
+                        } label: {
+                            FeatureCard(
+                                title: "Salah Circle",
+                                detail: sharingStatus,
+                                symbol: "person.2.fill",
+                                tint: AppTheme.prayerCircleFeature
+                            )
+                        }
+
+                        SalahFocusFeatureCard(
+                            isOn: salahFocusToggleBinding,
+                            detail: salahFocusStatus,
+                            onOpen: { selectedFeature = .salahFocus }
+                        )
+
+                        PeriodModeFeatureCard(
+                            isOn: periodModeBinding,
+                            detail: periodMode ? "Tracking is paused" : "Pause tracking when needed"
+                        )
+                    }
+                    .buttonStyle(.plain)
+                    .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 12, trailing: 0))
+                    .listRowBackground(Color.clear)
+                } header: {
+                    Text("Features")
+                }
+
+                Section {
+                    Button(action: handleLocationAction) {
+                        LabeledContent {
+                            Text(locationLabel)
+                                .foregroundStyle(.secondary)
+                                .lineLimit(1)
+                        } label: {
+                            Label {
+                                Text("Prayer location")
+                                    .foregroundStyle(.primary)
+                            } icon: {
+                                Image(systemName: locationSymbol)
                                     .foregroundStyle(.secondary)
                             }
-                        } icon: {
-                            Image(systemName: "person.2.fill")
-                                .foregroundStyle(AppTheme.accent)
                         }
                     }
-                } header: {
-                    Text("Pray with family")
-                } footer: {
-                    Text("Encourage one another in salah using a private linking code. Only completed-prayer check-ins are shared.")
-                }
+                    .accessibilityLabel("Prayer location: \(locationLabel)")
+                    .accessibilityHint("Updates the location used for prayer times")
 
-                Section {
-                    Toggle(isOn: periodModeBinding) {
-                        Label {
-                            Text("Period Mode")
-                        } icon: {
-                            Image(systemName: "pause.circle.fill")
-                                .foregroundStyle(.pink)
-                        }
-                    }
-                } header: {
-                    Text("For sisters")
-                }
-
-                Section {
                     NavigationLink {
                         PrayerTimesSettingsView()
                     } label: {
@@ -141,6 +175,16 @@ struct SettingsView: View {
                 }
             }
             .navigationTitle("Others")
+            .navigationDestination(item: $selectedFeature) { feature in
+                switch feature {
+                case .qibla:
+                    QiblaView()
+                case .prayerCircle:
+                    SharingSettingsView()
+                case .salahFocus:
+                    SalahFocusSettingsView()
+                }
+            }
             .task {
                 await notificationService.refreshAuthorizationStatus()
             }
@@ -177,11 +221,66 @@ struct SettingsView: View {
         }
     }
 
+    private var locationLabel: String {
+        switch locationProvider.state {
+        case .requesting:
+            return "Locating…"
+        case .denied:
+            return "Location off"
+        case .unavailable where locationProvider.cityName == nil:
+            return "Unavailable"
+        default:
+            return locationProvider.cityName ?? "Current location"
+        }
+    }
+
+    private var locationSymbol: String {
+        locationProvider.state == .denied ? "location.slash.fill" : "location.fill"
+    }
+
+    private var featureColumns: [GridItem] {
+        [
+            GridItem(.flexible(), spacing: 12),
+            GridItem(.flexible(), spacing: 12)
+        ]
+    }
+
     private var sharingStatus: String {
         guard sharingService.isConfigured else { return "Server not configured" }
         guard let profile = sharingService.profile else { return "Not set up" }
         let count = sharingService.linkedUsers.count
         return "\(profile.nickname) · \(count) linked"
+    }
+
+    private var salahFocusStatus: String {
+        guard salahFocusService.isAuthorized else { return "Not set up" }
+        guard salahFocusService.isEnabled else { return "Off" }
+        if let prayer = salahFocusService.activePrayerName {
+            return "Waiting for \(prayer)"
+        }
+        return "Ready for the next salah"
+    }
+
+    private var salahFocusToggleBinding: Binding<Bool> {
+        Binding(
+            get: { salahFocusService.isEnabled },
+            set: { newValue in
+                guard newValue else {
+                    salahFocusService.disable()
+                    HapticFeedback.impact(.soft)
+                    return
+                }
+
+                guard salahFocusService.isAuthorized else {
+                    selectedFeature = .salahFocus
+                    HapticFeedback.impact(.soft)
+                    return
+                }
+
+                let enabled = salahFocusService.enable()
+                HapticFeedback.notification(enabled ? .success : .warning)
+            }
+        )
     }
 
     private var prayerNotificationsBinding: Binding<Bool> {
@@ -248,6 +347,17 @@ struct SettingsView: View {
         openURL(settingsURL)
     }
 
+    private func handleLocationAction() {
+        HapticFeedback.impact(.light)
+
+        if locationProvider.state == .denied,
+           let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+            openURL(settingsURL)
+        } else {
+            locationProvider.requestLocation()
+        }
+    }
+
     private var periodModeBinding: Binding<Bool> {
         Binding(
             get: { periodMode },
@@ -263,6 +373,7 @@ struct SettingsView: View {
 
     private func setPeriodMode(_ enabled: Bool) {
         periodMode = enabled
+        salahFocusService.setPeriodMode(enabled)
         if enabled {
             if pauses.first(where: { $0.endDay == nil && $0.reason == "period" }) == nil {
                 modelContext.insert(TrackingPause())
@@ -279,6 +390,161 @@ struct SettingsView: View {
         } catch {
             HapticFeedback.notification(.error)
         }
+    }
+}
+
+private struct FeatureCard: View {
+    let title: String
+    let detail: String
+    let symbol: String
+    let tint: Color
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .top) {
+                Image(systemName: symbol)
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(tint)
+                    .frame(width: 38, height: 38)
+                    .background(tint.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
+
+                Spacer(minLength: 8)
+
+                Image(systemName: "chevron.right")
+                    .font(.caption.bold())
+                    .foregroundStyle(.tertiary)
+                    .padding(.top, 5)
+            }
+
+            Spacer(minLength: 0)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+
+                Text(detail)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(2)
+            }
+        }
+        .frame(maxWidth: .infinity, minHeight: 124, alignment: .leading)
+        .padding(14)
+        .background(
+            Color(.secondarySystemGroupedBackground),
+            in: RoundedRectangle(cornerRadius: 18)
+        )
+        .contentShape(RoundedRectangle(cornerRadius: 18))
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isButton)
+    }
+}
+
+private struct PeriodModeFeatureCard: View {
+    @Binding var isOn: Bool
+    let detail: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .top) {
+                Image(systemName: "pause.circle.fill")
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(AppTheme.periodModeFeature)
+                    .frame(width: 38, height: 38)
+                    .background(
+                        AppTheme.periodModeFeature.opacity(0.12),
+                        in: RoundedRectangle(cornerRadius: 12)
+                    )
+
+                Spacer(minLength: 4)
+
+                Toggle("Period Mode", isOn: $isOn)
+                    .labelsHidden()
+                    .controlSize(.mini)
+                    .tint(AppTheme.periodModeFeature)
+            }
+
+            Spacer(minLength: 0)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Period Mode")
+                    .font(.headline)
+
+                Text(detail)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(2)
+            }
+        }
+        .frame(maxWidth: .infinity, minHeight: 124, alignment: .leading)
+        .padding(14)
+        .background(
+            Color(.secondarySystemGroupedBackground),
+            in: RoundedRectangle(cornerRadius: 18)
+        )
+        .accessibilityElement(children: .contain)
+    }
+}
+
+private struct SalahFocusFeatureCard: View {
+    @Binding var isOn: Bool
+    let detail: String
+    let onOpen: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .top) {
+                Image(systemName: "lock.shield.fill")
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(AppTheme.salahFocusFeature)
+                    .frame(width: 38, height: 38)
+                    .background(
+                        AppTheme.salahFocusFeature.opacity(0.12),
+                        in: RoundedRectangle(cornerRadius: 12)
+                    )
+
+                Spacer(minLength: 4)
+
+                Toggle("Salah Focus", isOn: $isOn)
+                    .labelsHidden()
+                    .controlSize(.mini)
+                    .tint(AppTheme.salahFocusFeature)
+            }
+
+            Spacer(minLength: 0)
+
+            Button(action: onOpen) {
+                HStack(alignment: .bottom, spacing: 6) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Salah Focus")
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+
+                        Text(detail)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(2)
+                    }
+
+                    Spacer(minLength: 0)
+
+                    Image(systemName: "chevron.right")
+                        .font(.caption.bold())
+                        .foregroundStyle(.tertiary)
+                        .padding(.bottom, 4)
+                }
+            }
+            .buttonStyle(.plain)
+            .accessibilityHint("Opens Salah Focus settings")
+        }
+        .frame(maxWidth: .infinity, minHeight: 124, alignment: .leading)
+        .padding(14)
+        .background(
+            Color(.secondarySystemGroupedBackground),
+            in: RoundedRectangle(cornerRadius: 18)
+        )
+        .accessibilityElement(children: .contain)
     }
 }
 
@@ -330,7 +596,7 @@ private struct PeriodModeExplanationSheet: View {
             VStack(alignment: .leading, spacing: 10) {
                 Image(systemName: "pause.circle.fill")
                     .font(.system(size: 34))
-                    .foregroundStyle(.pink)
+                    .foregroundStyle(AppTheme.periodModeFeature)
 
                 Text("Pause tracking for your period?")
                     .font(.title2.bold())

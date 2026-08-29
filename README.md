@@ -2,17 +2,17 @@
 
 Muslim 5 is a private, local-first iPhone tracker for the five daily prayers. It
 uses a gentle habit-building approach: progress is visible, while missed days
-never erase earlier effort. Its optional **Prayer Circle** helps families and
+never erase earlier effort. Its optional **Salah Circle** helps families and
 friends quietly encourage one another without turning worship into a social
 feed.
 
-## Prayer Circle — pray together, even when apart
+## Salah Circle — pray together, even when apart
 
 Every user receives a simple personal linking code. Share the code with family
 or friends to connect instantly—there are no invitations to approve and no
 complicated account setup.
 
-When someone in your Prayer Circle completes a prayer, their compact two-letter
+When someone in your Salah Circle completes a prayer, their compact two-letter
 initial appears directly on that prayer's card on the Today screen. One glance
 shows that your people have prayed, offering gentle accountability without
 scores, rankings, messages, profile photos, or full-name clutter.
@@ -23,7 +23,7 @@ iPhone.
 
 ## Current MVP
 
-- Prayer Circle linking through auto-generated personal codes
+- Salah Circle linking through auto-generated personal codes
 - Compact two-letter initials from linked users on each completed prayer card
 - Five-prayer daily checklist
 - Completed, late, and prayed-after-time statuses
@@ -39,6 +39,7 @@ iPhone.
 - Dawn, daylight, golden-hour, dusk, and night homepage scenes
 - Calculation-method and Asr-method preferences
 - Configurable on-device reminders for each prayer time
+- Optional Salah Focus Screen Time shields for user-selected apps and websites
 - Subtle prayer-phase color transitions
 - Dark Mode and accessibility labels
 
@@ -51,7 +52,7 @@ iPhone.
 
 The project requires iOS 17 or later and uses Adhan Swift for offline prayer-time calculations.
 
-## Prayer Circle backend
+## Salah Circle backend
 
 Muslim 5 uses a small Cloudflare Worker and D1 database for linking users and
 showing who has completed each prayer. The production API is available at
