@@ -62,10 +62,13 @@ struct WelcomeView: View {
                     Spacer(minLength: compactHeight ? 16 : 24)
 
                     highlights
-                        .welcomeEntrance(
-                            isVisible: hasAppeared,
-                            delay: 0.18,
-                            reduceMotion: reduceMotion
+                        .opacity(hasAppeared ? 1 : 0)
+                        .animation(
+                            reduceMotion
+                                ? .linear(duration: 0.10)
+                                : .timingCurve(0.23, 1, 0.32, 1, duration: 0.40)
+                                    .delay(0.18),
+                            value: hasAppeared
                         )
 
                     Spacer(minLength: compactHeight ? 135 : 230)
@@ -228,22 +231,12 @@ struct WelcomeView: View {
     }
 
     private var highlights: some View {
-        ViewThatFits(in: .horizontal) {
-            HStack(spacing: 8) {
-                highlight("Only 3 MB", systemImage: "arrow.down.circle.fill")
-                highlight("No ads", systemImage: "eye.slash.fill")
-                highlight("Salah Circle", systemImage: "person.2.fill")
-            }
-
-            VStack(spacing: 8) {
-                HStack(spacing: 8) {
-                    highlight("Only 3 MB", systemImage: "arrow.down.circle.fill")
-                    highlight("No ads", systemImage: "eye.slash.fill")
-                }
-
-                highlight("Salah Circle", systemImage: "person.2.fill")
-            }
+        HStack(spacing: 8) {
+            highlight("Only 3 MB", systemImage: "arrow.down.circle.fill")
+            highlight("No ads", systemImage: "eye.slash.fill")
+            highlight("Salah Circle", systemImage: "person.2.fill")
         }
+        .frame(maxWidth: 360)
     }
 
     private func highlight(_ title: String, systemImage: String) -> some View {
@@ -251,12 +244,13 @@ struct WelcomeView: View {
             Image(systemName: systemImage)
             Text(title)
                 .lineLimit(1)
+                .minimumScaleFactor(0.72)
         }
         .font(.caption.weight(.semibold))
         .foregroundStyle(AppTheme.parchment.opacity(0.92))
-        .padding(.horizontal, 11)
+        .padding(.horizontal, 8)
+        .frame(maxWidth: .infinity)
         .frame(height: 36)
-        .fixedSize(horizontal: true, vertical: false)
         .background(
             AppTheme.ink.opacity(0.52),
             in: Capsule()
