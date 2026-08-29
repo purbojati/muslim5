@@ -114,7 +114,7 @@ final class SalahFocusService: ObservableObject {
         authorizationStatus = authorizationCenter.authorizationStatus
         if authorizationStatus == .denied, state.isEnabled {
             disable(clearError: true)
-            lastError = "Screen Time access is no longer available. Set up Salah Focus again."
+            lastError = String(localized: "Screen Time access is no longer available. Set up Salah Focus again.")
         }
     }
 
@@ -150,7 +150,7 @@ final class SalahFocusService: ObservableObject {
     func enable(now: Date = .now) -> Bool {
         refreshAuthorizationStatus()
         guard isAuthorized else {
-            lastError = "Allow Screen Time access before turning on Salah Focus."
+            lastError = String(localized: "Allow Screen Time access before turning on Salah Focus.")
             return false
         }
         state.isEnabled = true
@@ -235,7 +235,7 @@ final class SalahFocusService: ObservableObject {
             state.activeRequirement = nil
             state.scheduledRequirement = nil
             activePrayerName = nil
-            lastError = "Salah Focus needs a valid location and prayer schedule."
+            lastError = String(localized: "Salah Focus needs a valid location and prayer schedule.")
             persistState()
             return
         }
@@ -298,7 +298,7 @@ final class SalahFocusService: ObservableObject {
         persistState()
 
         guard let intervalEnd = calendar.date(byAdding: .minute, value: 15, to: requirement.start) else {
-            lastError = "Unable to create the next Salah Focus schedule."
+            lastError = String(localized: "Unable to create the next Salah Focus schedule.")
             return
         }
 

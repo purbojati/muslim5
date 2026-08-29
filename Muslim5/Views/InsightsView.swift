@@ -67,7 +67,10 @@ struct InsightsView: View {
 
             if let strongest = strongestRecentPrayer {
                 Divider()
-                Label("\(strongest.name) has been your most consistent prayer lately.", systemImage: "heart.fill")
+                Label(
+                    String(localized: "\(strongest.name) has been your most consistent prayer lately."),
+                    systemImage: "heart.fill"
+                )
                     .font(.caption)
                     .foregroundStyle(AppTheme.success)
             }
@@ -78,19 +81,19 @@ struct InsightsView: View {
 
     private var consistencyMessage: String {
         switch metrics.last30DayConsistency {
-        case 0: "Bismillah. Start by recording your next prayer."
-        case 0..<0.4: "Every prayer you record is a step forward."
-        case 0.4..<0.8: "Your consistency is growing, one salah at a time."
-        default: "MashaAllah, you’ve been consistent with your salah."
+        case 0: String(localized: "Bismillah. Start by recording your next prayer.")
+        case 0..<0.4: String(localized: "Every prayer you record is a step forward.")
+        case 0.4..<0.8: String(localized: "Your consistency is growing, one salah at a time.")
+        default: String(localized: "MashaAllah, you’ve been consistent with your salah.")
         }
     }
 
     private var monthRhythmTitle: String {
         switch metrics.last30DayConsistency {
-        case 0: "Ready when you are"
-        case 0..<0.4: "A start, Alhamdulillah"
-        case 0.4..<0.8: "Growing steadily"
-        default: "Steady, MashaAllah"
+        case 0: String(localized: "Ready when you are")
+        case 0..<0.4: String(localized: "A start, Alhamdulillah")
+        case 0.4..<0.8: String(localized: "Growing steadily")
+        default: String(localized: "Steady, MashaAllah")
         }
     }
 
@@ -111,10 +114,10 @@ struct InsightsView: View {
 
     private func rhythmLabel(for count: Int) -> String {
         switch count {
-        case 0: "Not recorded yet"
-        case 1..<10: "A few times"
-        case 10..<22: "Often"
-        default: "Consistent"
+        case 0: String(localized: "Not recorded yet")
+        case 1..<10: String(localized: "A few times")
+        case 10..<22: String(localized: "Often")
+        default: String(localized: "Consistent")
         }
     }
 

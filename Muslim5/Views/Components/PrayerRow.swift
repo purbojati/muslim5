@@ -64,7 +64,11 @@ struct PrayerRow: View {
             }
         }
         .accessibilityLabel(accessibilityLabel)
-        .accessibilityHint(isEnabled ? "Double tap to toggle. Touch and hold for more statuses." : "Tracking is paused.")
+        .accessibilityHint(
+            isEnabled
+                ? String(localized: "Double tap to toggle. Touch and hold for more statuses.")
+                : String(localized: "Tracking is paused.")
+        )
     }
 
     private var regularLayout: some View {
@@ -155,13 +159,15 @@ struct PrayerRow: View {
 
     private var statusMessage: String {
         guard let record else {
-            return hasPrayerTimePassed ? prayer.passedTimeEncouragement : "Ready when you are"
+            return hasPrayerTimePassed
+                ? prayer.passedTimeEncouragement
+                : String(localized: "Ready when you are")
         }
 
         let timingMessage = switch record.status {
-        case .completed: "Alhamdulillah"
-        case .late: "Prayed a little later"
-        case .madeUp: "Prayed after time"
+        case .completed: String(localized: "Alhamdulillah")
+        case .late: String(localized: "Prayed a little later")
+        case .madeUp: String(localized: "Prayed after time")
         }
 
         guard let attendance = record.attendance else { return timingMessage }
@@ -172,7 +178,7 @@ struct PrayerRow: View {
         let time = prayerTime?.formatted(date: .omitted, time: .shortened)
         let linkedNames = linkedUsers.isEmpty
             ? nil
-            : "Completed by " + linkedUsers.map(\.nickname).joined(separator: ", ")
+            : String(localized: "Completed by \(linkedUsers.map(\.nickname).joined(separator: ", "))")
         return [prayer.name, time, record?.status.title ?? statusMessage, record?.attendance?.title, linkedNames]
             .compactMap { $0 }
             .joined(separator: ", ")
@@ -197,7 +203,7 @@ private struct PrayerCompanionsView: View {
                     SharingAvatarView(user: user, size: 28)
                 }
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel("\(user.nickname) completed this prayer")
+                .accessibilityLabel(String(localized: "\(user.nickname) completed this prayer"))
             }
 
             if users.count > 5 {
@@ -206,7 +212,7 @@ private struct PrayerCompanionsView: View {
                     .foregroundStyle(.secondary)
                     .frame(width: 28, height: 28)
                     .background(Color.secondary.opacity(0.1), in: Circle())
-                    .accessibilityLabel("\(users.count - 5) more people completed this prayer")
+                    .accessibilityLabel(String(localized: "\(users.count - 5) more people completed this prayer"))
             }
 
             Spacer(minLength: 0)

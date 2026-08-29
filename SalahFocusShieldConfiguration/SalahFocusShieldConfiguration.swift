@@ -28,7 +28,7 @@ final class SalahFocusShieldConfiguration: ShieldConfigurationDataSource {
     private func makeConfiguration() -> ShieldConfiguration {
         let state = SalahFocusSharedStorage.load()
         let requirement = state.activeRequirement
-        let prayerName = requirement?.prayerName ?? "salah"
+        let prayerName = requirement?.prayerName ?? String(localized: "salah")
         let theme = shieldTheme(for: requirement)
         let foreground = UIColor(red: 0.97, green: 0.95, blue: 0.88, alpha: 1)
         let secondary = UIColor(red: 0.82, green: 0.84, blue: 0.78, alpha: 1)
@@ -37,15 +37,15 @@ final class SalahFocusShieldConfiguration: ShieldConfigurationDataSource {
             backgroundBlurStyle: .systemChromeMaterialDark,
             backgroundColor: theme.background.withAlphaComponent(0.96),
             icon: prayerIcon(for: requirement, color: theme.accent),
-            title: .init(text: "Make space for \(prayerName)", color: foreground),
+            title: .init(text: String(localized: "Make space for \(prayerName)"), color: foreground),
             subtitle: .init(
-                text: "“Prayer at its proper time.” — Sahih al-Bukhari 527\n\nPray \(prayerName), then mark it complete in Muslim 5 to unlock your apps.",
+                text: String(localized: "“Prayer at its proper time.” — Sahih al-Bukhari 527\n\nPray \(prayerName), then mark it complete in Muslim 5 to unlock your apps."),
                 color: secondary
             ),
             primaryButtonLabel: .init(text: primaryButtonTitle, color: theme.buttonLabel),
             primaryButtonBackgroundColor: theme.accent,
             secondaryButtonLabel: .init(
-                text: "Not yet — close this app",
+                text: String(localized: "Not yet — close this app"),
                 color: secondary
             )
         )
@@ -53,9 +53,9 @@ final class SalahFocusShieldConfiguration: ShieldConfigurationDataSource {
 
     private var primaryButtonTitle: String {
         if #available(iOS 26.5, *) {
-            return "I’ve prayed — open Muslim 5"
+            return String(localized: "I’ve prayed — open Muslim 5")
         }
-        return "Return to Home Screen"
+        return String(localized: "Return to Home Screen")
     }
 
     private func symbolName(for requirement: SalahFocusRequirement?) -> String {

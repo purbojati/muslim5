@@ -2,6 +2,7 @@ import SwiftData
 import SwiftUI
 
 struct JourneyView: View {
+    @Environment(\.locale) private var locale
     @EnvironmentObject private var locationProvider: LocationProvider
     @Query(sort: \PrayerRecord.day, order: .reverse) private var records: [PrayerRecord]
     @Query(sort: \TrackingPause.startDay, order: .reverse) private var pauses: [TrackingPause]
@@ -34,8 +35,18 @@ struct JourneyView: View {
 
     private var summary: some View {
         HStack(spacing: 12) {
-            summaryTile(value: "\(metrics.currentStreak)", label: "current streak", symbol: "flame.fill", color: AppTheme.gold)
-            summaryTile(value: "\(metrics.perfectDays)", label: "days with all five", symbol: "sparkles", color: AppTheme.success)
+            summaryTile(
+                value: "\(metrics.currentStreak)",
+                label: String(localized: "current streak"),
+                symbol: "flame.fill",
+                color: AppTheme.gold
+            )
+            summaryTile(
+                value: "\(metrics.perfectDays)",
+                label: String(localized: "days with all five"),
+                symbol: "sparkles",
+                color: AppTheme.success
+            )
         }
     }
 
@@ -70,12 +81,20 @@ struct JourneyView: View {
     private var weekdayLabels: some View {
         VStack(spacing: 5) {
             ForEach(0..<7) { index in
-                Text(index == 1 ? "M" : index == 3 ? "W" : index == 5 ? "F" : "")
+                Text(weekdayLabel(at: index))
                     .font(.system(size: 9, weight: .medium, design: .rounded))
                     .foregroundStyle(.secondary)
                     .frame(width: 12, height: 15)
             }
         }
+    }
+
+    private func weekdayLabel(at index: Int) -> String {
+        guard [1, 3, 5].contains(index) else { return "" }
+        var localizedCalendar = calendar
+        localizedCalendar.locale = locale
+        let symbols = localizedCalendar.veryShortWeekdaySymbols
+        return symbols.indices.contains(index) ? symbols[index] : ""
     }
 
     private var legend: some View {
@@ -121,8 +140,8 @@ struct JourneyView: View {
     private func journeyReflection(at date: Date) -> (title: String, body: String) {
         if metrics.isPaused(on: date) {
             return (
-                "Your pause is protected",
-                "Period Mode keeps these days from affecting your streak. Take care of yourself."
+                String(localized: "Your pause is protected"),
+                String(localized: "Period Mode keeps these days from affecting your streak. Take care of yourself.")
             )
         }
 
@@ -132,70 +151,70 @@ struct JourneyView: View {
 
         if records.isEmpty {
             return (
-                "Bismillah, begin with one",
-                "Record your next salah after you pray. Your journey can start there."
+                String(localized: "Bismillah, begin with one"),
+                String(localized: "Record your next salah after you pray. Your journey can start there.")
             )
         }
 
         if metrics.currentStreak >= 30 {
             return (
-                "MashaAllah — 30 days",
-                "May Allah keep you steadfast and make salah beloved to your heart."
+                String(localized: "MashaAllah — 30 days"),
+                String(localized: "May Allah keep you steadfast and make salah beloved to your heart.")
             )
         }
 
         if metrics.currentStreak >= 7 {
             return (
-                "MashaAllah — one full week",
-                "Seven days of showing up for salah. Keep asking Allah for steadfastness."
+                String(localized: "MashaAllah — one full week"),
+                String(localized: "Seven days of showing up for salah. Keep asking Allah for steadfastness.")
             )
         }
 
         if metrics.currentStreak >= 3 {
             return (
-                "A good start, Alhamdulillah",
-                "You’re building consistency day by day. Keep the next salah close."
+                String(localized: "A good start, Alhamdulillah"),
+                String(localized: "You’re building consistency day by day. Keep the next salah close.")
             )
         }
 
         if metrics.last30DayConsistency >= 0.9 {
             return (
-                "MashaAllah, you’ve been consistent",
-                "Your last 30 days show real care for salah. May Allah help you continue."
+                String(localized: "MashaAllah, you’ve been consistent"),
+                String(localized: "Your last 30 days show real care for salah. May Allah help you continue.")
             )
         }
 
         if metrics.perfectDays >= 10 {
             return (
-                "Ten complete days and counting",
-                "You’ve recorded all five prayers on many days. That effort still matters."
+                String(localized: "Ten complete days and counting"),
+                String(localized: "You’ve recorded all five prayers on many days. That effort still matters.")
             )
         }
 
         if metrics.last30DayConsistency >= 0.6 {
             return (
-                "Consistency grows one salah at a time",
-                "You’ve built a good foundation. Let the next prayer carry you forward."
+                String(localized: "Consistency grows one salah at a time"),
+                String(localized: "You’ve built a good foundation. Let the next prayer carry you forward.")
             )
         }
 
         if metrics.perfectDays > 0 {
             return (
-                "You’ve done all five before",
-                "That means you can do it again, inshaAllah. Begin with the next prayer."
+                String(localized: "You’ve done all five before"),
+                String(localized: "That means you can do it again, inshaAllah. Begin with the next prayer.")
             )
         }
 
         if let prayer = metrics.strongestPrayer {
             return (
-                "\(prayer.name) is your strongest prayer",
-                "Alhamdulillah for that consistency. Let it help you strengthen the other prayers too."
+                String(localized: "\(prayer.name) is your strongest prayer"),
+                String(localized: "Alhamdulillah for that consistency. Let it help you strengthen the other prayers too.")
             )
         }
 
         return (
-            "The door is always open",
-            "A missed day doesn’t erase your effort. Begin again with the next salah."
+            String(localized: "The door is always open"),
+            String(localized: "A missed day doesn’t erase your effort. Begin again with the next salah.")
         )
     }
 
@@ -249,7 +268,11 @@ struct JourneyView: View {
             }
             .frame(width: 15, height: 15)
             .accessibilityLabel(date.formatted(date: .abbreviated, time: .omitted))
-            .accessibilityValue(paused ? "Tracking paused" : "\(count) of 5 prayers")
+            .accessibilityValue(
+                paused
+                    ? String(localized: "Tracking paused")
+                    : String(localized: "\(count) of 5 prayers")
+            )
     }
 
     private var gridDates: [Date] {

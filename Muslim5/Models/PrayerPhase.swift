@@ -27,22 +27,22 @@ struct PrayerPhase: Equatable {
 
     var title: String {
         switch kind {
-        case .active(let prayer): "\(prayer.name) time"
-        case .upcoming(let prayer): "\(prayer.name) is next"
+        case .active(let prayer): String(localized: "\(prayer.name) time")
+        case .upcoming(let prayer): String(localized: "\(prayer.name) is next")
         }
     }
 
     var countdownVerb: String {
         switch kind {
-        case .active: "Ends"
-        case .upcoming: "Begins"
+        case .active: String(localized: "Ends")
+        case .upcoming: String(localized: "Begins")
         }
     }
 
     var boundaryName: String {
         switch kind {
         case .upcoming(let prayer): prayer.name
-        case .active(.fajr): "Sunrise"
+        case .active(.fajr): String(localized: "Sunrise")
         case .active(.dhuhr): Prayer.asr.name
         case .active(.asr): Prayer.maghrib.name
         case .active(.maghrib): Prayer.isha.name
@@ -66,11 +66,11 @@ struct PrayerPhase: Equatable {
         let minutes = totalMinutes % 60
 
         if hours == 0 {
-            return "\(countdownVerb) in \(minutes) min"
+            return String(localized: "\(countdownVerb) in \(minutes) min")
         } else if minutes == 0 {
-            return "\(countdownVerb) in \(hours) hr"
+            return String(localized: "\(countdownVerb) in \(hours) hr")
         } else {
-            return "\(countdownVerb) in \(hours) hr \(minutes) min"
+            return String(localized: "\(countdownVerb) in \(hours) hr \(minutes) min")
         }
     }
 
@@ -81,13 +81,18 @@ struct PrayerPhase: Equatable {
         var parts: [String] = []
 
         if hours > 0 {
-            parts.append("\(hours) \(hours == 1 ? "hour" : "hours")")
+            parts.append(hours == 1
+                ? String(localized: "1 hour")
+                : String(localized: "\(hours) hours"))
         }
         if minutes > 0 {
-            parts.append("\(minutes) \(minutes == 1 ? "minute" : "minutes")")
+            parts.append(minutes == 1
+                ? String(localized: "1 minute")
+                : String(localized: "\(minutes) minutes"))
         }
 
-        return "\(countdownVerb) in \(parts.joined(separator: " and "))"
+        let duration = parts.joined(separator: String(localized: " and "))
+        return String(localized: "\(countdownVerb) in \(duration)")
     }
 }
 

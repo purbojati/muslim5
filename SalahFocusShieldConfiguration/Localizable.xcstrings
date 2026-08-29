@@ -1,0 +1,126 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Asr": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Asar"
+          }
+        }
+      }
+    },
+    "Dhuhr": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zuhur"
+          }
+        }
+      }
+    },
+    "Fajr": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subuh"
+          }
+        }
+      }
+    },
+    "Isha": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Isya"
+          }
+        }
+      }
+    },
+    "I’ve prayed — open Muslim 5": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saya sudah salat — buka Muslim 5"
+          }
+        }
+      }
+    },
+    "Maghrib": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Magrib"
+          }
+        }
+      }
+    },
+    "Make space for %@": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beri ruang untuk %@"
+          }
+        }
+      }
+    },
+    "Not yet — close this app": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Belum — tutup aplikasi ini"
+          }
+        }
+      }
+    },
+    "Return to Home Screen": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kembali ke Layar Utama"
+          }
+        }
+      }
+    },
+    "Salah Focus shared storage is unavailable. Check the App Group entitlement.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Penyimpanan bersama Salah Focus tidak tersedia. Periksa hak akses App Group."
+          }
+        }
+      }
+    },
+    "salah": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "salat"
+          }
+        }
+      }
+    },
+    "“Prayer at its proper time.” — Sahih al-Bukhari 527\n\nPray %@, then mark it complete in Muslim 5 to unlock your apps.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“Salat pada waktunya.” — Sahih al-Bukhari 527\n\nTunaikan %@, lalu tandai selesai di Muslim 5 untuk membuka kembali aplikasi."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.2"
+}

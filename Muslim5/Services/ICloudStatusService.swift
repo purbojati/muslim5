@@ -17,34 +17,34 @@ struct ICloudSyncStateMachine: Equatable {
         var label: String {
             switch self {
             case .checking:
-                return "Checking…"
+                return String(localized: "Checking…")
             case .ready:
-                return "Ready"
+                return String(localized: "Ready")
             case .waitingToBackUp:
-                return "Waiting to back up"
+                return String(localized: "Waiting to back up")
             case .syncing:
-                return "Syncing…"
+                return String(localized: "Syncing…")
             case .upToDate:
-                return "Up to date"
+                return String(localized: "Up to date")
             case .backedUp:
-                return "Backed up"
+                return String(localized: "Backed up")
             case .failed:
-                return "Sync failed"
+                return String(localized: "Sync failed")
             case .unavailable:
-                return "Unavailable"
+                return String(localized: "Unavailable")
             }
         }
 
         var detail: String? {
             switch self {
             case .waitingToBackUp:
-                return "Keep Muslim 5 open and connected until the backup finishes."
+                return String(localized: "Keep Muslim 5 open and connected until the backup finishes.")
             case .syncing:
-                return "Sending prayer data securely to iCloud."
+                return String(localized: "Sending prayer data securely to iCloud.")
             case let .upToDate(date):
-                return "Last checked \(date.formatted(date: .omitted, time: .shortened))."
+                return String(localized: "Last checked \(date.formatted(date: .omitted, time: .shortened)).")
             case let .backedUp(date):
-                return "Last confirmed \(date.formatted(date: .omitted, time: .shortened))."
+                return String(localized: "Last confirmed \(date.formatted(date: .omitted, time: .shortened)).")
             case let .failed(message):
                 return message
             case .checking, .ready, .unavailable:
@@ -90,7 +90,7 @@ struct ICloudSyncStateMachine: Equatable {
         errorMessage: String? = nil
     ) {
         guard succeeded else {
-            state = .failed(errorMessage ?? "iCloud could not finish syncing. Try again while online.")
+            state = .failed(errorMessage ?? String(localized: "iCloud could not finish syncing. Try again while online."))
             return
         }
 
@@ -117,15 +117,15 @@ final class ICloudStatusService: ObservableObject {
         var label: String {
             switch self {
             case .checking:
-                return "Checking…"
+                return String(localized: "Checking…")
             case .available:
-                return "Available"
+                return String(localized: "Available")
             case .noAccount:
-                return "Sign in to iCloud"
+                return String(localized: "Sign in to iCloud")
             case .restricted:
-                return "Restricted"
+                return String(localized: "Restricted")
             case .temporarilyUnavailable:
-                return "Temporarily unavailable"
+                return String(localized: "Temporarily unavailable")
             }
         }
 

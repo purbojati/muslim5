@@ -1,0 +1,3798 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    " and ": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " dan "
+          }
+        }
+      }
+    },
+    "%@ ": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ "
+          }
+        }
+      }
+    },
+    "%@ Focus is active": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fokus %@ sedang aktif"
+          }
+        }
+      }
+    },
+    "%@ completed this prayer": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ sudah menunaikan salat ini"
+          }
+        }
+      }
+    },
+    "%@ has been your most consistent prayer lately.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Belakangan ini, %@ adalah salatmu yang paling terjaga."
+          }
+        }
+      }
+    },
+    "%@ in %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ in %2$@"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ dalam %2$@"
+          }
+        }
+      }
+    },
+    "%@ in %lld hr": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ in %2$lld hr"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ dalam %2$lld jam"
+          }
+        }
+      }
+    },
+    "%@ in %lld hr %lld min": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ in %2$lld hr %3$lld min"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ dalam %2$lld jam %3$lld menit"
+          }
+        }
+      }
+    },
+    "%@ in %lld min": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ in %2$lld min"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ dalam %2$lld menit"
+          }
+        }
+      }
+    },
+    "%@ is next": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Berikutnya %@"
+          }
+        }
+      }
+    },
+    "%@ is your strongest prayer": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ adalah salatmu yang paling terjaga"
+          }
+        }
+      }
+    },
+    "%@ time": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waktu %@"
+          }
+        }
+      }
+    },
+    "%@ · %lld linked": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@ · %2$lld linked"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ · %2$lld terhubung"
+          }
+        }
+      }
+    },
+    "%@. %@. %@ at %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@. %2$@. %3$@ at %4$@."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@. %2$@. %3$@ pukul %4$@."
+          }
+        }
+      }
+    },
+    "%lld days ago": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld hari lalu"
+          }
+        }
+      }
+    },
+    "%lld hours": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld jam"
+          }
+        }
+      }
+    },
+    "%lld minutes": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld menit"
+          }
+        }
+      }
+    },
+    "%lld more people completed this prayer": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld orang lainnya sudah menunaikan salat ini"
+          }
+        }
+      }
+    },
+    "%lld of 5 prayers": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld dari 5 salat"
+          }
+        }
+      }
+    },
+    "+%lld": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%lld"
+          }
+        }
+      }
+    },
+    "1 hour": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 jam"
+          }
+        }
+      }
+    },
+    "1 minute": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 menit"
+          }
+        }
+      }
+    },
+    "1 prayer": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 salat"
+          }
+        }
+      }
+    },
+    "A few times": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beberapa kali"
+          }
+        }
+      }
+    },
+    "A gentle reminder": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pengingat yang lembut"
+          }
+        }
+      }
+    },
+    "A gentle reminder at each selected prayer time. Sound and vibration follow your iPhone settings.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pengingat lembut di setiap waktu salat yang dipilih. Suara dan getaran mengikuti pengaturan iPhone."
+          }
+        }
+      }
+    },
+    "A good start, Alhamdulillah": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Awal yang baik, Alhamdulillah"
+          }
+        }
+      }
+    },
+    "A missed day doesn’t erase your effort. Begin again with the next salah.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Satu hari yang terlewat tidak menghapus ikhtiarmu. Mulai lagi di waktu salat berikutnya."
+          }
+        }
+      }
+    },
+    "A simple reminder": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pengingat sederhana"
+          }
+        }
+      }
+    },
+    "A start, Alhamdulillah": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sebuah awal, Alhamdulillah"
+          }
+        }
+      }
+    },
+    "ABCDE-FGHIJ": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ABCDE-FGHIJ"
+          }
+        }
+      }
+    },
+    "Add a SalahAPIBaseURL build setting before using Salah Circle.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tambahkan pengaturan build SalahAPIBaseURL sebelum menggunakan Salah Circle."
+          }
+        }
+      }
+    },
+    "After time": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Setelah waktunya"
+          }
+        }
+      }
+    },
+    "After you mark salah complete": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Setelah salat ditandai selesai"
+          }
+        }
+      }
+    },
+    "Alhamdulillah": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alhamdulillah"
+          }
+        }
+      }
+    },
+    "Alhamdulillah for that consistency. Let it help you strengthen the other prayers too.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alhamdulillah atas kebiasaan baik itu. Semoga ini membantu menjaga waktu salat lainnya juga."
+          }
+        }
+      }
+    },
+    "Alhamdulillah for this one. Keep the next prayer close.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alhamdulillah untuk salat ini. Mari jaga waktu salat berikutnya."
+          }
+        }
+      }
+    },
+    "Alhamdulillah — all five prayers recorded.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alhamdulillah — lima waktu sudah tercatat lengkap."
+          }
+        }
+      }
+    },
+    "All 5": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lengkap 5"
+          }
+        }
+      }
+    },
+    "All ordinary apps": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semua aplikasi biasa"
+          }
+        }
+      }
+    },
+    "Allow Screen Time": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Izinkan Durasi Layar"
+          }
+        }
+      }
+    },
+    "Allow Screen Time access before turning on Salah Focus.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Izinkan akses Durasi Layar sebelum mengaktifkan Salah Focus."
+          }
+        }
+      }
+    },
+    "Allow location access so we can calculate the Qibla from where you are.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Izinkan akses lokasi agar arah kiblat dapat dihitung dari tempatmu berada."
+          }
+        }
+      }
+    },
+    "Allow location in Settings to calculate the prayer windows around you.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Izinkan lokasi di Pengaturan untuk menghitung rentang waktu salat di sekitarmu."
+          }
+        }
+      }
+    },
+    "Anyone who enters this code is linked with you immediately.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siapa pun yang memasukkan kode ini akan langsung terhubung denganmu."
+          }
+        }
+      }
+    },
+    "Apple requires this permission to pause apps. Muslim 5 cannot see your Screen Time activity.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple memerlukan izin ini untuk menjeda aplikasi. Muslim 5 tidak dapat melihat aktivitas Durasi Layarmu."
+          }
+        }
+      }
+    },
+    "Apps available again after %@": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplikasi tersedia kembali setelah %@"
+          }
+        }
+      }
+    },
+    "Asr": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Asar"
+          }
+        }
+      }
+    },
+    "Asr method": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metode Asar"
+          }
+        }
+      }
+    },
+    "Asr — Renew your focus": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Asar — Segarkan kembali fokusmu"
+          }
+        }
+      }
+    },
+    "Attendance": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pelaksanaan"
+          }
+        }
+      }
+    },
+    "Available": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tersedia"
+          }
+        }
+      }
+    },
+    "Backed up": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sudah dicadangkan"
+          }
+        }
+      }
+    },
+    "Backup Status": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Status Pencadangan"
+          }
+        }
+      }
+    },
+    "Before you rest, return to Allah through Isha.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sebelum beristirahat, kembalilah kepada Allah melalui Isya."
+          }
+        }
+      }
+    },
+    "Begin": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mulai"
+          }
+        }
+      }
+    },
+    "Begins": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dimulai"
+          }
+        }
+      }
+    },
+    "Bismillah, begin with one": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bismillah, mulai dari satu"
+          }
+        }
+      }
+    },
+    "Bismillah. Continue with the next prayer.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bismillah. Lanjutkan dengan waktu salat berikutnya."
+          }
+        }
+      }
+    },
+    "Bismillah. Start by recording your next prayer.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bismillah. Mulai dengan mencatat salat berikutnya."
+          }
+        }
+      }
+    },
+    "Calculation": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perhitungan"
+          }
+        }
+      }
+    },
+    "Calculation method": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metode perhitungan"
+          }
+        }
+      }
+    },
+    "Cancel": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Batal"
+          }
+        }
+      }
+    },
+    "Checking…": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Memeriksa…"
+          }
+        }
+      }
+    },
+    "Clear": {
+      "comment": "Destructive menu action that removes a recorded prayer check-in.",
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hapus Catatan"
+          }
+        }
+      }
+    },
+    "Close": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tutup"
+          }
+        }
+      }
+    },
+    "Compass unavailable on this device.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kompas tidak tersedia di perangkat ini."
+          }
+        }
+      }
+    },
+    "Complete %@, then tap %@ on Today to unlock your apps.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Complete %1$@, then tap %2$@ on Today to unlock your apps."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tunaikan %1$@, lalu ketuk %2$@ di Hari Ini untuk membuka kembali aplikasi."
+          }
+        }
+      }
+    },
+    "Completed": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selesai"
+          }
+        }
+      }
+    },
+    "Completed by %@": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sudah ditunaikan oleh %@"
+          }
+        }
+      }
+    },
+    "Completed by your circle": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sudah ditunaikan oleh lingkaranmu"
+          }
+        }
+      }
+    },
+    "Completed late": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salat agak terlambat"
+          }
+        }
+      }
+    },
+    "Completed-prayer check-ins": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Catatan salat yang sudah ditunaikan"
+          }
+        }
+      }
+    },
+    "Consistency grows one salah at a time": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kebiasaan baik tumbuh satu salat demi satu"
+          }
+        }
+      }
+    },
+    "Consistent": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terjaga"
+          }
+        }
+      }
+    },
+    "Continue": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lanjutkan"
+          }
+        }
+      }
+    },
+    "Continue to Setup": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lanjutkan Pengaturan"
+          }
+        }
+      }
+    },
+    "Copy linking code": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salin kode penghubung"
+          }
+        }
+      }
+    },
+    "Could not create your sharing profile. Please try again.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profil berbagi belum dapat dibuat. Silakan coba lagi."
+          }
+        }
+      }
+    },
+    "Could not generate a unique linking code. Please try again.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kode penghubung baru belum dapat dibuat. Silakan coba lagi."
+          }
+        }
+      }
+    },
+    "Could not securely save sharing access on this iPhone (%d).": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Akses berbagi belum dapat disimpan dengan aman di iPhone ini (%d)."
+          }
+        }
+      }
+    },
+    "Coverage": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cakupan"
+          }
+        }
+      }
+    },
+    "Current location": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lokasi saat ini"
+          }
+        }
+      }
+    },
+    "Data": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data"
+          }
+        }
+      }
+    },
+    "Delete Sharing Profile": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hapus Profil Berbagi"
+          }
+        }
+      }
+    },
+    "Delete your sharing profile?": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hapus profil berbagi?"
+          }
+        }
+      }
+    },
+    "Dhu al-Hijjah": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zulhijah"
+          }
+        }
+      }
+    },
+    "Dhu al-Qi'dah": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zulkaidah"
+          }
+        }
+      }
+    },
+    "Dhuhr": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zuhur"
+          }
+        }
+      }
+    },
+    "Done": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selesai"
+          }
+        }
+      }
+    },
+    "Double tap to toggle. Touch and hold for more statuses.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ketuk dua kali untuk mengubah. Sentuh dan tahan untuk pilihan status lainnya."
+          }
+        }
+      }
+    },
+    "E": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "T"
+          }
+        }
+      }
+    },
+    "Each square shows how many prayers you recorded that day.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Setiap kotak menunjukkan jumlah salat yang kamu catat pada hari itu."
+          }
+        }
+      }
+    },
+    "Ends": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Berakhir"
+          }
+        }
+      }
+    },
+    "Enter a valid linking code.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masukkan kode penghubung yang valid."
+          }
+        }
+      }
+    },
+    "Enter their private linking code.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masukkan kode penghubung pribadi mereka."
+          }
+        }
+      }
+    },
+    "Every prayer you record is a step forward.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Setiap salat yang dicatat adalah satu langkah ke depan."
+          }
+        }
+      }
+    },
+    "Every salah is a fresh chance to return to Allah.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Setiap waktu salat adalah kesempatan baru untuk kembali mendekat kepada Allah."
+          }
+        }
+      }
+    },
+    "Fajr": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subuh"
+          }
+        }
+      }
+    },
+    "Fajr does not define the whole day": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subuh tidak menentukan seluruh harimu"
+          }
+        }
+      }
+    },
+    "Family initials appear here": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inisial keluarga akan muncul di sini"
+          }
+        }
+      }
+    },
+    "Features": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fitur"
+          }
+        }
+      }
+    },
+    "Find the prayer direction": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temukan arah kiblat"
+          }
+        }
+      }
+    },
+    "Find your local prayer times": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temukan waktu salat di lokasimu"
+          }
+        }
+      }
+    },
+    "Finding your location": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mencari lokasimu"
+          }
+        }
+      }
+    },
+    "Finding your prayer times": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mencari waktu salatmu"
+          }
+        }
+      }
+    },
+    "Generate New Code": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buat Kode Baru"
+          }
+        }
+      }
+    },
+    "Growing steadily": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tumbuh perlahan"
+          }
+        }
+      }
+    },
+    "Hanafi": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hanafi"
+          }
+        }
+      }
+    },
+    "If Asr was missed, carry a renewed intention into the prayer ahead.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jika Asar terlewat, perbarui niat untuk menyambut waktu salat berikutnya."
+          }
+        }
+      }
+    },
+    "If Dhuhr was missed, pause without despair and begin again with the next salah.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jika Zuhur terlewat, berhenti sejenak tanpa putus asa dan mulai lagi di waktu salat berikutnya."
+          }
+        }
+      }
+    },
+    "If Fajr was missed, be gentle with yourself. Return with the next salah.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jika Subuh terlewat, jangan terlalu keras pada diri sendiri. Kembali lagi di waktu salat berikutnya."
+          }
+        }
+      }
+    },
+    "If Isha was missed, rest without despair and begin again tomorrow.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jika Isya terlewat, beristirahatlah tanpa putus asa dan mulai lagi besok."
+          }
+        }
+      }
+    },
+    "If Maghrib was missed, meet the next salah with a gentle heart.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jika Magrib terlewat, sambut waktu salat berikutnya dengan hati yang tenang."
+          }
+        }
+      }
+    },
+    "Individual": {
+      "comment": "Prayer attendance performed alone rather than in congregation.",
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sendiri"
+          }
+        }
+      }
+    },
+    "Isha": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Isya"
+          }
+        }
+      }
+    },
+    "It names the prayer and opens Muslim 5 when you’re ready.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pengingat ini menyebut waktu salat dan membuka Muslim 5 saat kamu siap."
+          }
+        }
+      }
+    },
+    "It’s okay — Asr is a fresh chance": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tidak apa-apa — Asar adalah kesempatan baru"
+          }
+        }
+      }
+    },
+    "It’s okay — Isha is another chance": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tidak apa-apa — Isya adalah kesempatan berikutnya"
+          }
+        }
+      }
+    },
+    "It’s okay — begin again with Dhuhr": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tidak apa-apa — mulai lagi saat Zuhur"
+          }
+        }
+      }
+    },
+    "It’s okay — return with Maghrib": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tidak apa-apa — kembali lagi saat Magrib"
+          }
+        }
+      }
+    },
+    "It’s okay — tomorrow begins with Fajr": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tidak apa-apa — besok dimulai dengan Subuh"
+          }
+        }
+      }
+    },
+    "I’ve prayed — open Muslim 5": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saya sudah salat — buka Muslim 5"
+          }
+        }
+      }
+    },
+    "Jamā'ah": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Berjamaah"
+          }
+        }
+      }
+    },
+    "Journey": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perjalanan"
+          }
+        }
+      }
+    },
+    "Jumada al-Awwal": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jumadilawal"
+          }
+        }
+      }
+    },
+    "Jumada al-Thani": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jumadilakhir"
+          }
+        }
+      }
+    },
+    "Keep Muslim 5 open and connected until the backup finishes.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Biarkan Muslim 5 tetap terbuka dan terhubung sampai pencadangan selesai."
+          }
+        }
+      }
+    },
+    "Keep it private": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tetap terjaga privasinya"
+          }
+        }
+      }
+    },
+    "Keep your iPhone flat, with the top pointing in front of you.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Posisikan iPhone mendatar dengan bagian atas mengarah ke depan."
+          }
+        }
+      }
+    },
+    "Last checked %@.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terakhir diperiksa %@."
+          }
+        }
+      }
+    },
+    "Last confirmed %@.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terakhir dikonfirmasi %@."
+          }
+        }
+      }
+    },
+    "Late": {
+      "comment": "Prayer status: completed somewhat late, but still distinct from after its time.",
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terlambat"
+          }
+        }
+      }
+    },
+    "Link": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hubungkan"
+          }
+        }
+      }
+    },
+    "Link Someone": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hubungkan Seseorang"
+          }
+        }
+      }
+    },
+    "Link with me in Muslim 5 using code %@": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terhubung denganku di Muslim 5 menggunakan kode %@"
+          }
+        }
+      }
+    },
+    "Linked people": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orang yang terhubung"
+          }
+        }
+      }
+    },
+    "Linking code not found.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kode penghubung tidak ditemukan."
+          }
+        }
+      }
+    },
+    "Locating…": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mencari lokasi…"
+          }
+        }
+      }
+    },
+    "Location access is off": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Akses lokasi dimatikan"
+          }
+        }
+      }
+    },
+    "Location is off": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lokasi dimatikan"
+          }
+        }
+      }
+    },
+    "Location off": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lokasi mati"
+          }
+        }
+      }
+    },
+    "Location unavailable": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lokasi tidak tersedia"
+          }
+        }
+      }
+    },
+    "Low accuracy. Move away from metal and trace a figure eight.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Akurasi rendah. Jauhkan dari benda logam dan gerakkan membentuk angka delapan."
+          }
+        }
+      }
+    },
+    "MUSLIM 5": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MUSLIM 5"
+          }
+        }
+      }
+    },
+    "Made with care by a fellow Muslim in Indonesia 🇮🇩": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dibuat sepenuh hati oleh saudara sesama Muslim di Indonesia 🇮🇩"
+          }
+        }
+      }
+    },
+    "Maghrib": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Magrib"
+          }
+        }
+      }
+    },
+    "Maghrib completed. Family initials A Y, O M, and S R appear beneath the prayer.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Magrib selesai. Inisial keluarga A Y, O M, dan S R muncul di bawah salat."
+          }
+        }
+      }
+    },
+    "Make space for %@": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beri ruang untuk %@"
+          }
+        }
+      }
+    },
+    "MashaAllah — 30 days": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MasyaAllah — 30 hari"
+          }
+        }
+      }
+    },
+    "MashaAllah — one full week": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MasyaAllah — satu pekan penuh"
+          }
+        }
+      }
+    },
+    "MashaAllah, you’ve been consistent": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MasyaAllah, salatmu terjaga"
+          }
+        }
+      }
+    },
+    "MashaAllah, you’ve been consistent with your salah.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "MasyaAllah, salatmu tetap terjaga."
+          }
+        }
+      }
+    },
+    "May Allah keep you steadfast and make salah beloved to your heart.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Semoga Allah meneguhkanmu dan menjadikan salat dicintai hatimu."
+          }
+        }
+      }
+    },
+    "Missed a check-in?": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lupa mencatat?"
+          }
+        }
+      }
+    },
+    "Muharram": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muharam"
+          }
+        }
+      }
+    },
+    "Muslim 5": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muslim 5"
+          }
+        }
+      }
+    },
+    "Muslim 5 could not open your prayer history. Your data was not replaced or deleted.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muslim 5 tidak dapat membuka riwayat salatmu. Datamu tidak diganti atau dihapus."
+          }
+        }
+      }
+    },
+    "Muslim 5, calls, and emergency access stay available": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muslim 5, panggilan, dan akses darurat tetap tersedia"
+          }
+        }
+      }
+    },
+    "Muslim World League": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liga Muslim Dunia"
+          }
+        }
+      }
+    },
+    "N": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "U"
+          }
+        }
+      }
+    },
+    "Next day": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hari berikutnya"
+          }
+        }
+      }
+    },
+    "Nickname": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nama panggilan"
+          }
+        }
+      }
+    },
+    "Nickname and initial": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nama panggilan dan inisial"
+          }
+        }
+      }
+    },
+    "Nickname must contain 1 to 30 visible characters.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nama panggilan harus berisi 1 hingga 30 karakter yang terlihat."
+          }
+        }
+      }
+    },
+    "No ads": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tanpa iklan"
+          }
+        }
+      }
+    },
+    "No linked people yet": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Belum ada yang terhubung"
+          }
+        }
+      }
+    },
+    "No location, prayer time, or streak": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lokasi, waktu salat, dan rentetan tidak dibagikan"
+          }
+        }
+      }
+    },
+    "Not Now": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nanti Saja"
+          }
+        }
+      }
+    },
+    "Not recorded yet": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Belum dicatat"
+          }
+        }
+      }
+    },
+    "Not set up": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Belum diatur"
+          }
+        }
+      }
+    },
+    "Not yet — close this app": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Belum — tutup aplikasi ini"
+          }
+        }
+      }
+    },
+    "Nothing recorded for this day. You can still update it.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Belum ada yang dicatat untuk hari ini. Kamu masih bisa memperbaruinya."
+          }
+        }
+      }
+    },
+    "Notifications are off in iPhone Settings.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Notifikasi dimatikan di Pengaturan iPhone."
+          }
+        }
+      }
+    },
+    "Now ": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sekarang "
+          }
+        }
+      }
+    },
+    "Off": {
+      "comment": "Disabled state for Salah Focus.",
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nonaktif"
+          }
+        }
+      }
+    },
+    "Often": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sering"
+          }
+        }
+      }
+    },
+    "On": {
+      "comment": "Enabled state for Salah Focus.",
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktif"
+          }
+        }
+      }
+    },
+    "One prayer left. May Allah make it easy.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tinggal satu salat lagi. Semoga Allah mudahkan."
+          }
+        }
+      }
+    },
+    "Only 3 MB": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hanya 3 MB"
+          }
+        }
+      }
+    },
+    "Open Settings": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buka Pengaturan"
+          }
+        }
+      }
+    },
+    "Open iPhone Settings": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buka Pengaturan iPhone"
+          }
+        }
+      }
+    },
+    "Opens Salah Circle setup": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Membuka pengaturan Salah Circle"
+          }
+        }
+      }
+    },
+    "Opens Salah Focus settings": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Membuka pengaturan Salah Focus"
+          }
+        }
+      }
+    },
+    "Opens Salah Focus setup": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Membuka pengaturan Salah Focus"
+          }
+        }
+      }
+    },
+    "Opens the Today screen": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Membuka layar Hari Ini"
+          }
+        }
+      }
+    },
+    "Ordinary apps pause so you can make time for salah": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplikasi biasa dijeda agar ada ruang untuk salat"
+          }
+        }
+      }
+    },
+    "Ordinary apps will pause when your next unfinished prayer begins.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplikasi biasa akan dijeda ketika waktu salat berikutnya yang belum ditunaikan dimulai."
+          }
+        }
+      }
+    },
+    "Other apps pause until you record your prayer in Muslim 5.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aplikasi lain dijeda sampai kamu mencatat salat di Muslim 5."
+          }
+        }
+      }
+    },
+    "Others": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lainnya"
+          }
+        }
+      }
+    },
+    "Pause apps for salah": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jeda aplikasi untuk salat"
+          }
+        }
+      }
+    },
+    "Pause distractions for salah": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jeda gangguan untuk salat"
+          }
+        }
+      }
+    },
+    "Pause tracking for your period?": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jeda pencatatan selama haid?"
+          }
+        }
+      }
+    },
+    "Pause tracking when needed": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jeda pencatatan saat diperlukan"
+          }
+        }
+      }
+    },
+    "Pause, breathe, and reconnect. It’s time for Asr.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Berhenti sejenak, tarik napas, dan kembali mendekat. Waktu Asar telah tiba."
+          }
+        }
+      }
+    },
+    "Paused": {
+      "comment": "Legend label for days excluded by Period Mode.",
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dijeda"
+          }
+        }
+      }
+    },
+    "Period Mode": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode Haid"
+          }
+        }
+      }
+    },
+    "Period Mode is on": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode Haid aktif"
+          }
+        }
+      }
+    },
+    "Period Mode keeps these days from affecting your streak. Take care of yourself.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mode Haid menjaga agar hari-hari ini tidak memengaruhi rentetanmu. Jaga dirimu baik-baik."
+          }
+        }
+      }
+    },
+    "Please check Location Services, then try again.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Periksa Layanan Lokasi, lalu coba lagi."
+          }
+        }
+      }
+    },
+    "Point toward %lld°": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arahkan ke %lld°"
+          }
+        }
+      }
+    },
+    "Pray %@, then mark it complete in Muslim 5 to unlock your apps.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tunaikan %@, lalu tandai selesai di Muslim 5 untuk membuka kembali aplikasi."
+          }
+        }
+      }
+    },
+    "Pray together, anywhere": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bersama dalam salat"
+          }
+        }
+      }
+    },
+    "Pray together, wherever you are": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salat bersama, di mana pun berada"
+          }
+        }
+      }
+    },
+    "Prayed a little later": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salat agak terlambat"
+          }
+        }
+      }
+    },
+    "Prayed after time": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dikerjakan setelah waktunya"
+          }
+        }
+      }
+    },
+    "Prayer Times": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waktu Salat"
+          }
+        }
+      }
+    },
+    "Prayer by prayer": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Satu per satu waktu salat"
+          }
+        }
+      }
+    },
+    "Prayer history unavailable": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riwayat salat tidak tersedia"
+          }
+        }
+      }
+    },
+    "Prayer location": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lokasi salat"
+          }
+        }
+      }
+    },
+    "Prayer location: %@": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lokasi salat: %@"
+          }
+        }
+      }
+    },
+    "Prayer reminders": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pengingat waktu salat"
+          }
+        }
+      }
+    },
+    "Prayer time": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Waktu salat"
+          }
+        }
+      }
+    },
+    "Preview. Make space for Dhuhr. Pray Dhuhr, then mark it complete in Muslim 5 to unlock your apps.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pratinjau. Beri ruang untuk Zuhur. Tunaikan Zuhur, lalu tandai selesai di Muslim 5 untuk membuka kembali aplikasi."
+          }
+        }
+      }
+    },
+    "Previous day": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hari sebelumnya"
+          }
+        }
+      }
+    },
+    "Qibla": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kiblat"
+          }
+        }
+      }
+    },
+    "Qibla compass": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kompas kiblat"
+          }
+        }
+      }
+    },
+    "Qibla is %lld degrees %@. %@.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Qibla is %1$lld degrees %2$@. %3$@."
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arah kiblat %1$lld derajat ke %2$@. %3$@."
+          }
+        }
+      }
+    },
+    "Qibla is %lld° %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Qibla is %1$lld° %2$@"
+          }
+        },
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arah kiblat %1$lld° %2$@"
+          }
+        }
+      }
+    },
+    "Rabi al-Awwal": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rabiulawal"
+          }
+        }
+      }
+    },
+    "Rabi al-Thani": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rabiulakhir"
+          }
+        }
+      }
+    },
+    "Rajab": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rajab"
+          }
+        }
+      }
+    },
+    "Ramadan": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ramadan"
+          }
+        }
+      }
+    },
+    "Ready": {
+      "comment": "iCloud sync is available and ready.",
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siap"
+          }
+        }
+      }
+    },
+    "Ready for the next salah": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siap untuk waktu salat berikutnya"
+          }
+        }
+      }
+    },
+    "Ready when you are": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kalau sudah salat, tandai di sini"
+          }
+        }
+      }
+    },
+    "Record any salah you prayed on this day.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Catat salat yang sudah kamu tunaikan pada hari ini."
+          }
+        }
+      }
+    },
+    "Record your next salah after you pray. Your journey can start there.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Catat salat berikutnya setelah ditunaikan. Perjalananmu bisa dimulai dari sana."
+          }
+        }
+      }
+    },
+    "Requesting permission…": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meminta izin…"
+          }
+        }
+      }
+    },
+    "Restricted": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dibatasi"
+          }
+        }
+      }
+    },
+    "S": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "S"
+          }
+        }
+      }
+    },
+    "Safar": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Safar"
+          }
+        }
+      }
+    },
+    "Sahih al-Bukhari 527": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sahih al-Bukhari 527"
+          }
+        }
+      }
+    },
+    "Salah Circle": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salah Circle"
+          }
+        }
+      }
+    },
+    "Salah Circle lets family members share simple prayer check-ins using a private linking code.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salah Circle membantu keluarga saling berbagi catatan salat sederhana melalui kode penghubung pribadi."
+          }
+        }
+      }
+    },
+    "Salah Focus": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salah Focus"
+          }
+        }
+      }
+    },
+    "Salah Focus is off": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salah Focus nonaktif"
+          }
+        }
+      }
+    },
+    "Salah Focus needs a valid location and prayer schedule.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salah Focus memerlukan lokasi dan jadwal salat yang valid."
+          }
+        }
+      }
+    },
+    "Salah Focus setup": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pengaturan Salah Focus"
+          }
+        }
+      }
+    },
+    "Salah Focus shared storage is unavailable. Check the App Group entitlement.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Penyimpanan bersama Salah Focus tidak tersedia. Periksa hak akses App Group."
+          }
+        }
+      }
+    },
+    "Salah tracking is paused, and these days won’t affect your streak.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pencatatan salat dijeda dan hari-hari ini tidak akan memengaruhi rentetanmu."
+          }
+        }
+      }
+    },
+    "Salah tracking will pause": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pencatatan salat akan dijeda"
+          }
+        }
+      }
+    },
+    "Save Name": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Simpan Nama"
+          }
+        }
+      }
+    },
+    "Save Name & Continue": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Simpan Nama & Lanjutkan"
+          }
+        }
+      }
+    },
+    "Screen Time access is no longer available. Set up Salah Focus again.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Akses Durasi Layar sudah tidak tersedia. Atur kembali Salah Focus."
+          }
+        }
+      }
+    },
+    "See how Salah Focus works": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lihat cara kerja Salah Focus"
+          }
+        }
+      }
+    },
+    "See who has prayed": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lihat siapa yang sudah salat"
+          }
+        }
+      }
+    },
+    "Sending prayer data securely to iCloud.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mengirim data salat dengan aman ke iCloud."
+          }
+        }
+      }
+    },
+    "Server not configured": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server belum dikonfigurasi"
+          }
+        }
+      }
+    },
+    "Set up": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atur"
+          }
+        }
+      }
+    },
+    "Set up Salah Circle": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atur Salah Circle"
+          }
+        }
+      }
+    },
+    "Set up Salah Focus": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atur Salah Focus"
+          }
+        }
+      }
+    },
+    "Settings": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pengaturan"
+          }
+        }
+      }
+    },
+    "Seven days of showing up for salah. Keep asking Allah for steadfastness.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tujuh hari menjaga salat. Teruslah memohon keteguhan kepada Allah."
+          }
+        }
+      }
+    },
+    "Sha'ban": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Syakban"
+          }
+        }
+      }
+    },
+    "Share linking code": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bagikan kode penghubung"
+          }
+        }
+      }
+    },
+    "Sharing server not configured": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server berbagi belum dikonfigurasi"
+          }
+        }
+      }
+    },
+    "Shawwal": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Syawal"
+          }
+        }
+      }
+    },
+    "Shows a more recent checklist": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menampilkan catatan salat yang lebih baru"
+          }
+        }
+      }
+    },
+    "Shows an earlier checklist": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menampilkan catatan salat yang lebih lama"
+          }
+        }
+      }
+    },
+    "Sign in to iCloud": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masuk ke iCloud"
+          }
+        }
+      }
+    },
+    "Singapore (MUIS)": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Singapura (MUIS)"
+          }
+        }
+      }
+    },
+    "Standard": {
+      "comment": "Asr calculation method used by Shafi’i, Maliki, and Hanbali traditions.",
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standar"
+          }
+        }
+      }
+    },
+    "Standard is used by Shafi’i, Maliki, and Hanbali traditions. Hanafi calculates Asr later. Standard usually matches local practice in Indonesia.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standar digunakan dalam mazhab Syafi’i, Maliki, dan Hanbali. Mazhab Hanafi menghitung waktu Asar lebih lambat. Standar biasanya sesuai dengan praktik setempat di Indonesia."
+          }
+        }
+      }
+    },
+    "Starting compass…": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menyalakan kompas…"
+          }
+        }
+      }
+    },
+    "Stay close": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mari jaga"
+          }
+        }
+      }
+    },
+    "Stay close to salah, a little more every day.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mari jaga salat kita, sedikit demi sedikit setiap hari."
+          }
+        }
+      }
+    },
+    "Steady, MashaAllah": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terjaga, MasyaAllah"
+          }
+        }
+      }
+    },
+    "Step %lld of 3": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Langkah %lld dari 3"
+          }
+        }
+      }
+    },
+    "Step away from the noise. It’s time for Dhuhr.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jeda sejenak dari kesibukan. Waktu Zuhur telah tiba."
+          }
+        }
+      }
+    },
+    "Sunrise": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Matahari terbit"
+          }
+        }
+      }
+    },
+    "Swipe a person to unlink them.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geser nama seseorang untuk memutuskan hubungan."
+          }
+        }
+      }
+    },
+    "Sync failed": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sinkronisasi gagal"
+          }
+        }
+      }
+    },
+    "Syncing…": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menyinkronkan…"
+          }
+        }
+      }
+    },
+    "Take care of yourself. Your salah journey will be here when you return.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jaga dirimu baik-baik. Perjalanan salatmu akan tetap ada saat kamu kembali."
+          }
+        }
+      }
+    },
+    "Tap after you pray. Touch and hold for more options.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ketuk setelah salat. Sentuh dan tahan untuk pilihan lainnya."
+          }
+        }
+      }
+    },
+    "Temporarily unavailable": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sementara tidak tersedia"
+          }
+        }
+      }
+    },
+    "Ten complete days and counting": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sepuluh hari lengkap dan terus bertambah"
+          }
+        }
+      }
+    },
+    "That means you can do it again, inshaAllah. Begin with the next prayer.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Artinya, kamu bisa melakukannya lagi, insyaAllah. Mulai dari waktu salat berikutnya."
+          }
+        }
+      }
+    },
+    "The day can turn again after Asr": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hari masih bisa berubah setelah Asar"
+          }
+        }
+      }
+    },
+    "The day is waking. Begin yours with Fajr.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hari mulai terbangun. Awali harimu dengan Subuh."
+          }
+        }
+      }
+    },
+    "The door is always open": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pintu untuk kembali selalu terbuka"
+          }
+        }
+      }
+    },
+    "The evening still holds another chance": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Malam masih menyimpan kesempatan lain"
+          }
+        }
+      }
+    },
+    "The sharing request failed. Please try again.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permintaan berbagi gagal. Silakan coba lagi."
+          }
+        }
+      }
+    },
+    "The sharing server is not configured.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server berbagi belum dikonfigurasi."
+          }
+        }
+      }
+    },
+    "The sharing server response could not be read.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Respons server berbagi tidak dapat dibaca."
+          }
+        }
+      }
+    },
+    "The sharing server returned an invalid response.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server berbagi mengirim respons yang tidak valid."
+          }
+        }
+      }
+    },
+    "The sun has set. Welcome Maghrib with a grateful heart.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Matahari telah terbenam. Sambut Magrib dengan hati penuh syukur."
+          }
+        }
+      }
+    },
+    "Their initials appear beneath a prayer after they check in.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Inisial mereka muncul di bawah salat setelah mereka mencatatnya."
+          }
+        }
+      }
+    },
+    "There is still room after Dhuhr": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masih ada kesempatan setelah Zuhur"
+          }
+        }
+      }
+    },
+    "These days won’t affect your streak": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hari-hari ini tidak memengaruhi rentetanmu"
+          }
+        }
+      }
+    },
+    "Three prayers recorded. Keep going, one salah at a time.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tiga salat sudah dicatat. Lanjutkan, satu salat demi satu."
+          }
+        }
+      }
+    },
+    "Today": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hari Ini"
+          }
+        }
+      }
+    },
+    "Tomorrow opens again with Fajr": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Besok terbuka lagi dengan Subuh"
+          }
+        }
+      }
+    },
+    "Tracking is paused": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pencatatan sedang dijeda"
+          }
+        }
+      }
+    },
+    "Tracking is paused.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pencatatan sedang dijeda."
+          }
+        }
+      }
+    },
+    "Tracking paused": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pencatatan dijeda"
+          }
+        }
+      }
+    },
+    "Try Again": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coba Lagi"
+          }
+        }
+      }
+    },
+    "Try location again": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coba cari lokasi lagi"
+          }
+        }
+      }
+    },
+    "Turn %lld° left": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Putar %lld° ke kiri"
+          }
+        }
+      }
+    },
+    "Turn %lld° right": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Putar %lld° ke kanan"
+          }
+        }
+      }
+    },
+    "Turn On Period Mode": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktifkan Mode Haid"
+          }
+        }
+      }
+    },
+    "Turn On Salah Focus": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktifkan Salah Focus"
+          }
+        }
+      }
+    },
+    "Turn Salah Focus off anytime": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salah Focus dapat dimatikan kapan saja"
+          }
+        }
+      }
+    },
+    "Turn it on below whenever you want apps to pause at prayer time.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktifkan di bawah saat kamu ingin aplikasi dijeda pada waktu salat."
+          }
+        }
+      }
+    },
+    "Turn on": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktifkan"
+          }
+        }
+      }
+    },
+    "Turn on Salah Focus": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktifkan Salah Focus"
+          }
+        }
+      }
+    },
+    "Two prayers recorded. The next salah is another chance.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dua salat sudah dicatat. Waktu berikutnya adalah kesempatan baru."
+          }
+        }
+      }
+    },
+    "Umm al-Qura": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Umm al-Qura"
+          }
+        }
+      }
+    },
+    "Unable to create the next Salah Focus schedule.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jadwal Salah Focus berikutnya belum dapat dibuat."
+          }
+        }
+      }
+    },
+    "Unavailable": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tidak tersedia"
+          }
+        }
+      }
+    },
+    "Unlink": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Putuskan Hubungan"
+          }
+        }
+      }
+    },
+    "Unlocks": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terbuka kembali"
+          }
+        }
+      }
+    },
+    "Up to date": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sudah terbaru"
+          }
+        }
+      }
+    },
+    "Update location": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perbarui lokasi"
+          }
+        }
+      }
+    },
+    "Updates the location used for prayer times": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Memperbarui lokasi untuk menghitung waktu salat"
+          }
+        }
+      }
+    },
+    "Use local convention": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gunakan ketentuan setempat"
+          }
+        }
+      }
+    },
+    "Using your location only on this device.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lokasimu hanya digunakan di perangkat ini."
+          }
+        }
+      }
+    },
+    "Version": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versi"
+          }
+        }
+      }
+    },
+    "W": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "B"
+          }
+        }
+      }
+    },
+    "Wait until Backup Status says “Backed up” before removing or reinstalling Muslim 5. Prayer history and Period Mode ranges sync privately through your iCloud account. Salah Circle remains separate.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sebelum menghapus atau memasang ulang Muslim 5, tunggu hingga Status Pencadangan menunjukkan “Sudah dicadangkan”. Riwayat salat dan rentang Mode Haid disinkronkan secara pribadi melalui akun iCloud. Salah Circle tetap terpisah."
+          }
+        }
+      }
+    },
+    "Waiting for %@": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menunggu %@"
+          }
+        }
+      }
+    },
+    "Waiting for iPhone…": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menunggu iPhone…"
+          }
+        }
+      }
+    },
+    "Waiting to back up": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Menunggu pencadangan"
+          }
+        }
+      }
+    },
+    "We use your location to calculate the Qibla from where you are.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lokasimu digunakan untuk menghitung arah kiblat dari tempatmu berada."
+          }
+        }
+      }
+    },
+    "What is shared": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yang dibagikan"
+          }
+        }
+      }
+    },
+    "While Period Mode is on:": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Selama Mode Haid aktif:"
+          }
+        }
+      }
+    },
+    "Yesterday": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kemarin"
+          }
+        }
+      }
+    },
+    "You cannot link yourself.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kamu tidak dapat menghubungkan diri sendiri."
+          }
+        }
+      }
+    },
+    "You recorded %@ of your prayers": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kamu mencatat %@ dari seluruh salatmu"
+          }
+        }
+      }
+    },
+    "Your consistency is growing, one salah at a time.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kebiasaan baikmu terus tumbuh, satu salat demi satu."
+          }
+        }
+      }
+    },
+    "Your coordinates stay on this device and are used for offline calculation.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Koordinatmu tetap tersimpan di perangkat ini dan digunakan untuk perhitungan tanpa internet."
+          }
+        }
+      }
+    },
+    "Your data remains on this iPhone": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datamu tetap tersimpan di iPhone ini"
+          }
+        }
+      }
+    },
+    "Your days in salah": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hari-harimu bersama salat"
+          }
+        }
+      }
+    },
+    "Your five daily prayers": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lima waktu salatmu"
+          }
+        }
+      }
+    },
+    "Your last 30 days": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "30 hari terakhirmu"
+          }
+        }
+      }
+    },
+    "Your last 30 days show real care for salah. May Allah help you continue.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Catatan 30 hari terakhirmu menunjukkan perhatian yang tulus pada salat. Semoga Allah memudahkanmu untuk melanjutkannya."
+          }
+        }
+      }
+    },
+    "Your linking code": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kode penghubungmu"
+          }
+        }
+      }
+    },
+    "Your location, prayer times, and streak are never shared.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lokasi, waktu salat, dan rentetanmu tidak pernah dibagikan."
+          }
+        }
+      }
+    },
+    "Your nickname and its initial will appear when linked people view a prayer you completed.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nama panggilan dan inisialmu akan terlihat saat orang yang terhubung melihat salat yang sudah kamu tunaikan."
+          }
+        }
+      }
+    },
+    "Your pause is protected": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jeda ini tidak mengurangi progresmu"
+          }
+        }
+      }
+    },
+    "Your prayer history stays on this iPhone.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riwayat salatmu tetap tersimpan di iPhone ini."
+          }
+        }
+      }
+    },
+    "Your prayer history stays on this iPhone. Your profile, links, and shared check-ins will be removed from the server.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Riwayat salatmu tetap tersimpan di iPhone ini. Profil, hubungan, dan catatan salat yang dibagikan akan dihapus dari server."
+          }
+        }
+      }
+    },
+    "Your profile": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profilmu"
+          }
+        }
+      }
+    },
+    "Your salah journey": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Perjalanan salatmu"
+          }
+        }
+      }
+    },
+    "Your sharing session has expired. Set up Salah Circle again.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sesi berbagi telah berakhir. Atur kembali Salah Circle."
+          }
+        }
+      }
+    },
+    "You’re building consistency day by day. Keep the next salah close.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kamu sedang membangun kebiasaan baik hari demi hari. Mari jaga waktu salat berikutnya."
+          }
+        }
+      }
+    },
+    "You’re facing the Qibla, Alhamdulillah": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sudah menghadap kiblat, Alhamdulillah"
+          }
+        }
+      }
+    },
+    "You’ve built a good foundation. Let the next prayer carry you forward.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kamu sudah membangun dasar yang baik. Lanjutkan dengan waktu salat berikutnya."
+          }
+        }
+      }
+    },
+    "You’ve done all five before": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kamu pernah melengkapi lima waktu"
+          }
+        }
+      }
+    },
+    "You’ve recorded all five prayers on many days. That effort still matters.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kamu sudah mencatat lengkap lima waktu di banyak hari. Ikhtiar itu tetap berarti."
+          }
+        }
+      }
+    },
+    "a little more": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "sedikit demi sedikit"
+          }
+        }
+      }
+    },
+    "current streak": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "berturut-turut saat ini"
+          }
+        }
+      }
+    },
+    "days with all five": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "hari lengkap lima waktu"
+          }
+        }
+      }
+    },
+    "east": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "timur"
+          }
+        }
+      }
+    },
+    "every day.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "setiap hari."
+          }
+        }
+      }
+    },
+    "iCloud Sync": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sinkronisasi iCloud"
+          }
+        }
+      }
+    },
+    "iCloud could not finish syncing. Try again while online.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud belum dapat menyelesaikan sinkronisasi. Coba lagi saat terhubung ke internet."
+          }
+        }
+      }
+    },
+    "north": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "utara"
+          }
+        }
+      }
+    },
+    "northeast": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "timur laut"
+          }
+        }
+      }
+    },
+    "northwest": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "barat laut"
+          }
+        }
+      }
+    },
+    "salah": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "salat"
+          }
+        }
+      }
+    },
+    "south": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "selatan"
+          }
+        }
+      }
+    },
+    "southeast": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tenggara"
+          }
+        }
+      }
+    },
+    "southwest": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "barat daya"
+          }
+        }
+      }
+    },
+    "to salah,": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "salat kita,"
+          }
+        }
+      }
+    },
+    "west": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "barat"
+          }
+        }
+      }
+    },
+    "“Prayer at its proper time.”\n— Sahih al-Bukhari 527": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“Salat pada waktunya.”\n— Sahih al-Bukhari 527"
+          }
+        }
+      }
+    },
+    "“The most beloved deed to Allah is prayer at its proper time.”": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“Amal yang paling dicintai Allah adalah salat pada waktunya.”"
+          }
+        }
+      }
+    },
+    "☀️ Dhuhr — Pause and return": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "☀️ Zuhur — Berhenti sejenak dan kembali"
+          }
+        }
+      }
+    },
+    "🌅 Fajr — Begin with Allah": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌅 Subuh — Awali bersama Allah"
+          }
+        }
+      }
+    },
+    "🌇 Maghrib — A moment of gratitude": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌇 Magrib — Sejenak untuk bersyukur"
+          }
+        }
+      }
+    },
+    "🌙 Isha — Close the day in peace": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🌙 Isya — Tutup hari dengan tenang"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.2"
+}

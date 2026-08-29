@@ -79,7 +79,7 @@ struct QiblaView: View {
                 .frame(width: 34, height: 34)
                 .background(AppTheme.qiblaFeature.opacity(0.12), in: Circle())
 
-            Text(locationProvider.cityName ?? "Current location")
+            Text(locationProvider.cityName ?? String(localized: "Current location"))
                 .font(.headline)
 
             Spacer()
@@ -126,7 +126,7 @@ struct QiblaView: View {
                     .foregroundStyle(isAligned ? AppTheme.success : .primary)
                     .contentTransition(.numericText())
 
-                Text("Qibla is \(Int(bearing.rounded()))° \(cardinalDirection(for: bearing))")
+                Text(String(localized: "Qibla is \(Int(bearing.rounded()))° \(cardinalDirection(for: bearing))"))
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .monospacedDigit()
@@ -231,24 +231,31 @@ struct QiblaView: View {
     }
 
     private func guidance(for bearing: CLLocationDirection) -> String {
-        guard let turn else { return "Point toward \(Int(bearing.rounded()))°" }
+        guard let turn else {
+            return String(localized: "Point toward \(Int(bearing.rounded()))°")
+        }
         let amount = Int(abs(turn).rounded())
 
         if abs(turn) <= alignmentTolerance {
-            return "You’re facing the Qibla, Alhamdulillah"
+            return String(localized: "You’re facing the Qibla, Alhamdulillah")
         }
 
-        return "Turn \(amount)° \(turn > 0 ? "right" : "left")"
+        if turn > 0 {
+            return String(localized: "Turn \(amount)° right")
+        }
+        return String(localized: "Turn \(amount)° left")
     }
 
     private func accessibilityGuidance(for bearing: CLLocationDirection) -> String {
-        "Qibla is \(Int(bearing.rounded())) degrees \(cardinalDirection(for: bearing)). \(guidance(for: bearing))."
+        String(localized: "Qibla is \(Int(bearing.rounded())) degrees \(cardinalDirection(for: bearing)). \(guidance(for: bearing)).")
     }
 
     private func cardinalDirection(for bearing: CLLocationDirection) -> String {
         let directions = [
-            "north", "northeast", "east", "southeast",
-            "south", "southwest", "west", "northwest"
+            String(localized: "north"), String(localized: "northeast"),
+            String(localized: "east"), String(localized: "southeast"),
+            String(localized: "south"), String(localized: "southwest"),
+            String(localized: "west"), String(localized: "northwest")
         ]
         let index = Int((QiblaCalculator.normalize(bearing) + 22.5) / 45) % directions.count
         return directions[index]
@@ -256,20 +263,20 @@ struct QiblaView: View {
 
     private var locationStateTitle: String {
         switch locationProvider.state {
-        case .denied: "Location is off"
-        case .unavailable: "Location unavailable"
-        default: "Finding your location"
+        case .denied: String(localized: "Location is off")
+        case .unavailable: String(localized: "Location unavailable")
+        default: String(localized: "Finding your location")
         }
     }
 
     private var locationStateMessage: String {
         switch locationProvider.state {
         case .denied:
-            "Allow location access so we can calculate the Qibla from where you are."
+            String(localized: "Allow location access so we can calculate the Qibla from where you are.")
         case .unavailable:
-            "Please check Location Services, then try again."
+            String(localized: "Please check Location Services, then try again.")
         default:
-            "We use your location to calculate the Qibla from where you are."
+            String(localized: "We use your location to calculate the Qibla from where you are.")
         }
     }
 
@@ -408,16 +415,16 @@ private struct QiblaCompass: View {
             }
 
             VStack {
-                cardinalLabel("N", color: AppTheme.qiblaFeature)
+                cardinalLabel(String(localized: "N"), color: AppTheme.qiblaFeature)
                 Spacer()
-                cardinalLabel("S")
+                cardinalLabel(String(localized: "S"))
             }
             .padding(.vertical, 42)
 
             HStack {
-                cardinalLabel("W")
+                cardinalLabel(String(localized: "W"))
                 Spacer()
-                cardinalLabel("E")
+                cardinalLabel(String(localized: "E"))
             }
             .padding(.horizontal, 42)
         }

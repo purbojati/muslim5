@@ -172,7 +172,7 @@ final class PrayerNotificationService: ObservableObject {
         timeZone: TimeZone
     ) -> UNNotificationRequest {
         let content = UNMutableNotificationContent()
-        let message = notificationMessage(for: prayer)
+        let message = Self.notificationMessage(for: prayer)
         content.title = message.title
         content.body = message.body
         content.sound = .default
@@ -199,18 +199,37 @@ final class PrayerNotificationService: ObservableObject {
         return UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
     }
 
-    private func notificationMessage(for prayer: Prayer) -> (title: String, body: String) {
+    static func notificationMessage(
+        for prayer: Prayer,
+        locale: Locale = .autoupdatingCurrent,
+        bundle: Bundle = .main
+    ) -> (title: String, body: String) {
         switch prayer {
         case .fajr:
-            ("🌅 Fajr — Begin with Allah", "The day is waking. Begin yours with Fajr.")
+            (
+                String(localized: "🌅 Fajr — Begin with Allah", bundle: bundle, locale: locale),
+                String(localized: "The day is waking. Begin yours with Fajr.", bundle: bundle, locale: locale)
+            )
         case .dhuhr:
-            ("☀️ Dhuhr — Pause and return", "Step away from the noise. It’s time for Dhuhr.")
+            (
+                String(localized: "☀️ Dhuhr — Pause and return", bundle: bundle, locale: locale),
+                String(localized: "Step away from the noise. It’s time for Dhuhr.", bundle: bundle, locale: locale)
+            )
         case .asr:
-            ("Asr — Renew your focus", "Pause, breathe, and reconnect. It’s time for Asr.")
+            (
+                String(localized: "Asr — Renew your focus", bundle: bundle, locale: locale),
+                String(localized: "Pause, breathe, and reconnect. It’s time for Asr.", bundle: bundle, locale: locale)
+            )
         case .maghrib:
-            ("🌇 Maghrib — A moment of gratitude", "The sun has set. Welcome Maghrib with a grateful heart.")
+            (
+                String(localized: "🌇 Maghrib — A moment of gratitude", bundle: bundle, locale: locale),
+                String(localized: "The sun has set. Welcome Maghrib with a grateful heart.", bundle: bundle, locale: locale)
+            )
         case .isha:
-            ("🌙 Isha — Close the day in peace", "Before you rest, return to Allah through Isha.")
+            (
+                String(localized: "🌙 Isha — Close the day in peace", bundle: bundle, locale: locale),
+                String(localized: "Before you rest, return to Allah through Isha.", bundle: bundle, locale: locale)
+            )
         }
     }
 }

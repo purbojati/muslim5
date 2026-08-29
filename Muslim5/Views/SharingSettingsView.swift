@@ -136,14 +136,14 @@ struct SharingSettingsView: View {
 
                 VStack(alignment: .leading, spacing: 18) {
                     onboardingDetail(
-                        title: "See who has prayed",
-                        message: "Their initials appear beneath a prayer after they check in.",
+                        title: String(localized: "See who has prayed"),
+                        message: String(localized: "Their initials appear beneath a prayer after they check in."),
                         systemImage: "checkmark.circle.fill"
                     )
 
                     onboardingDetail(
-                        title: "Keep it private",
-                        message: "Your location, prayer times, and streak are never shared.",
+                        title: String(localized: "Keep it private"),
+                        message: String(localized: "Your location, prayer times, and streak are never shared."),
                         systemImage: "lock.fill"
                     )
                 }
@@ -275,7 +275,7 @@ struct SharingSettingsView: View {
                 .buttonStyle(.borderless)
                 .accessibilityLabel("Copy linking code")
 
-                ShareLink(item: "Link with me in Muslim 5 using code \(profile.linkCode)") {
+                ShareLink(item: String(localized: "Link with me in Muslim 5 using code \(profile.linkCode)")) {
                     Image(systemName: "square.and.arrow.up")
                 }
                 .buttonStyle(.borderless)

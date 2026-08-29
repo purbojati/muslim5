@@ -82,14 +82,18 @@ private struct SalahFocusControlView: View {
             }
             .accessibilityHidden(true)
 
-            Text(salahFocusService.isEnabled ? "Ready for the next salah" : "Salah Focus is off")
+            Text(
+                salahFocusService.isEnabled
+                    ? String(localized: "Ready for the next salah")
+                    : String(localized: "Salah Focus is off")
+            )
                 .font(.system(.title2, design: .serif, weight: .bold))
                 .multilineTextAlignment(.center)
 
             Text(
                 salahFocusService.isEnabled
-                    ? "Ordinary apps will pause when your next unfinished prayer begins."
-                    : "Turn it on below whenever you want apps to pause at prayer time."
+                    ? String(localized: "Ordinary apps will pause when your next unfinished prayer begins.")
+                    : String(localized: "Turn it on below whenever you want apps to pause at prayer time.")
             )
             .font(.subheadline)
             .foregroundStyle(.secondary)
@@ -107,7 +111,11 @@ private struct SalahFocusControlView: View {
                 VStack(alignment: .leading, spacing: 3) {
                     Text("Salah Focus")
                         .font(.headline)
-                    Text(salahFocusService.isEnabled ? "On" : "Off")
+                    Text(
+                        salahFocusService.isEnabled
+                            ? String(localized: "On")
+                            : String(localized: "Off")
+                    )
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -286,7 +294,7 @@ private struct SalahFocusOnboardingView: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
 
-                SalahFocusShieldPreview(prayerName: "Dhuhr")
+                SalahFocusShieldPreview(prayerName: String(localized: "Dhuhr"))
             }
         }
     }
@@ -310,8 +318,11 @@ private struct SalahFocusOnboardingView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 10) {
-                    safetyRow("Muslim 5, calls, and emergency access stay available", icon: "checkmark.circle.fill")
-                    safetyRow("Turn Salah Focus off anytime", icon: "switch.2")
+                    safetyRow(
+                        String(localized: "Muslim 5, calls, and emergency access stay available"),
+                        icon: "checkmark.circle.fill"
+                    )
+                    safetyRow(String(localized: "Turn Salah Focus off anytime"), icon: "switch.2")
                 }
                 .padding(.horizontal, 4)
 
@@ -353,18 +364,20 @@ private struct SalahFocusOnboardingView: View {
                     page += 1
                 }
             } label: {
-                onboardingButtonLabel("Continue", icon: "arrow.right")
+                onboardingButtonLabel(String(localized: "Continue"), icon: "arrow.right")
             }
             .buttonStyle(SalahFocusPrimaryButtonStyle())
         } else if isReview || salahFocusService.isAuthorized {
             Button { dismiss() } label: {
-                onboardingButtonLabel("Done", icon: "checkmark")
+                onboardingButtonLabel(String(localized: "Done"), icon: "checkmark")
             }
             .buttonStyle(SalahFocusPrimaryButtonStyle())
         } else {
             Button(action: requestAuthorization) {
                 onboardingButtonLabel(
-                    isRequestingAuthorization ? "Waiting for iPhone…" : "Turn On Salah Focus",
+                    isRequestingAuthorization
+                        ? String(localized: "Waiting for iPhone…")
+                        : String(localized: "Turn On Salah Focus"),
                     icon: isRequestingAuthorization ? nil : "lock.open.fill",
                     showsProgress: isRequestingAuthorization
                 )
@@ -386,7 +399,7 @@ private struct SalahFocusOnboardingView: View {
                 Image(systemName: icon)
             }
             Text(title)
-            if title == "Continue" {
+            if title == String(localized: "Continue") {
                 Spacer(minLength: 0)
             }
         }

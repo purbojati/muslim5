@@ -44,6 +44,7 @@ iPhone.
 - Optional Salah Focus Screen Time shields for user-selected apps and websites
 - Subtle prayer-phase color transitions
 - Dark Mode and accessibility labels
+- Contextual English and Indonesian localization
 
 ## Run locally
 

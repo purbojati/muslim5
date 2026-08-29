@@ -41,17 +41,21 @@
 		A00000000000000000000120 /* Muslim5Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000221 /* Muslim5Schema.swift */; };
 		A00000000000000000000121 /* ICloudStatusService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000222 /* ICloudStatusService.swift */; };
 		A00000000000000000000122 /* ICloudSyncDataNormalizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000223 /* ICloudSyncDataNormalizer.swift */; };
+		A00000000000000000000123 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000224 /* Localizable.xcstrings */; };
+		A00000000000000000000124 /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A00000000000000000000225 /* InfoPlist.xcstrings */; };
 		B00000000000000000000001 /* QiblaCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000002 /* QiblaCalculatorTests.swift */; };
 		B0000000000000000000000E /* SharingServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000F /* SharingServiceTests.swift */; };
 		B00000000000000000000010 /* SalahFocusDecisionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000011 /* SalahFocusDecisionTests.swift */; };
 		B00000000000000000000012 /* ICloudSyncDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000013 /* ICloudSyncDataTests.swift */; };
 		B00000000000000000000014 /* ICloudSyncStateMachineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000015 /* ICloudSyncStateMachineTests.swift */; };
+		B00000000000000000000016 /* LocalizationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000017 /* LocalizationTests.swift */; };
 		C00000000000000000000101 /* SalahFocusMonitorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000201 /* SalahFocusMonitorExtension.swift */; };
 		C00000000000000000000102 /* SalahFocusSharedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000021D /* SalahFocusSharedState.swift */; };
 		C00000000000000000000103 /* SalahFocusMonitor.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = C00000000000000000000200 /* SalahFocusMonitor.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D00000000000000000000101 /* SalahFocusShieldConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000201 /* SalahFocusShieldConfiguration.swift */; };
 		D00000000000000000000102 /* SalahFocusSharedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000021D /* SalahFocusSharedState.swift */; };
 		D00000000000000000000103 /* SalahFocusShieldConfiguration.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D00000000000000000000200 /* SalahFocusShieldConfiguration.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D00000000000000000000104 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D00000000000000000000204 /* Localizable.xcstrings */; };
 		E00000000000000000000101 /* SalahFocusShieldAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00000000000000000000201 /* SalahFocusShieldAction.swift */; };
 		E00000000000000000000102 /* SalahFocusSharedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000021D /* SalahFocusSharedState.swift */; };
 		E00000000000000000000103 /* SalahFocusShieldAction.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = E00000000000000000000200 /* SalahFocusShieldAction.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -141,12 +145,15 @@
 		A00000000000000000000221 /* Muslim5Schema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Muslim5Schema.swift; sourceTree = "<group>"; };
 		A00000000000000000000222 /* ICloudStatusService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICloudStatusService.swift; sourceTree = "<group>"; };
 		A00000000000000000000223 /* ICloudSyncDataNormalizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICloudSyncDataNormalizer.swift; sourceTree = "<group>"; };
+		A00000000000000000000224 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		A00000000000000000000225 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		B00000000000000000000002 /* QiblaCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaCalculatorTests.swift; sourceTree = "<group>"; };
 		B00000000000000000000003 /* Muslim5Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Muslim5Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0000000000000000000000F /* SharingServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingServiceTests.swift; sourceTree = "<group>"; };
 		B00000000000000000000011 /* SalahFocusDecisionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalahFocusDecisionTests.swift; sourceTree = "<group>"; };
 		B00000000000000000000013 /* ICloudSyncDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICloudSyncDataTests.swift; sourceTree = "<group>"; };
 		B00000000000000000000015 /* ICloudSyncStateMachineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICloudSyncStateMachineTests.swift; sourceTree = "<group>"; };
+		B00000000000000000000017 /* LocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationTests.swift; sourceTree = "<group>"; };
 		C00000000000000000000200 /* SalahFocusMonitor.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SalahFocusMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C00000000000000000000201 /* SalahFocusMonitorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalahFocusMonitorExtension.swift; sourceTree = "<group>"; };
 		C00000000000000000000202 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -155,6 +162,7 @@
 		D00000000000000000000201 /* SalahFocusShieldConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalahFocusShieldConfiguration.swift; sourceTree = "<group>"; };
 		D00000000000000000000202 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D00000000000000000000203 /* SalahFocusShieldConfiguration.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SalahFocusShieldConfiguration.entitlements; sourceTree = "<group>"; };
+		D00000000000000000000204 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		E00000000000000000000200 /* SalahFocusShieldAction.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SalahFocusShieldAction.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		E00000000000000000000201 /* SalahFocusShieldAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalahFocusShieldAction.swift; sourceTree = "<group>"; };
 		E00000000000000000000202 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -218,6 +226,8 @@
 			children = (
 				A00000000000000000000201 /* Muslim5App.swift */,
 				A0000000000000000000021B /* Info.plist */,
+				A00000000000000000000224 /* Localizable.xcstrings */,
+				A00000000000000000000225 /* InfoPlist.xcstrings */,
 				A00000000000000000000220 /* Muslim5.entitlements */,
 				A00000000000000000000402 /* Models */,
 				A00000000000000000000403 /* Design */,
@@ -315,6 +325,7 @@
 				B00000000000000000000011 /* SalahFocusDecisionTests.swift */,
 				B00000000000000000000013 /* ICloudSyncDataTests.swift */,
 				B00000000000000000000015 /* ICloudSyncStateMachineTests.swift */,
+				B00000000000000000000017 /* LocalizationTests.swift */,
 			);
 			path = Muslim5Tests;
 			sourceTree = "<group>";
@@ -335,6 +346,7 @@
 				D00000000000000000000201 /* SalahFocusShieldConfiguration.swift */,
 				D00000000000000000000202 /* Info.plist */,
 				D00000000000000000000203 /* SalahFocusShieldConfiguration.entitlements */,
+				D00000000000000000000204 /* Localizable.xcstrings */,
 			);
 			path = SalahFocusShieldConfiguration;
 			sourceTree = "<group>";
@@ -498,6 +510,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				id,
 				Base,
 			);
 			mainGroup = A00000000000000000000400;
@@ -524,6 +537,8 @@
 			files = (
 				A00000000000000000000114 /* Muslim5Icon.icon in Resources */,
 				A0000000000000000000010D /* Assets.xcassets in Resources */,
+				A00000000000000000000123 /* Localizable.xcstrings in Resources */,
+				A00000000000000000000124 /* InfoPlist.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -545,6 +560,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D00000000000000000000104 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -605,6 +621,7 @@
 				B00000000000000000000010 /* SalahFocusDecisionTests.swift in Sources */,
 				B00000000000000000000012 /* ICloudSyncDataTests.swift in Sources */,
 				B00000000000000000000014 /* ICloudSyncStateMachineTests.swift in Sources */,
+				B00000000000000000000016 /* LocalizationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -45,8 +45,8 @@ struct SettingsView: View {
                             selectedFeature = .qibla
                         } label: {
                             FeatureCard(
-                                title: "Qibla",
-                                detail: "Find the prayer direction",
+                                title: String(localized: "Qibla"),
+                                detail: String(localized: "Find the prayer direction"),
                                 symbol: "location.north.circle.fill",
                                 tint: AppTheme.qiblaFeature
                             )
@@ -56,7 +56,7 @@ struct SettingsView: View {
                             selectedFeature = .prayerCircle
                         } label: {
                             FeatureCard(
-                                title: "Salah Circle",
+                                title: String(localized: "Salah Circle"),
                                 detail: sharingStatus,
                                 symbol: "person.2.fill",
                                 tint: AppTheme.prayerCircleFeature
@@ -71,7 +71,9 @@ struct SettingsView: View {
 
                         PeriodModeFeatureCard(
                             isOn: periodModeBinding,
-                            detail: periodMode ? "Tracking is paused" : "Pause tracking when needed"
+                            detail: periodMode
+                                ? String(localized: "Tracking is paused")
+                                : String(localized: "Pause tracking when needed")
                         )
                     }
                     .buttonStyle(.plain)
@@ -113,7 +115,11 @@ struct SettingsView: View {
 
                     Toggle(isOn: prayerNotificationsBinding) {
                         Label {
-                            Text(isRequestingNotificationPermission ? "Requesting permission…" : "Prayer reminders")
+                            Text(
+                                isRequestingNotificationPermission
+                                    ? String(localized: "Requesting permission…")
+                                    : String(localized: "Prayer reminders")
+                            )
                         } icon: {
                             Image(systemName: "bell.badge.fill")
                                 .foregroundStyle(.secondary)
@@ -262,13 +268,13 @@ struct SettingsView: View {
     private var locationLabel: String {
         switch locationProvider.state {
         case .requesting:
-            return "Locating…"
+            return String(localized: "Locating…")
         case .denied:
-            return "Location off"
+            return String(localized: "Location off")
         case .unavailable where locationProvider.cityName == nil:
-            return "Unavailable"
+            return String(localized: "Unavailable")
         default:
-            return locationProvider.cityName ?? "Current location"
+            return locationProvider.cityName ?? String(localized: "Current location")
         }
     }
 
@@ -284,19 +290,19 @@ struct SettingsView: View {
     }
 
     private var sharingStatus: String {
-        guard sharingService.isConfigured else { return "Server not configured" }
-        guard let profile = sharingService.profile else { return "Not set up" }
+        guard sharingService.isConfigured else { return String(localized: "Server not configured") }
+        guard let profile = sharingService.profile else { return String(localized: "Not set up") }
         let count = sharingService.linkedUsers.count
-        return "\(profile.nickname) · \(count) linked"
+        return String(localized: "\(profile.nickname) · \(count) linked")
     }
 
     private var salahFocusStatus: String {
-        guard salahFocusService.isAuthorized else { return "Not set up" }
-        guard salahFocusService.isEnabled else { return "Off" }
+        guard salahFocusService.isAuthorized else { return String(localized: "Not set up") }
+        guard salahFocusService.isEnabled else { return String(localized: "Off") }
         if let prayer = salahFocusService.activePrayerName {
-            return "Waiting for \(prayer)"
+            return String(localized: "Waiting for \(prayer)")
         }
-        return "Ready for the next salah"
+        return String(localized: "Ready for the next salah")
     }
 
     private var salahFocusToggleBinding: Binding<Bool> {
@@ -645,9 +651,9 @@ private struct PeriodModeExplanationSheet: View {
             }
 
             VStack(alignment: .leading, spacing: 16) {
-                explanationRow("Salah tracking will pause", symbol: "pause.fill")
-                explanationRow("These days won’t affect your streak", symbol: "flame.fill")
-                explanationRow("Your data remains on this iPhone", symbol: "lock.fill")
+                explanationRow(String(localized: "Salah tracking will pause"), symbol: "pause.fill")
+                explanationRow(String(localized: "These days won’t affect your streak"), symbol: "flame.fill")
+                explanationRow(String(localized: "Your data remains on this iPhone"), symbol: "lock.fill")
             }
 
             Spacer(minLength: 0)

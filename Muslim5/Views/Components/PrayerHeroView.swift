@@ -84,8 +84,7 @@ struct PrayerHeroView: View {
         .foregroundStyle(.white)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(
-            "\(phase.title). \(phase.accessibilityCountdownText(at: date)). " +
-            "\(phase.boundaryName) at \(phase.end.formatted(date: .omitted, time: .shortened))."
+            String(localized: "\(phase.title). \(phase.accessibilityCountdownText(at: date)). \(phase.boundaryName) at \(phase.end.formatted(date: .omitted, time: .shortened)).")
         )
     }
 
@@ -116,18 +115,29 @@ struct PrayerHeroView: View {
                 Image(systemName: locationState == .denied ? "location.slash.fill" : "location.fill")
                     .font(.system(size: 25, weight: .semibold))
 
-                Text(locationState == .denied ? "Location access is off" : "Find your local prayer times")
+                Text(
+                    locationState == .denied
+                        ? String(localized: "Location access is off")
+                        : String(localized: "Find your local prayer times")
+                )
                     .font(.title3.bold())
 
-                Text(locationState == .denied
-                     ? "Allow location in Settings to calculate the prayer windows around you."
-                     : "Your coordinates stay on this device and are used for offline calculation.")
+                Text(
+                    locationState == .denied
+                        ? String(localized: "Allow location in Settings to calculate the prayer windows around you.")
+                        : String(localized: "Your coordinates stay on this device and are used for offline calculation.")
+                )
                     .font(.subheadline)
                     .foregroundStyle(.white.opacity(0.75))
                     .multilineTextAlignment(.leading)
 
                 Button(action: onLocationAction) {
-                    Label(locationState == .denied ? "Open Settings" : "Try location again", systemImage: "location.circle.fill")
+                    Label(
+                        locationState == .denied
+                            ? String(localized: "Open Settings")
+                            : String(localized: "Try location again"),
+                        systemImage: "location.circle.fill"
+                    )
                         .font(.subheadline.weight(.semibold))
                         .padding(.horizontal, 16)
                         .padding(.vertical, 10)

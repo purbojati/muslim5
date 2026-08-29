@@ -264,9 +264,9 @@ struct WelcomeView: View {
 
     private var highlights: some View {
         HStack(spacing: 8) {
-            highlight("Only 3 MB", systemImage: "arrow.down.circle.fill")
-            highlight("No ads", systemImage: "eye.slash.fill")
-            highlight("Salah Circle", systemImage: "person.2.fill")
+            highlight(String(localized: "Only 3 MB"), systemImage: "arrow.down.circle.fill")
+            highlight(String(localized: "No ads"), systemImage: "eye.slash.fill")
+            highlight(String(localized: "Salah Circle"), systemImage: "person.2.fill")
         }
         .frame(maxWidth: 360)
     }

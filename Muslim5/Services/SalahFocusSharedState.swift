@@ -22,12 +22,12 @@ struct SalahFocusRequirement: Codable, Equatable {
 
     var prayerName: String {
         switch prayerRawValue {
-        case "fajr": "Fajr"
-        case "dhuhr": "Dhuhr"
-        case "asr": "Asr"
-        case "maghrib": "Maghrib"
-        case "isha": "Isha"
-        default: "salah"
+        case "fajr": String(localized: "Fajr")
+        case "dhuhr": String(localized: "Dhuhr")
+        case "asr": String(localized: "Asr")
+        case "maghrib": String(localized: "Maghrib")
+        case "isha": String(localized: "Isha")
+        default: String(localized: "salah")
         }
     }
 }
@@ -77,7 +77,7 @@ private enum SalahFocusSharedStorageError: LocalizedError {
     case appGroupUnavailable
 
     var errorDescription: String? {
-        "Salah Focus shared storage is unavailable. Check the App Group entitlement."
+        String(localized: "Salah Focus shared storage is unavailable. Check the App Group entitlement.")
     }
 }
 

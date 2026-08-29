@@ -87,7 +87,7 @@ final class SharingService: ObservableObject {
     @discardableResult
     func createProfile(nickname: String) async -> Bool {
         guard let client else {
-            lastErrorMessage = "The sharing server is not configured."
+            lastErrorMessage = String(localized: "The sharing server is not configured.")
             return false
         }
 
@@ -359,7 +359,7 @@ private struct SharingKeychainError: LocalizedError {
     let status: OSStatus
 
     var errorDescription: String? {
-        "Could not securely save sharing access on this iPhone (\(status))."
+        String(localized: "Could not securely save sharing access on this iPhone (\(status)).")
     }
 }
 
@@ -488,10 +488,10 @@ private struct SharingAPIClient: Sendable {
             throw SharingAPIError.invalidResponse
         }
         guard (200..<300).contains(httpResponse.statusCode) else {
-            let message = try? JSONDecoder().decode(APIErrorEnvelope.self, from: data).error.message
+            let apiError = try? JSONDecoder().decode(APIErrorEnvelope.self, from: data).error
             throw SharingAPIError.server(
                 status: httpResponse.statusCode,
-                message: message ?? "The sharing request failed."
+                code: apiError?.code
             )
         }
         return httpResponse
@@ -544,7 +544,7 @@ private struct APIErrorBody: Decodable, Sendable {
 private enum SharingAPIError: LocalizedError {
     case invalidResponse
     case decodingFailed
-    case server(status: Int, message: String)
+    case server(status: Int, code: String?)
 
     var isUnauthorized: Bool {
         if case .server(let status, _) = self {
@@ -556,11 +556,28 @@ private enum SharingAPIError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidResponse:
-            "The sharing server returned an invalid response."
+            String(localized: "The sharing server returned an invalid response.")
         case .decodingFailed:
-            "The sharing server response could not be read."
-        case .server(_, let message):
-            message
+            String(localized: "The sharing server response could not be read.")
+        case .server(_, let code):
+            switch code {
+            case "invalid_nickname":
+                String(localized: "Nickname must contain 1 to 30 visible characters.")
+            case "invalid_code":
+                String(localized: "Enter a valid linking code.")
+            case "code_not_found":
+                String(localized: "Linking code not found.")
+            case "cannot_link_self":
+                String(localized: "You cannot link yourself.")
+            case "registration_unavailable":
+                String(localized: "Could not create your sharing profile. Please try again.")
+            case "code_unavailable":
+                String(localized: "Could not generate a unique linking code. Please try again.")
+            case "unauthorized":
+                String(localized: "Your sharing session has expired. Set up Salah Circle again.")
+            default:
+                String(localized: "The sharing request failed. Please try again.")
+            }
         }
     }
 }

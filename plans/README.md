@@ -6,6 +6,7 @@
 |---|---|---|
 | 004 | Salah Focus app shield | IMPLEMENTED — DEVICE VERIFICATION PENDING |
 | 005 | iCloud backup | IMPLEMENTED — DEVICE/CLOUDKIT VERIFICATION PENDING |
+| 006 | Indonesian localization | IMPLEMENTED — NATIVE REVIEW/DEVICE VERIFICATION PENDING |
 
 ## Animation improvements
 

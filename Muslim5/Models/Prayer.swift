@@ -9,13 +9,18 @@ enum Prayer: String, CaseIterable, Codable, Identifiable {
 
     var id: String { rawValue }
 
-    var name: String {
+    var name: String { localizedName() }
+
+    func localizedName(
+        locale: Locale = .autoupdatingCurrent,
+        bundle: Bundle = .main
+    ) -> String {
         switch self {
-        case .fajr: "Fajr"
-        case .dhuhr: "Dhuhr"
-        case .asr: "Asr"
-        case .maghrib: "Maghrib"
-        case .isha: "Isha"
+        case .fajr: String(localized: "Fajr", bundle: bundle, locale: locale)
+        case .dhuhr: String(localized: "Dhuhr", bundle: bundle, locale: locale)
+        case .asr: String(localized: "Asr", bundle: bundle, locale: locale)
+        case .maghrib: String(localized: "Maghrib", bundle: bundle, locale: locale)
+        case .isha: String(localized: "Isha", bundle: bundle, locale: locale)
         }
     }
 
@@ -31,11 +36,11 @@ enum Prayer: String, CaseIterable, Codable, Identifiable {
 
     var passedTimeEncouragement: String {
         switch self {
-        case .fajr: "It’s okay — begin again with Dhuhr"
-        case .dhuhr: "It’s okay — Asr is a fresh chance"
-        case .asr: "It’s okay — return with Maghrib"
-        case .maghrib: "It’s okay — Isha is another chance"
-        case .isha: "It’s okay — tomorrow begins with Fajr"
+        case .fajr: String(localized: "It’s okay — begin again with Dhuhr")
+        case .dhuhr: String(localized: "It’s okay — Asr is a fresh chance")
+        case .asr: String(localized: "It’s okay — return with Maghrib")
+        case .maghrib: String(localized: "It’s okay — Isha is another chance")
+        case .isha: String(localized: "It’s okay — tomorrow begins with Fajr")
         }
     }
 
@@ -43,28 +48,28 @@ enum Prayer: String, CaseIterable, Codable, Identifiable {
         switch self {
         case .fajr:
             (
-                "Fajr does not define the whole day",
-                "If Fajr was missed, be gentle with yourself. Return with the next salah."
+                String(localized: "Fajr does not define the whole day"),
+                String(localized: "If Fajr was missed, be gentle with yourself. Return with the next salah.")
             )
         case .dhuhr:
             (
-                "There is still room after Dhuhr",
-                "If Dhuhr was missed, pause without despair and begin again with the next salah."
+                String(localized: "There is still room after Dhuhr"),
+                String(localized: "If Dhuhr was missed, pause without despair and begin again with the next salah.")
             )
         case .asr:
             (
-                "The day can turn again after Asr",
-                "If Asr was missed, carry a renewed intention into the prayer ahead."
+                String(localized: "The day can turn again after Asr"),
+                String(localized: "If Asr was missed, carry a renewed intention into the prayer ahead.")
             )
         case .maghrib:
             (
-                "The evening still holds another chance",
-                "If Maghrib was missed, meet the next salah with a gentle heart."
+                String(localized: "The evening still holds another chance"),
+                String(localized: "If Maghrib was missed, meet the next salah with a gentle heart.")
             )
         case .isha:
             (
-                "Tomorrow opens again with Fajr",
-                "If Isha was missed, rest without despair and begin again tomorrow."
+                String(localized: "Tomorrow opens again with Fajr"),
+                String(localized: "If Isha was missed, rest without despair and begin again tomorrow.")
             )
         }
     }
@@ -77,17 +82,17 @@ enum PrayerStatus: String, CaseIterable, Codable {
 
     var title: String {
         switch self {
-        case .completed: "Completed"
-        case .late: "Completed late"
-        case .madeUp: "Prayed after time"
+        case .completed: String(localized: "Completed")
+        case .late: String(localized: "Completed late")
+        case .madeUp: String(localized: "Prayed after time")
         }
     }
 
     var shortTitle: String {
         switch self {
-        case .completed: "Done"
-        case .late: "Late"
-        case .madeUp: "After time"
+        case .completed: String(localized: "Done")
+        case .late: String(localized: "Late")
+        case .madeUp: String(localized: "After time")
         }
     }
 
@@ -106,15 +111,15 @@ enum PrayerAttendance: String, CaseIterable, Codable {
 
     var title: String {
         switch self {
-        case .congregation: "Jamā'ah"
-        case .individual: "Individual"
+        case .congregation: String(localized: "Jamā'ah")
+        case .individual: String(localized: "Individual")
         }
     }
 
     var shortTitle: String {
         switch self {
-        case .congregation: "Jamā'ah"
-        case .individual: "Individual"
+        case .congregation: String(localized: "Jamā'ah")
+        case .individual: String(localized: "Individual")
         }
     }
 

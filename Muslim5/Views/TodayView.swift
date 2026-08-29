@@ -3,20 +3,22 @@ import SwiftUI
 import UIKit
 
 struct TodayView: View {
-    private static let hijriMonthNames = [
-        "Muharram",
-        "Safar",
-        "Rabi al-Awwal",
-        "Rabi al-Thani",
-        "Jumada al-Awwal",
-        "Jumada al-Thani",
-        "Rajab",
-        "Sha'ban",
-        "Ramadan",
-        "Shawwal",
-        "Dhu al-Qi'dah",
-        "Dhu al-Hijjah"
-    ]
+    private static func hijriMonthNames(locale: Locale) -> [String] {
+        [
+            String(localized: "Muharram", locale: locale),
+            String(localized: "Safar", locale: locale),
+            String(localized: "Rabi al-Awwal", locale: locale),
+            String(localized: "Rabi al-Thani", locale: locale),
+            String(localized: "Jumada al-Awwal", locale: locale),
+            String(localized: "Jumada al-Thani", locale: locale),
+            String(localized: "Rajab", locale: locale),
+            String(localized: "Sha'ban", locale: locale),
+            String(localized: "Ramadan", locale: locale),
+            String(localized: "Shawwal", locale: locale),
+            String(localized: "Dhu al-Qi'dah", locale: locale),
+            String(localized: "Dhu al-Hijjah", locale: locale)
+        ]
+    }
 
     @Environment(\.modelContext) private var modelContext
     @Environment(\.locale) private var locale
@@ -223,9 +225,9 @@ struct TodayView: View {
 
     private var dayTitle: String {
         switch dayOffset {
-        case 0: "Today"
-        case -1: "Yesterday"
-        default: "\(abs(dayOffset)) days ago"
+        case 0: String(localized: "Today")
+        case -1: String(localized: "Yesterday")
+        default: String(localized: "\(abs(dayOffset)) days ago")
         }
     }
 
@@ -268,15 +270,16 @@ struct TodayView: View {
             calendar: calendar
         ))
 
+        let monthNames = Self.hijriMonthNames(locale: locale)
         guard
             let month = components.month,
-            Self.hijriMonthNames.indices.contains(month - 1),
+            monthNames.indices.contains(month - 1),
             let day = components.day
         else {
             return fallbackDate
         }
 
-        return "\(day) \(Self.hijriMonthNames[month - 1])"
+        return "\(day) \(monthNames[month - 1])"
     }
 
     @ViewBuilder
@@ -305,9 +308,9 @@ struct TodayView: View {
 
     private var prayerCircleCard: some View {
         featureAdoptionCard(
-            title: "Salah Circle",
-            message: "Pray together, anywhere",
-            actionTitle: "Set up",
+            title: String(localized: "Salah Circle"),
+            message: String(localized: "Pray together, anywhere"),
+            actionTitle: String(localized: "Set up"),
             symbol: "person.2.fill",
             tint: AppTheme.prayerCircleFeature
         ) {
@@ -320,9 +323,11 @@ struct TodayView: View {
 
     private var salahFocusCard: some View {
         featureAdoptionCard(
-            title: "Salah Focus",
-            message: "Pause apps for salah",
-            actionTitle: salahFocusService.isAuthorized ? "Turn on" : "Set up",
+            title: String(localized: "Salah Focus"),
+            message: String(localized: "Pause apps for salah"),
+            actionTitle: salahFocusService.isAuthorized
+                ? String(localized: "Turn on")
+                : String(localized: "Set up"),
             symbol: "lock.shield.fill",
             tint: AppTheme.salahFocusFeature
         ) {
@@ -330,7 +335,9 @@ struct TodayView: View {
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel(
-            salahFocusService.isAuthorized ? "Turn on Salah Focus" : "Set up Salah Focus"
+            salahFocusService.isAuthorized
+                ? String(localized: "Turn on Salah Focus")
+                : String(localized: "Set up Salah Focus")
         )
         .accessibilityHint("Opens Salah Focus setup")
     }
@@ -457,7 +464,7 @@ struct TodayView: View {
         HStack(spacing: 2) {
             checklistDayButton(
                 systemImage: "chevron.left",
-                accessibilityLabel: "Previous day"
+                accessibilityLabel: String(localized: "Previous day")
             ) {
                 changeDay(by: -1)
             }
@@ -471,7 +478,7 @@ struct TodayView: View {
 
             checklistDayButton(
                 systemImage: "chevron.right",
-                accessibilityLabel: "Next day",
+                accessibilityLabel: String(localized: "Next day"),
                 isEnabled: dayOffset < 0
             ) {
                 changeDay(by: 1)
@@ -498,7 +505,11 @@ struct TodayView: View {
         .disabled(!isEnabled)
         .opacity(isEnabled ? 1 : 0.3)
         .accessibilityLabel(accessibilityLabel)
-        .accessibilityHint(systemImage == "chevron.left" ? "Shows an earlier checklist" : "Shows a more recent checklist")
+        .accessibilityHint(
+            systemImage == "chevron.left"
+                ? String(localized: "Shows an earlier checklist")
+                : String(localized: "Shows a more recent checklist")
+        )
     }
 
     private var pauseBanner: some View {
@@ -557,7 +568,7 @@ struct TodayView: View {
         let completedCount = metrics.completedCount(on: date)
 
         if metrics.isPaused(on: date) {
-            return "Take care of yourself. Your salah journey will be here when you return."
+            return String(localized: "Take care of yourself. Your salah journey will be here when you return.")
         }
 
         if let prayer = mostRecentMissedPrayer(
@@ -570,23 +581,23 @@ struct TodayView: View {
 
         switch completedCount {
         case 5:
-            return "Alhamdulillah — all five prayers recorded."
+            return String(localized: "Alhamdulillah — all five prayers recorded.")
         case 4:
-            return "One prayer left. May Allah make it easy."
+            return String(localized: "One prayer left. May Allah make it easy.")
         case 3:
-            return "Three prayers recorded. Keep going, one salah at a time."
+            return String(localized: "Three prayers recorded. Keep going, one salah at a time.")
         case 2:
-            return "Two prayers recorded. The next salah is another chance."
+            return String(localized: "Two prayers recorded. The next salah is another chance.")
         case 1:
-            return "Alhamdulillah for this one. Keep the next prayer close."
+            return String(localized: "Alhamdulillah for this one. Keep the next prayer close.")
         default:
             if dayOffset < 0 {
-                return "Nothing recorded for this day. You can still update it."
+                return String(localized: "Nothing recorded for this day. You can still update it.")
             }
             if metrics.currentStreak > 0 {
-                return "Bismillah. Continue with the next prayer."
+                return String(localized: "Bismillah. Continue with the next prayer.")
             }
-            return "Every salah is a fresh chance to return to Allah."
+            return String(localized: "Every salah is a fresh chance to return to Allah.")
         }
     }
 
