@@ -1,7 +1,9 @@
+import CloudKit
 import SwiftData
 import SwiftUI
 
 struct RootTabView: View {
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
     @Query(sort: \PrayerRecord.day, order: .reverse) private var records: [PrayerRecord]
     @Query(sort: \TrackingPause.startDay, order: .reverse) private var pauses: [TrackingPause]
@@ -23,6 +25,7 @@ struct RootTabView: View {
     @State private var selectedTab = AppTab.today
     @StateObject private var locationProvider = LocationProvider()
     @StateObject private var notificationService = PrayerNotificationService()
+    @StateObject private var iCloudStatusService = ICloudStatusService()
     @StateObject private var salahFocusService = SalahFocusService()
     @StateObject private var sharingService = SharingService()
 
@@ -44,10 +47,12 @@ struct RootTabView: View {
         }
         .environmentObject(locationProvider)
         .environmentObject(notificationService)
+        .environmentObject(iCloudStatusService)
         .environmentObject(salahFocusService)
         .environmentObject(sharingService)
         .task {
             locationProvider.start()
+            normalizeCloudDataIfNeeded()
             await sharingService.start()
             await synchronizeNotifications()
             await salahFocusService.prepareForLaunch()
@@ -72,10 +77,18 @@ struct RootTabView: View {
         .onChange(of: salahFocusSynchronizationKey) {
             synchronizeSalahFocus()
         }
+        .onChange(of: cloudDataFingerprint) {
+            normalizeCloudDataIfNeeded()
+        }
         .onReceive(NotificationCenter.default.publisher(for: .NSSystemTimeZoneDidChange)) { _ in
             Task {
                 await synchronizeNotifications()
                 synchronizeSalahFocus()
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .CKAccountChanged)) { _ in
+            Task {
+                await iCloudStatusService.refresh()
             }
         }
     }
@@ -168,6 +181,34 @@ struct RootTabView: View {
             calculationMethod: calculationMethod,
             asrMethod: asrMethod
         )
+    }
+
+    private var cloudDataFingerprint: String {
+        let recordFingerprint = records.map {
+            "\($0.id):\($0.statusRawValue):\($0.attendanceRawValue ?? ""):" +
+                String($0.recordedAt.timeIntervalSince1970)
+        }.sorted().joined(separator: ",")
+        let pauseFingerprint = pauses.map {
+            "\($0.id.uuidString):\($0.reason):\($0.startDay.timeIntervalSince1970):" +
+                String($0.endDay?.timeIntervalSince1970 ?? 0)
+        }.sorted().joined(separator: ",")
+        return recordFingerprint + "|" + pauseFingerprint
+    }
+
+    private func normalizeCloudDataIfNeeded() {
+        guard ICloudSyncDataNormalizer.normalize(
+            records: records,
+            pauses: pauses,
+            in: modelContext
+        ) else { return }
+
+        do {
+            try modelContext.save()
+        } catch {
+            #if DEBUG
+            print("Could not normalize iCloud data: \(error)")
+            #endif
+        }
     }
 
     private struct NotificationConfiguration: Equatable {

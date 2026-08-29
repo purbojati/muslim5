@@ -1,6 +1,8 @@
 # Muslim 5
 
-Muslim 5 is a private, local-first iPhone tracker for the five daily prayers. It
+Muslim 5 is a private, local-first iPhone tracker for the five daily prayers. Its
+prayer history and Period Mode ranges can sync through the user's private iCloud
+account for recovery and use on another iPhone. It
 uses a gentle habit-building approach: progress is visible, while missed days
 never erase earlier effort. Its optional **Salah Circle** helps families and
 friends quietly encourage one another without turning worship into a social
@@ -28,7 +30,7 @@ iPhone.
 - Five-prayer daily checklist
 - Completed, late, and prayed-after-time statuses
 - Congregation and individual prayer attendance
-- SwiftData persistence stored on-device
+- Local-first SwiftData persistence with private iCloud sync
 - Twenty-week contribution grid
 - Current streak, complete days, and 30-day consistency
 - User-friendly monthly and prayer-by-prayer reflections
@@ -60,9 +62,11 @@ showing who has completed each prayer. The production API is available at
 health check at [`/health`](https://muslim5.purbojati.workers.dev/health).
 
 The prayer tracker remains local-first. SwiftData stores the full prayer log,
-timing and attendance status, streaks, period mode, preferences, location, and
-calculated prayer times on the iPhone. The backend only stores the data required
-for sharing:
+timing and attendance status, streaks, and Period Mode ranges on the iPhone and
+syncs those records through the user's private iCloud account when available.
+Preferences, location, calculated prayer times, notification configuration,
+Salah Focus state, and sharing credentials remain device-local. The Salah Circle
+backend only stores the data required for sharing:
 
 - User ID, nickname, avatar key, linking code, hashed authentication token, and
   creation/update timestamps

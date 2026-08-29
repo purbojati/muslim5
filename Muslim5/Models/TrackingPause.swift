@@ -3,10 +3,10 @@ import SwiftData
 
 @Model
 final class TrackingPause {
-    var id: UUID
-    var startDay: Date
+    var id: UUID = UUID()
+    var startDay: Date = Date.distantPast
     var endDay: Date?
-    var reason: String
+    var reason: String = "period"
 
     init(startDay: Date = .now, endDay: Date? = nil, reason: String = "period", calendar: Calendar = .current) {
         self.id = UUID()

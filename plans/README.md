@@ -5,6 +5,7 @@
 | # | Plan | Status |
 |---|---|---|
 | 004 | Salah Focus app shield | IMPLEMENTED — DEVICE VERIFICATION PENDING |
+| 005 | iCloud backup | IMPLEMENTED — DEVICE/CLOUDKIT VERIFICATION PENDING |
 
 ## Animation improvements
 

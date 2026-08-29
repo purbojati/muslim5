@@ -8,6 +8,7 @@ struct SettingsView: View {
     @Environment(\.openURL) private var openURL
     @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject private var notificationService: PrayerNotificationService
+    @EnvironmentObject private var iCloudStatusService: ICloudStatusService
     @EnvironmentObject private var salahFocusService: SalahFocusService
     @EnvironmentObject private var sharingService: SharingService
     @EnvironmentObject private var locationProvider: LocationProvider
@@ -167,6 +168,25 @@ struct SettingsView: View {
                 }
 
                 Section {
+                    LabeledContent {
+                        Text(iCloudStatusService.status.label)
+                            .foregroundStyle(.secondary)
+                    } label: {
+                        Label {
+                            Text("iCloud Sync")
+                        } icon: {
+                            Image(systemName: iCloudStatusService.status.symbol)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+
+                } header: {
+                    Text("Data")
+                } footer: {
+                    Text("Prayer history and Period Mode ranges sync privately through your iCloud account. Muslim 5 still works offline, and Salah Circle remains separate.")
+                }
+
+                Section {
                     LabeledContent("Version", value: appVersion)
                 } footer: {
                     Text("Made with care by a fellow Muslim in Indonesia 🇮🇩")
@@ -187,11 +207,13 @@ struct SettingsView: View {
             }
             .task {
                 await notificationService.refreshAuthorizationStatus()
+                await iCloudStatusService.refresh()
             }
             .onChange(of: scenePhase) { _, newPhase in
                 guard newPhase == .active else { return }
                 Task {
                     await notificationService.refreshAuthorizationStatus()
+                    await iCloudStatusService.refresh()
                 }
             }
             .sheet(isPresented: $isShowingPeriodModeExplanation) {

@@ -630,12 +630,28 @@ struct TodayView: View {
         let willCompleteDay = existingRecord == nil && metrics.completedCount(on: date) == Prayer.allCases.count - 1
 
         completionCelebrationDay = willCompleteDay ? date : nil
+        var mutationFailed = false
         withAnimation(.easeOut(duration: 0.2)) {
-            if let record = existingRecord {
-                modelContext.delete(record)
-            } else {
-                modelContext.insert(PrayerRecord(day: date, prayer: prayer, status: .completed))
+            do {
+                if existingRecord != nil {
+                    try PrayerRecord.deleteAll(in: modelContext, day: date, prayer: prayer)
+                } else {
+                    try PrayerRecord.upsert(
+                        in: modelContext,
+                        day: date,
+                        prayer: prayer,
+                        status: .completed
+                    )
+                }
+            } catch {
+                modelContext.rollback()
+                mutationFailed = true
             }
+        }
+
+        guard !mutationFailed else {
+            HapticFeedback.notification(.error)
+            return
         }
 
         guard save() else {
@@ -663,11 +679,17 @@ struct TodayView: View {
             && metrics.completedCount(on: date) == Prayer.allCases.count - 1
         completionCelebrationDay = willCompleteDay ? date : nil
 
-        if let record = metrics.record(for: prayer, on: date) {
-            record.status = status
-            record.recordedAt = .now
-        } else {
-            modelContext.insert(PrayerRecord(day: date, prayer: prayer, status: status))
+        do {
+            try PrayerRecord.upsert(
+                in: modelContext,
+                day: date,
+                prayer: prayer,
+                status: status
+            )
+        } catch {
+            modelContext.rollback()
+            HapticFeedback.notification(.error)
+            return
         }
         if save() {
             synchronizeSalahFocus(prayer: prayer, on: date, isCompleted: true)
@@ -682,18 +704,18 @@ struct TodayView: View {
             && metrics.completedCount(on: date) == Prayer.allCases.count - 1
         completionCelebrationDay = willCompleteDay ? date : nil
 
-        if let record = metrics.record(for: prayer, on: date) {
-            record.attendance = attendance
-            record.recordedAt = .now
-        } else {
-            modelContext.insert(
-                PrayerRecord(
-                    day: date,
-                    prayer: prayer,
-                    status: .completed,
-                    attendance: attendance
-                )
+        do {
+            try PrayerRecord.upsert(
+                in: modelContext,
+                day: date,
+                prayer: prayer,
+                attendance: attendance,
+                updateAttendance: true
             )
+        } catch {
+            modelContext.rollback()
+            HapticFeedback.notification(.error)
+            return
         }
         if save() {
             synchronizeSalahFocus(prayer: prayer, on: date, isCompleted: true)
