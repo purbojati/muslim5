@@ -164,7 +164,10 @@ struct WelcomeView: View {
                 size: compactHeight ? 24 : 28,
                 rotation: -28,
                 x: compactHeight ? -108 : -132,
-                y: compactHeight ? -96 : -110
+                y: compactHeight ? -96 : -110,
+                drift: CGSize(width: 3, height: -4),
+                rotationDrift: 4,
+                duration: 3.8
             )
 
             decorativeSymbol(
@@ -173,7 +176,10 @@ struct WelcomeView: View {
                 size: compactHeight ? 25 : 29,
                 rotation: -10,
                 x: compactHeight ? -118 : -142,
-                y: compactHeight ? 58 : 66
+                y: compactHeight ? 58 : 66,
+                drift: CGSize(width: -3, height: 3),
+                rotationDrift: -5,
+                duration: 4.4
             )
 
             decorativeSymbol(
@@ -182,7 +188,10 @@ struct WelcomeView: View {
                 size: compactHeight ? 23 : 27,
                 rotation: 12,
                 x: compactHeight ? 112 : 137,
-                y: compactHeight ? -29 : -34
+                y: compactHeight ? -29 : -34,
+                drift: CGSize(width: 2, height: -4),
+                rotationDrift: 3,
+                duration: 3.4
             )
 
             VStack(spacing: compactHeight ? -5 : -3) {
@@ -219,14 +228,37 @@ struct WelcomeView: View {
         size: CGFloat,
         rotation: Double,
         x: CGFloat,
-        y: CGFloat
+        y: CGFloat,
+        drift: CGSize,
+        rotationDrift: Double,
+        duration: Double
     ) -> some View {
-        Image(systemName: systemName)
+        let isDrifting = backgroundDrift && !reduceMotion
+        let driftDirection: CGFloat = isDrifting ? 1 : -1
+
+        return Image(systemName: systemName)
             .font(.system(size: size, weight: .bold))
             .symbolRenderingMode(.hierarchical)
             .foregroundStyle(color)
-            .rotationEffect(.degrees(rotation))
-            .offset(x: x, y: y)
+            .rotationEffect(
+                .degrees(
+                    rotation
+                        + (reduceMotion
+                            ? 0
+                            : rotationDrift * Double(driftDirection))
+                )
+            )
+            .offset(
+                x: x + (reduceMotion ? 0 : drift.width * driftDirection),
+                y: y + (reduceMotion ? 0 : drift.height * driftDirection)
+            )
+            .animation(
+                reduceMotion
+                    ? nil
+                    : .timingCurve(0.77, 0, 0.175, 1, duration: duration)
+                        .repeatForever(autoreverses: true),
+                value: isDrifting
+            )
             .accessibilityHidden(true)
     }
 
@@ -266,6 +298,19 @@ struct WelcomeView: View {
         Button(action: onContinue) {
             HStack(spacing: 9) {
                 Text("Begin")
+                    .opacity(
+                        reduceMotion ? 1 : (backgroundDrift ? 1 : 0.86)
+                    )
+                    .scaleEffect(
+                        reduceMotion ? 1 : (backgroundDrift ? 1.015 : 0.985)
+                    )
+                    .animation(
+                        reduceMotion
+                            ? nil
+                            : .timingCurve(0.77, 0, 0.175, 1, duration: 1.9)
+                                .repeatForever(autoreverses: true),
+                        value: backgroundDrift
+                    )
                 Image(systemName: "arrow.right")
                     .font(.system(size: 16, weight: .bold))
             }
