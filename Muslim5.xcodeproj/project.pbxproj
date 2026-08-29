@@ -45,6 +45,7 @@
 		B0000000000000000000000E /* SharingServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0000000000000000000000F /* SharingServiceTests.swift */; };
 		B00000000000000000000010 /* SalahFocusDecisionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000011 /* SalahFocusDecisionTests.swift */; };
 		B00000000000000000000012 /* ICloudSyncDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000013 /* ICloudSyncDataTests.swift */; };
+		B00000000000000000000014 /* ICloudSyncStateMachineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00000000000000000000015 /* ICloudSyncStateMachineTests.swift */; };
 		C00000000000000000000101 /* SalahFocusMonitorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C00000000000000000000201 /* SalahFocusMonitorExtension.swift */; };
 		C00000000000000000000102 /* SalahFocusSharedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0000000000000000000021D /* SalahFocusSharedState.swift */; };
 		C00000000000000000000103 /* SalahFocusMonitor.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = C00000000000000000000200 /* SalahFocusMonitor.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -145,6 +146,7 @@
 		B0000000000000000000000F /* SharingServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharingServiceTests.swift; sourceTree = "<group>"; };
 		B00000000000000000000011 /* SalahFocusDecisionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalahFocusDecisionTests.swift; sourceTree = "<group>"; };
 		B00000000000000000000013 /* ICloudSyncDataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICloudSyncDataTests.swift; sourceTree = "<group>"; };
+		B00000000000000000000015 /* ICloudSyncStateMachineTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICloudSyncStateMachineTests.swift; sourceTree = "<group>"; };
 		C00000000000000000000200 /* SalahFocusMonitor.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SalahFocusMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C00000000000000000000201 /* SalahFocusMonitorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SalahFocusMonitorExtension.swift; sourceTree = "<group>"; };
 		C00000000000000000000202 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -312,6 +314,7 @@
 				B0000000000000000000000F /* SharingServiceTests.swift */,
 				B00000000000000000000011 /* SalahFocusDecisionTests.swift */,
 				B00000000000000000000013 /* ICloudSyncDataTests.swift */,
+				B00000000000000000000015 /* ICloudSyncStateMachineTests.swift */,
 			);
 			path = Muslim5Tests;
 			sourceTree = "<group>";
@@ -463,6 +466,9 @@
 					A00000000000000000000500 = {
 						CreatedOnToolsVersion = 26.6;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.CloudKit = {
 								enabled = 1;
 							};
@@ -598,6 +604,7 @@
 				B0000000000000000000000E /* SharingServiceTests.swift in Sources */,
 				B00000000000000000000010 /* SalahFocusDecisionTests.swift in Sources */,
 				B00000000000000000000012 /* ICloudSyncDataTests.swift in Sources */,
+				B00000000000000000000014 /* ICloudSyncStateMachineTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

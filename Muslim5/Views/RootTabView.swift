@@ -53,6 +53,7 @@ struct RootTabView: View {
         .task {
             locationProvider.start()
             normalizeCloudDataIfNeeded()
+            await iCloudStatusService.refresh()
             await sharingService.start()
             await synchronizeNotifications()
             await salahFocusService.prepareForLaunch()
@@ -204,6 +205,7 @@ struct RootTabView: View {
 
         do {
             try modelContext.save()
+            iCloudStatusService.markLocalChangePending()
         } catch {
             #if DEBUG
             print("Could not normalize iCloud data: \(error)")

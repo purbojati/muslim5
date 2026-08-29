@@ -180,10 +180,26 @@ struct SettingsView: View {
                         }
                     }
 
+                    if iCloudStatusService.status == .available {
+                        LabeledContent {
+                            Text(iCloudStatusService.syncStatus.label)
+                                .foregroundStyle(.secondary)
+                        } label: {
+                            Label("Backup Status", systemImage: "icloud.and.arrow.up.fill")
+                                .foregroundStyle(.secondary)
+                        }
+
+                        if let detail = iCloudStatusService.syncStatus.detail {
+                            Text(detail)
+                                .font(.footnote)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+
                 } header: {
                     Text("Data")
                 } footer: {
-                    Text("Prayer history and Period Mode ranges sync privately through your iCloud account. Muslim 5 still works offline, and Salah Circle remains separate.")
+                    Text("Wait until Backup Status says “Backed up” before removing or reinstalling Muslim 5. Prayer history and Period Mode ranges sync privately through your iCloud account. Salah Circle remains separate.")
                 }
 
                 Section {
@@ -408,6 +424,7 @@ struct SettingsView: View {
 
         do {
             try modelContext.save()
+            iCloudStatusService.markLocalChangePending()
             HapticFeedback.impact(enabled ? .medium : .soft)
         } catch {
             HapticFeedback.notification(.error)

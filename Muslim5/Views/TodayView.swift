@@ -24,6 +24,7 @@ struct TodayView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
     @EnvironmentObject private var locationProvider: LocationProvider
+    @EnvironmentObject private var iCloudStatusService: ICloudStatusService
     @EnvironmentObject private var salahFocusService: SalahFocusService
     @EnvironmentObject private var sharingService: SharingService
     @Query(sort: \PrayerRecord.day, order: .reverse) private var records: [PrayerRecord]
@@ -729,6 +730,7 @@ struct TodayView: View {
     private func save() -> Bool {
         do {
             try modelContext.save()
+            iCloudStatusService.markLocalChangePending()
             return true
         } catch {
             return false
