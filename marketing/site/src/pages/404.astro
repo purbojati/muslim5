@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+---
+
+<BaseLayout
+  title="Page not found | Muslim 5"
+  description="The requested Muslim 5 page was not found."
+  noindex
+>
+  <Header />
+  <main id="main" class="grid min-h-[calc(100dvh-66px)] place-items-center px-8 text-center md:min-h-[calc(100dvh-72px)]">
+    <div>
+      <h1 class="mb-3 text-[clamp(3rem,8vw,6rem)] leading-none font-extrabold tracking-[-0.06em]">
+        Page not found.
+      </h1>
+      <p class="text-[var(--ink-soft)]">The page you requested is not here.</p>
+      <a class="mt-4 inline-block font-extrabold text-[var(--teal)] underline underline-offset-4" href="/">
+        Return home
+      </a>
+    </div>
+  </main>
+</BaseLayout>

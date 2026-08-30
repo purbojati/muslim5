@@ -1,0 +1,45 @@
+---
+interface Props {
+  landing?: boolean;
+}
+
+const { landing = false } = Astro.props;
+---
+
+<header
+  class="site-header h-[66px] border-b border-[var(--line)] bg-[color-mix(in_srgb,var(--page)_88%,transparent)] backdrop-blur-2xl md:h-[72px]"
+>
+  <div
+    class="mx-auto flex h-full w-[min(calc(100%-2rem),1180px)] items-center justify-between gap-8 md:w-[min(calc(100%-2.5rem),1180px)]"
+  >
+    <a
+      class="flex items-center gap-3 text-[1.05rem] font-extrabold tracking-[-0.02em] text-[var(--ink)] no-underline"
+      href="/"
+      aria-label="Muslim 5 home"
+    >
+      <picture>
+        <source
+          srcset="/assets/brand-mark-dark.svg"
+          media="(prefers-color-scheme: dark)"
+        />
+        <img src="/assets/brand-mark.svg" alt="" width="36" height="36" />
+      </picture>
+      <span>Muslim 5</span>
+    </a>
+    <nav
+      class="flex items-center gap-5 whitespace-nowrap text-sm font-bold text-[var(--ink-soft)]"
+      aria-label="Main navigation"
+    >
+      {landing && <a class="hidden no-underline hover:text-[var(--ink)] sm:block" href="#features">Features</a>}
+      {landing ? (
+        <a class="no-underline hover:text-[var(--ink)]" href="/privacy/">Privacy</a>
+      ) : (
+        <a class="hidden no-underline hover:text-[var(--ink)] sm:block" href="/">Home</a>
+      )}
+      <a
+        class="no-underline hover:text-[var(--ink)]"
+        href="mailto:official.purbojati@gmail.com"
+      >Support</a>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,23 @@
+---
+interface Props {
+  privacy?: boolean;
+}
+
+const { privacy = false } = Astro.props;
+---
+
+<footer class="border-t border-[var(--line)]">
+  <div
+    class="mx-auto flex w-[min(calc(100%-2rem),1180px)] flex-col items-start justify-between gap-5 py-10 text-sm md:w-[min(calc(100%-2.5rem),1180px)] md:flex-row md:items-center"
+  >
+    <p class="m-0 text-[var(--ink-soft)]">
+      {privacy
+        ? "© 2026 Muslim 5. Privacy is part of the product."
+        : "© 2026 Muslim 5. Made with care for the ummah."}
+    </p>
+    <div class="flex gap-5">
+      {privacy ? <a href="/">Home</a> : <a href="/privacy/">Privacy</a>}
+      <a href="mailto:official.purbojati@gmail.com">Support</a>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: ui-rounded, "SF Pro Rounded", "SF Pro Display", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --radius-panel: 1.375rem;
+  --shadow-soft: 0 28px 70px rgb(9 51 47 / 0.14);
+}
+
+:root {
+  color-scheme: light dark;
+  --page: #f7f8f5;
+  --surface: #eef2ed;
+  --surface-strong: #e1ebe6;
+  --ink: #073b36;
+  --ink-soft: #46645f;
+  --line: rgb(7 59 54 / 0.16);
+  --accent: #de6f30;
+  --accent-ink: #2f1609;
+  --teal: #0b5d54;
+  --hero-copy: #f6f7f2;
+  --hero-muted: #d6e3df;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #071a18;
+    --surface: #0d2421;
+    --surface-strong: #14312d;
+    --ink: #edf3ef;
+    --ink-soft: #aec4be;
+    --line: rgb(222 237 232 / 0.16);
+    --accent: #ee8a50;
+    --accent-ink: #241007;
+    --teal: #81c7bc;
+    --shadow-soft: 0 28px 70px rgb(0 0 0 / 0.28);
+  }
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+  }
+
+  img {
+    display: block;
+    height: auto;
+    max-width: 100%;
+  }
+
+  a:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .site-header {
+    background: var(--page) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+.hero-scene {
+  background:
+    linear-gradient(90deg, rgb(6 30 34 / 0.4), transparent 38%),
+    url("/assets/muslim5-dawn-hero.jpg") center / cover;
+}

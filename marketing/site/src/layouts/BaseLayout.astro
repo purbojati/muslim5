@@ -1,0 +1,48 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  image = "/assets/muslim5-dawn-hero.jpg",
+  noindex = false,
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const socialImage = new URL(image, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#073b36" />
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/assets/brand-mark.svg" type="image/svg+xml" />
+    <title>{title}</title>
+    <slot name="head" />
+  </head>
+  <body>
+    <a
+      class="fixed top-4 left-4 z-50 -translate-y-40 rounded-xl bg-[var(--page)] px-4 py-3 font-bold text-[var(--ink)] focus:translate-y-0"
+      href="#main"
+    >
+      Skip to content
+    </a>
+    <slot />
+  </body>
+</html>

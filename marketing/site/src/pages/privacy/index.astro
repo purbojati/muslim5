@@ -1,0 +1,191 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+
+const sections = [
+  ["overview", "Overview"],
+  ["on-device", "On-device data"],
+  ["icloud", "iCloud"],
+  ["circle", "Salah Circle"],
+  ["use", "How data is used"],
+  ["providers", "Service providers"],
+  ["retention", "Retention and deletion"],
+  ["your-choices", "Your choices"],
+  ["security", "Security"],
+  ["contact", "Contact"],
+];
+---
+
+<BaseLayout
+  title="Privacy Policy | Muslim 5"
+  description="Privacy Policy for the Muslim 5 iPhone app, including local data, iCloud sync, Salah Circle, retention, deletion, and privacy choices."
+>
+  <Header />
+
+  <main id="main" class="pb-24">
+    <header class="border-b border-[var(--line)] py-[clamp(4.5rem,10vw,8rem)]">
+      <div class="mx-auto w-[min(calc(100%-2rem),1180px)] md:w-[min(calc(100%-2.5rem),1180px)]">
+        <p class="mb-5 text-xs font-extrabold tracking-[0.16em] text-[var(--teal)] uppercase">
+          Effective August 30, 2026
+        </p>
+        <h1
+          class="mb-5 max-w-[12ch] text-[clamp(2.8rem,7vw,4.8rem)] leading-[1.03] font-extrabold tracking-[-0.055em]"
+        >
+          Privacy Policy
+        </h1>
+        <p class="max-w-[60ch] text-lg text-[var(--ink-soft)]">
+          Muslim 5 is designed to keep your worship personal. This policy explains what stays on your iPhone, what may sync through iCloud, and what the optional Salah Circle service receives.
+        </p>
+      </div>
+    </header>
+
+    <div
+      class="mx-auto grid w-[min(calc(100%-2rem),1180px)] grid-cols-1 gap-12 pt-16 md:w-[min(calc(100%-2.5rem),1180px)] min-[861px]:grid-cols-[minmax(180px,0.32fr)_minmax(0,0.68fr)] min-[861px]:gap-[clamp(2rem,8vw,7rem)]"
+    >
+      <nav class="sticky top-8 hidden self-start min-[861px]:block" aria-label="Privacy policy sections">
+        <strong class="mb-3 block">On this page</strong>
+        {sections.map(([id, label]) => (
+          <a class="block py-1.5 text-sm text-[var(--ink-soft)] no-underline hover:text-[var(--ink)]" href={`#${id}`}>
+            {label}
+          </a>
+        ))}
+      </nav>
+
+      <article
+        class="max-w-[760px] [&_a]:text-[var(--teal)] [&_a]:underline [&_a]:underline-offset-4 [&_h2]:mb-4 [&_h2]:text-[clamp(1.65rem,3vw,2.35rem)] [&_h2]:leading-tight [&_h2]:font-extrabold [&_h2]:tracking-[-0.035em] [&_h3]:mt-7 [&_h3]:mb-2 [&_h3]:text-lg [&_h3]:font-extrabold [&_li]:text-[var(--ink-soft)] [&_p]:text-[var(--ink-soft)] [&_section]:scroll-mt-8 [&_section]:border-b [&_section]:border-[var(--line)] [&_section]:py-10 [&_section:first-child]:pt-0 [&_section:last-child]:border-0 [&_ul]:my-4 [&_ul]:list-disc [&_ul]:space-y-2.5 [&_ul]:pl-5"
+      >
+        <section id="overview">
+          <h2>Overview</h2>
+          <p>
+            This Privacy Policy applies to the Muslim 5 iPhone app and its optional Salah Circle service. You can use the core prayer tracker without creating a Salah Circle profile.
+          </p>
+          <p class="mt-5 rounded-2xl bg-[var(--surface)] px-5 py-4 !text-[var(--ink)]">
+            Muslim 5 does not sell personal data, show third-party advertising, or use data for cross-app tracking.
+          </p>
+        </section>
+
+        <section id="on-device">
+          <h2>Data that stays on your device</h2>
+          <p>Most Muslim 5 data is processed and stored on your iPhone. This includes:</p>
+          <ul>
+            <li>Your detailed prayer history, timing and attendance status, streaks, reflections, and Period Mode settings.</li>
+            <li>Your location and compass heading, which are used on-device to calculate prayer times and Qibla direction.</li>
+            <li>Your calculation preferences, reminder settings, Salah Focus configuration, and selected apps or websites.</li>
+            <li>Your Salah Circle authentication credential, which is stored in the iOS Keychain.</li>
+          </ul>
+          <p>
+            Location and compass information are not sent to the Muslim 5 Salah Circle service. You control location, notification, and Screen Time permissions through iOS Settings.
+          </p>
+        </section>
+
+        <section id="icloud">
+          <h2>Private iCloud sync</h2>
+          <p>
+            If iCloud is available, your prayer history and Period Mode ranges may sync through your private iCloud account so you can recover them or use them on another iPhone.
+          </p>
+          <p>
+            This information is handled by Apple under your Apple account and Apple’s terms. The Muslim 5 developer does not operate a server that reads this private iCloud data.
+          </p>
+        </section>
+
+        <section id="circle">
+          <h2>Optional Salah Circle data</h2>
+          <p>
+            Salah Circle lets you connect with family or close friends and see their initials after a completed prayer. If you choose to create a Salah Circle profile, the service receives and stores:
+          </p>
+          <ul>
+            <li>A random user identifier, the nickname you provide, an avatar key, a linking code, and account timestamps.</li>
+            <li>A one-way hash of your authentication token. The service does not store the original token.</li>
+            <li>Connections between linked Salah Circle profiles and the date each link was created.</li>
+            <li>The completed prayer name, your local calendar date, and the completion timestamp for shared check-ins.</li>
+          </ul>
+          <p>
+            Prayer check-ins can reveal religious practice and may be considered sensitive information in some places. They are used only to provide Salah Circle. The service does not receive your detailed prayer history, attendance status, streaks, location, prayer times, or preferences.
+          </p>
+        </section>
+
+        <section id="use">
+          <h2>How information is used</h2>
+          <p>Information is used only to:</p>
+          <ul>
+            <li>Provide prayer times, Qibla guidance, reminders, tracking, and optional Salah Focus features on your device.</li>
+            <li>Create and secure a Salah Circle profile, connect users by code, and show shared prayer check-ins.</li>
+            <li>Maintain service reliability, prevent abuse, troubleshoot problems, and respond to support requests.</li>
+            <li>Meet legal obligations and protect the rights, safety, and security of users and the service.</li>
+          </ul>
+        </section>
+
+        <section id="providers">
+          <h2>Service providers and transfers</h2>
+          <h3>Apple</h3>
+          <p>
+            Apple provides iCloud, notifications, location and compass permissions, Keychain, and Screen Time features. Apple processes information under its own privacy policy and your Apple account settings.
+          </p>
+          <h3>Cloudflare</h3>
+          <p>
+            Cloudflare hosts the Salah Circle service and this website. Cloudflare may process network information such as IP address, request metadata, and security logs to deliver and protect the service. Salah Circle records are stored in Cloudflare D1.
+          </p>
+          <p>
+            These providers may process information in countries other than your own. We require service providers to protect information consistently with their agreements and applicable law.
+          </p>
+        </section>
+
+        <section id="retention">
+          <h2>Retention and deletion</h2>
+          <p>
+            On-device data remains until you delete it in the app, remove the app, or erase the device. iCloud data remains according to your Apple account and iCloud settings.
+          </p>
+          <p>
+            Salah Circle data remains while your sharing profile is active. Deleting the profile inside Muslim 5 removes the active profile, links, and shared check-ins from the service. Limited residual copies may remain temporarily in provider backups or security logs until they expire under normal retention schedules.
+          </p>
+        </section>
+
+        <section id="your-choices">
+          <h2>Your privacy choices</h2>
+          <ul>
+            <li>Use Muslim 5 without Salah Circle. A sharing profile is optional.</li>
+            <li>Unlink any Salah Circle connection from the app.</li>
+            <li>Delete your Salah Circle profile from the app to remove its active server records.</li>
+            <li>Turn off iCloud access, location, notifications, or Screen Time access in iOS Settings.</li>
+            <li>Delete local records in the app or remove the app from your iPhone.</li>
+            <li>Email us to ask a privacy question or request help with access or deletion.</li>
+          </ul>
+          <p>
+            Depending on where you live, you may have rights to access, correct, delete, restrict, or object to certain processing of personal information. Contact us to make a request. We may need to verify the request before acting on it.
+          </p>
+        </section>
+
+        <section id="security">
+          <h2>Security</h2>
+          <p>
+            Muslim 5 uses HTTPS for network requests. Authentication tokens are stored in the iOS Keychain, and only a SHA-256 hash is retained by the Salah Circle service. No method of storage or transmission is completely secure, so absolute security cannot be guaranteed.
+          </p>
+        </section>
+
+        <section id="children">
+          <h2>Children</h2>
+          <p>
+            Muslim 5 is not specifically directed to children below the age at which parental consent is required for data processing. We do not knowingly collect a child’s personal information through Salah Circle without the consent required by law. A parent or guardian may contact us to request deletion.
+          </p>
+        </section>
+
+        <section id="changes">
+          <h2>Changes to this policy</h2>
+          <p>
+            We may update this policy when the app, service, or legal requirements change. The effective date at the top will show when the latest version took effect. Material changes will be communicated through the app or this page when appropriate.
+          </p>
+        </section>
+
+        <section id="contact">
+          <h2>Contact</h2>
+          <p>
+            For privacy questions, requests, or support, contact the Muslim 5 developer at <a href="mailto:official.purbojati@gmail.com">official.purbojati@gmail.com</a>.
+          </p>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <Footer privacy />
+</BaseLayout>

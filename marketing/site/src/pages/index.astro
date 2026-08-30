@@ -1,0 +1,242 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+const featureItems = [
+  "Prayer times calculated on your iPhone",
+  "Live Qibla direction and guidance",
+  "Gentle streaks and long-term reflections",
+  "Optional reminders for every prayer",
+];
+
+const privacyPoints = [
+  {
+    title: "On-device location",
+    text: "Used for prayer times and Qibla. It is not sent to our Salah Circle service.",
+  },
+  {
+    title: "Private iCloud sync",
+    text: "Prayer history and Period Mode can sync through your own Apple account.",
+  },
+  {
+    title: "Minimal sharing",
+    text: "Salah Circle stores only what is needed to link people and show prayer check-ins.",
+  },
+  {
+    title: "Delete any time",
+    text: "Unlink people or delete the sharing profile directly inside Muslim 5.",
+  },
+];
+---
+
+<BaseLayout
+  title="Muslim 5 | Stay close to salah"
+  description="Muslim 5 is a private, gentle iPhone companion for prayer times, Qibla, salah tracking, Salah Focus, and close family check-ins."
+>
+  <link
+    slot="head"
+    rel="preload"
+    href="/assets/muslim5-dawn-hero.jpg"
+    as="image"
+    fetchpriority="high"
+  />
+  <Header landing />
+
+  <main id="main">
+    <section
+      class="grid min-h-[calc(100dvh-66px)] overflow-hidden bg-[#082a2e] text-[var(--hero-copy)] md:min-h-[calc(100dvh-72px)] min-[861px]:grid-cols-[minmax(0,1.03fr)_minmax(360px,0.97fr)]"
+    >
+      <div
+        class="flex min-h-[calc(100dvh-66px)] items-center bg-[radial-gradient(circle_at_74%_20%,rgb(34_120_111/0.28),transparent_40%),linear-gradient(145deg,#061e22,#0a393a)] px-5 py-14 md:min-h-[560px] md:px-[clamp(2rem,6vw,7.5rem)] md:py-[clamp(3.5rem,8vw,7.5rem)] min-[861px]:min-h-0"
+      >
+        <div class="max-w-[640px]">
+          <p
+            class="mb-5 text-xs font-extrabold tracking-[0.16em] text-[#9bc9c1] uppercase"
+          >
+            A gentle iPhone prayer companion
+          </p>
+          <h1
+            class="mb-6 max-w-[10ch] text-[clamp(3.05rem,15vw,4.4rem)] leading-[0.98] font-extrabold tracking-[-0.065em] md:text-[clamp(3.35rem,6.2vw,6.6rem)]"
+          >
+            Stay close to salah.
+          </h1>
+          <p
+            class="mb-8 max-w-[29rem] text-[clamp(1.05rem,1.6vw,1.25rem)] leading-relaxed text-[var(--hero-muted)]"
+          >
+            Keep all five prayers close with private tracking, local prayer times, and quiet encouragement.
+          </p>
+          <div class="flex flex-wrap gap-3.5">
+            <a
+              class="inline-flex min-h-[50px] items-center justify-center whitespace-nowrap rounded-[14px] bg-[var(--accent)] px-5 py-3 font-extrabold leading-none text-[var(--accent-ink)] no-underline transition-transform duration-150 hover:-translate-y-0.5 active:translate-y-px active:scale-[0.98]"
+              href="https://apps.apple.com/app/id6805083914"
+            >
+              View on App Store
+            </a>
+            <a
+              class="inline-flex min-h-[50px] items-center justify-center whitespace-nowrap rounded-[14px] border border-white/35 bg-white/10 px-5 py-3 font-extrabold leading-none text-[var(--hero-copy)] no-underline transition-transform duration-150 hover:-translate-y-0.5 active:translate-y-px active:scale-[0.98]"
+              href="/privacy/"
+            >
+              Read our privacy policy
+            </a>
+          </div>
+        </div>
+      </div>
+      <div
+        class="hero-scene relative min-h-[500px] isolate md:min-h-[560px] min-[861px]:min-h-[600px]"
+        aria-label="A peaceful dawn over Indonesian mountains"
+      >
+        <img
+          class="absolute top-8 right-1/2 w-[min(68%,330px)] translate-x-1/2 rounded-[34px] border border-white/20 shadow-[0_32px_90px_rgb(2_18_23/0.36)] min-[621px]:w-[min(54%,350px)] min-[861px]:right-[clamp(2rem,7vw,6.5rem)] min-[861px]:w-[min(58%,390px)] min-[861px]:translate-x-0 min-[861px]:rounded-[44px]"
+          src="/assets/today-screen-820.webp"
+          srcset="/assets/today-screen-420.webp 420w, /assets/today-screen-820.webp 820w"
+          sizes="(min-width: 861px) 390px, (min-width: 621px) 350px, 68vw"
+          alt="The background-free Muslim 5 Today app screen"
+          width="820"
+          height="1782"
+          fetchpriority="high"
+        />
+      </div>
+    </section>
+
+    <div class="border-b border-[var(--line)]">
+      <div
+        class="mx-auto grid w-[min(calc(100%-2rem),1180px)] grid-cols-1 items-center gap-5 py-6 sm:grid-cols-2 md:w-[min(calc(100%-2.5rem),1180px)] min-[861px]:grid-cols-[1.2fr_repeat(3,1fr)]"
+      >
+        <div class="font-extrabold text-[var(--ink)] sm:col-span-2 min-[861px]:col-span-1">
+          Built by a fellow Muslim.
+        </div>
+        <div class="text-sm font-bold text-[var(--ink-soft)]">Local-first by design</div>
+        <div class="text-sm font-bold text-[var(--ink-soft)]">No ads or tracking</div>
+        <div class="text-sm font-bold text-[var(--ink-soft)]">Missed days never erase progress</div>
+      </div>
+    </div>
+
+    <section class="py-[clamp(5rem,10vw,9rem)]" id="features">
+      <div
+        class="mx-auto grid w-[min(calc(100%-2rem),1180px)] grid-cols-1 items-center gap-12 md:w-[min(calc(100%-2.5rem),1180px)] min-[861px]:grid-cols-[minmax(280px,0.8fr)_minmax(0,1.2fr)] min-[861px]:gap-[clamp(3rem,8vw,8rem)]"
+      >
+        <div class="mx-auto w-full max-w-[450px]">
+          <img
+            class="w-full rounded-[42px] border border-[var(--line)] shadow-soft"
+            src="/assets/today-screen-820.webp"
+            srcset="/assets/today-screen-420.webp 420w, /assets/today-screen-820.webp 820w"
+            sizes="(min-width: 861px) 450px, calc(100vw - 2rem)"
+            alt="The background-free Muslim 5 Today screen with prayer times and daily prayer check-ins"
+            width="820"
+            height="1782"
+            loading="lazy"
+          />
+        </div>
+        <div class="max-w-[590px]">
+          <h2
+            class="mb-5 text-[clamp(2.2rem,4vw,4rem)] leading-[1.06] font-extrabold tracking-[-0.05em]"
+          >
+            One calm place for every prayer.
+          </h2>
+          <p class="text-lg text-[var(--ink-soft)]">
+            See what is active, what comes next, and record each salah without turning worship into a score.
+          </p>
+          <ul class="mt-8 grid list-none grid-cols-1 gap-x-8 gap-y-5 p-0 sm:grid-cols-2">
+            {featureItems.map((item) => (
+              <li class="border-t border-[var(--line)] pt-3.5 text-sm text-[var(--ink-soft)]">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-[clamp(5rem,10vw,9rem)]" id="together">
+      <div
+        class="mx-auto grid w-[min(calc(100%-2rem),1180px)] grid-cols-1 items-center gap-12 md:w-[min(calc(100%-2.5rem),1180px)] min-[861px]:grid-cols-[minmax(250px,0.72fr)_minmax(0,1.28fr)] min-[861px]:gap-[clamp(3rem,7vw,7rem)]"
+      >
+        <div class="max-w-[520px]">
+          <h2
+            class="mb-5 text-[clamp(2.5rem,5vw,4.8rem)] leading-[1.03] font-extrabold tracking-[-0.055em]"
+          >
+            Make space for salah, together.
+          </h2>
+          <p class="max-w-[60ch] text-lg text-[var(--ink-soft)]">
+            Optional tools help protect prayer time and keep close people connected without messages, rankings, or public profiles.
+          </p>
+          <div class="mt-10 border-t border-[var(--line)]">
+            <article class="py-6">
+              <h3 class="mb-2 text-[clamp(1.4rem,2.5vw,2rem)] leading-[1.1] font-extrabold tracking-[-0.035em]">
+                Salah Focus
+              </h3>
+              <p class="m-0 text-[var(--ink-soft)]">
+                Choose apps to pause at prayer time, then lift the shield after recording the salah.
+              </p>
+            </article>
+            <article class="border-t border-[var(--line)] py-6">
+              <h3 class="mb-2 text-[clamp(1.4rem,2.5vw,2rem)] leading-[1.1] font-extrabold tracking-[-0.035em]">
+                Salah Circle
+              </h3>
+              <p class="m-0 text-[var(--ink-soft)]">
+                Link with family or close friends and see a small initial when they complete a prayer.
+              </p>
+            </article>
+          </div>
+        </div>
+
+        <div
+          class="relative min-h-[520px] overflow-hidden rounded-panel bg-[var(--surface)] sm:min-h-[680px] min-[861px]:min-h-[760px]"
+          aria-label="Muslim 5 Salah Focus and Salah Circle app screens"
+        >
+          <img
+            class="absolute top-7 left-[4%] w-[53%] rounded-[28px] border border-white/10 shadow-[0_28px_65px_rgb(7_59_54/0.2)] sm:top-10 sm:left-[7%] sm:w-[46%] sm:rounded-[38px]"
+            src="/assets/focus-screen-820.webp"
+            srcset="/assets/focus-screen-420.webp 420w, /assets/focus-screen-820.webp 820w"
+            sizes="(min-width: 861px) 320px, 53vw"
+            alt="The background-free Muslim 5 Salah Focus screen"
+            width="820"
+            height="1782"
+            loading="lazy"
+          />
+          <img
+            class="absolute top-24 right-[3%] w-[53%] rounded-[28px] border border-[var(--line)] shadow-[0_28px_65px_rgb(7_59_54/0.2)] sm:top-32 sm:right-[6%] sm:w-[46%] sm:rounded-[38px]"
+            src="/assets/circle-screen-820.webp"
+            srcset="/assets/circle-screen-420.webp 420w, /assets/circle-screen-820.webp 820w"
+            sizes="(min-width: 861px) 320px, 53vw"
+            alt="The background-free Muslim 5 Salah Circle screen"
+            width="820"
+            height="1782"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-[var(--surface)] py-[clamp(4rem,8vw,7rem)]">
+      <div
+        class="mx-auto grid w-[min(calc(100%-2rem),1180px)] grid-cols-1 items-start gap-10 md:w-[min(calc(100%-2.5rem),1180px)] min-[861px]:grid-cols-[0.9fr_1.1fr] min-[861px]:gap-[clamp(2rem,8vw,7rem)]"
+      >
+        <div>
+          <h2
+            class="mb-4 text-[clamp(2.4rem,5vw,4.6rem)] leading-[1.02] font-extrabold tracking-[-0.055em]"
+          >
+            Your worship stays personal.
+          </h2>
+          <p class="max-w-[60ch] text-lg text-[var(--ink-soft)]">
+            Detailed prayer history, location, Qibla direction, and preferences stay on your iPhone or in your private iCloud.
+          </p>
+          <a class="mt-4 inline-block font-extrabold text-[var(--teal)] underline underline-offset-4" href="/privacy/">
+            See exactly how data is handled
+          </a>
+        </div>
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          {privacyPoints.map((point) => (
+            <div class="rounded-2xl border border-[var(--line)] bg-[color-mix(in_srgb,var(--page)_65%,transparent)] p-5">
+              <strong class="mb-1.5 block">{point.title}</strong>
+              <span class="text-sm text-[var(--ink-soft)]">{point.text}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
