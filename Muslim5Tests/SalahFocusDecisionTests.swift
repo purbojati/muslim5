@@ -19,6 +19,30 @@ final class SalahFocusDecisionTests: XCTestCase {
         )
     }
 
+    func testActiveTemporaryUnlockStaysOpenUntilItsDeadline() {
+        let unlockUntil = Date(timeIntervalSince1970: 2_100)
+
+        XCTAssertEqual(
+            decision(
+                activeRequirement: fajr,
+                temporaryUnlockUntil: unlockUntil,
+                occurrences: [fajr, dhuhr]
+            ),
+            .temporaryUnlock(fajr, until: unlockUntil)
+        )
+    }
+
+    func testExpiredTemporaryUnlockRestoresShield() {
+        XCTAssertEqual(
+            decision(
+                activeRequirement: fajr,
+                temporaryUnlockUntil: Date(timeIntervalSince1970: 299),
+                occurrences: [fajr, dhuhr]
+            ),
+            .shield(fajr)
+        )
+    }
+
     func testCompletingActiveRequirementAdvancesToNextDuePrayer() {
         XCTAssertEqual(
             decision(
@@ -101,6 +125,7 @@ final class SalahFocusDecisionTests: XCTestCase {
     private func decision(
         isEnabled: Bool = true,
         activeRequirement: SalahFocusRequirement? = nil,
+        temporaryUnlockUntil: Date? = nil,
         occurrences: [SalahFocusRequirement],
         completed: Set<String> = [],
         pausedDays: Set<String> = []
@@ -109,6 +134,7 @@ final class SalahFocusDecisionTests: XCTestCase {
             isEnabled: isEnabled,
             enabledAt: enabledAt,
             activeRequirement: activeRequirement,
+            temporaryUnlockUntil: temporaryUnlockUntil,
             occurrences: occurrences,
             completedRecordIdentifiers: completed,
             pausedDayIdentifiers: pausedDays,

@@ -45,7 +45,7 @@ final class SalahFocusShieldConfiguration: ShieldConfigurationDataSource {
             primaryButtonLabel: .init(text: primaryButtonTitle, color: theme.buttonLabel),
             primaryButtonBackgroundColor: theme.accent,
             secondaryButtonLabel: .init(
-                text: String(localized: "Not yet — close this app"),
+                text: String(localized: "Snooze for 30 minutes"),
                 color: secondary
             )
         )

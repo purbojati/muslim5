@@ -537,7 +537,7 @@ private struct SalahFocusShieldPreview: View {
                 .background(Color(red: 0.91, green: 0.64, blue: 0.25), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
                 .padding(.horizontal, 18)
 
-            Text("Not yet — close this app")
+            Text("Snooze for 30 minutes")
                 .font(.caption)
                 .foregroundStyle(Color(red: 0.82, green: 0.84, blue: 0.78))
                 .padding(.top, 13)

@@ -5,6 +5,8 @@ import ManagedSettings
 enum SalahFocusConstants {
     static let appGroupIdentifier = "group.com.muslim5.app"
     static let activityPrefix = "muslim5.salah-focus"
+    static let temporaryUnlockActivity = "\(activityPrefix).temporary-unlock"
+    static let temporaryUnlockDuration: TimeInterval = 30 * 60
     static let sharedStateKey = "salahFocus.sharedState"
     static var storeName: ManagedSettingsStore.Name {
         ManagedSettingsStore.Name("salah-focus")
@@ -42,6 +44,7 @@ struct SalahFocusSharedState: Codable, Equatable {
     var selection = FamilyActivitySelection()
     var activeRequirement: SalahFocusRequirement?
     var scheduledRequirement: SalahFocusRequirement?
+    var temporaryUnlockUntil: Date?
     var completedRecordIdentifiers: Set<String> = []
     var pausedDayIdentifiers: Set<String> = []
     var revision = 0

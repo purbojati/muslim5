@@ -1736,6 +1736,16 @@
         }
       }
     },
+    "Snooze for 30 minutes": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tunda 30 menit"
+          }
+        }
+      }
+    },
     "Not recorded yet": {
       "localizations": {
         "id": {
@@ -1752,16 +1762,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Belum diatur"
-          }
-        }
-      }
-    },
-    "Not yet — close this app": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Belum — tutup aplikasi ini"
           }
         }
       }

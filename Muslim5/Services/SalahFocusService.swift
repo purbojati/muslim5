@@ -26,6 +26,7 @@ struct SalahFocusOccurrence: Equatable {
 enum SalahFocusDecision: Equatable {
     case clear
     case shield(SalahFocusRequirement)
+    case temporaryUnlock(SalahFocusRequirement, until: Date)
     case schedule(SalahFocusRequirement)
 
     static func resolve(
@@ -37,6 +38,7 @@ enum SalahFocusDecision: Equatable {
             isEnabled: state.isEnabled,
             enabledAt: state.enabledAt,
             activeRequirement: state.activeRequirement,
+            temporaryUnlockUntil: state.temporaryUnlockUntil,
             occurrences: occurrences,
             completedRecordIdentifiers: state.completedRecordIdentifiers,
             pausedDayIdentifiers: state.pausedDayIdentifiers,
@@ -48,6 +50,7 @@ enum SalahFocusDecision: Equatable {
         isEnabled: Bool,
         enabledAt: Date?,
         activeRequirement: SalahFocusRequirement?,
+        temporaryUnlockUntil: Date? = nil,
         occurrences: [SalahFocusRequirement],
         completedRecordIdentifiers: Set<String>,
         pausedDayIdentifiers: Set<String>,
@@ -60,6 +63,9 @@ enum SalahFocusDecision: Equatable {
         if let active = activeRequirement,
            !completedRecordIdentifiers.contains(active.recordIdentifier),
            !pausedDayIdentifiers.contains(active.dayIdentifier) {
+            if let temporaryUnlockUntil, temporaryUnlockUntil > now {
+                return .temporaryUnlock(active, until: temporaryUnlockUntil)
+            }
             return .shield(active)
         }
 
@@ -157,6 +163,7 @@ final class SalahFocusService: ObservableObject {
         state.enabledAt = now
         state.activeRequirement = nil
         state.scheduledRequirement = nil
+        state.temporaryUnlockUntil = nil
         state.revision += 1
         isEnabled = true
         lastError = nil
@@ -175,6 +182,7 @@ final class SalahFocusService: ObservableObject {
             SalahFocusShieldStore.clear()
             state.activeRequirement = nil
             state.scheduledRequirement = nil
+            state.temporaryUnlockUntil = nil
             state.revision += 1
             activePrayerName = nil
             persistState()
@@ -217,6 +225,7 @@ final class SalahFocusService: ObservableObject {
             SalahFocusShieldStore.clear()
             state.activeRequirement = nil
             state.scheduledRequirement = nil
+            state.temporaryUnlockUntil = nil
             activePrayerName = nil
             persistState()
             return
@@ -234,6 +243,7 @@ final class SalahFocusService: ObservableObject {
             SalahFocusShieldStore.clear()
             state.activeRequirement = nil
             state.scheduledRequirement = nil
+            state.temporaryUnlockUntil = nil
             activePrayerName = nil
             lastError = String(localized: "Salah Focus needs a valid location and prayer schedule.")
             persistState()
@@ -250,19 +260,37 @@ final class SalahFocusService: ObservableObject {
             SalahFocusShieldStore.clear()
             state.activeRequirement = nil
             state.scheduledRequirement = nil
+            state.temporaryUnlockUntil = nil
             activePrayerName = nil
 
         case .shield(let requirement):
             stopMuslim5Monitoring()
             state.activeRequirement = requirement
             state.scheduledRequirement = nil
+            state.temporaryUnlockUntil = nil
             activePrayerName = requirement.prayerName
             persistState()
             SalahFocusShieldStore.apply()
 
+        case .temporaryUnlock(let requirement, let unlockUntil):
+            state.activeRequirement = requirement
+            state.scheduledRequirement = nil
+            activePrayerName = requirement.prayerName
+            SalahFocusShieldStore.clear()
+
+            if !ensureTemporaryUnlockMonitoring(
+                endingAt: unlockUntil,
+                now: now,
+                calendar: calendar
+            ) {
+                state.temporaryUnlockUntil = nil
+                SalahFocusShieldStore.apply()
+            }
+
         case .schedule(let requirement):
             SalahFocusShieldStore.clear()
             state.activeRequirement = nil
+            state.temporaryUnlockUntil = nil
             activePrayerName = nil
             scheduleMonitoring(requirement, calendar: calendar)
         }
@@ -278,6 +306,7 @@ final class SalahFocusService: ObservableObject {
         state.enabledAt = nil
         state.activeRequirement = nil
         state.scheduledRequirement = nil
+        state.temporaryUnlockUntil = nil
         state.revision += 1
         isEnabled = false
         activePrayerName = nil
@@ -317,6 +346,38 @@ final class SalahFocusService: ObservableObject {
         } catch {
             state.scheduledRequirement = nil
             lastError = error.localizedDescription
+        }
+    }
+
+    private func ensureTemporaryUnlockMonitoring(
+        endingAt unlockUntil: Date,
+        now: Date,
+        calendar: Calendar
+    ) -> Bool {
+        let activity = DeviceActivityName(SalahFocusConstants.temporaryUnlockActivity)
+        if activityCenter.activities.contains(activity) {
+            return true
+        }
+        guard
+            unlockUntil > now,
+            let intervalEnd = calendar.date(byAdding: .minute, value: 15, to: unlockUntil)
+        else {
+            return false
+        }
+
+        let components: Set<Calendar.Component> = [.year, .month, .day, .hour, .minute, .second]
+        let schedule = DeviceActivitySchedule(
+            intervalStart: calendar.dateComponents(components, from: unlockUntil),
+            intervalEnd: calendar.dateComponents(components, from: intervalEnd),
+            repeats: false
+        )
+
+        do {
+            try activityCenter.startMonitoring(activity, during: schedule)
+            return true
+        } catch {
+            lastError = error.localizedDescription
+            return false
         }
     }
 

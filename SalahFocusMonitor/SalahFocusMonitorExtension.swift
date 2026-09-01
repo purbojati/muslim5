@@ -6,6 +6,12 @@ final class SalahFocusMonitorExtension: DeviceActivityMonitor {
         super.intervalDidStart(for: activity)
 
         var state = SalahFocusSharedStorage.load()
+
+        if activity.rawValue == SalahFocusConstants.temporaryUnlockActivity {
+            finishTemporaryUnlock(state: &state)
+            return
+        }
+
         guard
             state.isEnabled,
             let requirement = state.scheduledRequirement,
@@ -25,8 +31,31 @@ final class SalahFocusMonitorExtension: DeviceActivityMonitor {
             SalahFocusShieldStore.apply()
         } catch {
             SalahFocusShieldStore.clear()
+        }
     }
-}
+
+    private func finishTemporaryUnlock(state: inout SalahFocusSharedState) {
+        state.temporaryUnlockUntil = nil
+
+        guard
+            state.isEnabled,
+            let requirement = state.activeRequirement,
+            !state.completedRecordIdentifiers.contains(requirement.recordIdentifier),
+            !state.pausedDayIdentifiers.contains(requirement.dayIdentifier)
+        else {
+            try? SalahFocusSharedStorage.save(state)
+            SalahFocusShieldStore.clear()
+            return
+        }
+
+        do {
+            try SalahFocusSharedStorage.save(state)
+            SalahFocusShieldStore.apply()
+        } catch {
+            SalahFocusShieldStore.clear()
+        }
+    }
+
     private func expectedActivityName(
         requirement: SalahFocusRequirement,
         revision: Int

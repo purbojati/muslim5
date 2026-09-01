@@ -41,6 +41,16 @@
         }
       }
     },
+    "Snooze for 30 minutes": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tunda 30 menit"
+          }
+        }
+      }
+    },
     "I’ve prayed — open Muslim 5": {
       "localizations": {
         "id": {
@@ -67,16 +77,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Beri ruang untuk %@"
-          }
-        }
-      }
-    },
-    "Not yet — close this app": {
-      "localizations": {
-        "id": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Belum — tutup aplikasi ini"
           }
         }
       }
