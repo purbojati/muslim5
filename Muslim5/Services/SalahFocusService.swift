@@ -201,6 +201,7 @@ final class SalahFocusService: ObservableObject {
         now: Date = .now,
         timeZone: TimeZone = .autoupdatingCurrent
     ) {
+        reloadSharedState()
         refreshAuthorizationStatus()
         state.selection = FamilyActivitySelection()
 
@@ -297,6 +298,12 @@ final class SalahFocusService: ObservableObject {
 
         lastError = nil
         persistState()
+    }
+
+    private func reloadSharedState() {
+        state = SalahFocusSharedStorage.load()
+        isEnabled = state.isEnabled
+        activePrayerName = state.activeRequirement?.prayerName
     }
 
     private func disable(clearError: Bool) {
