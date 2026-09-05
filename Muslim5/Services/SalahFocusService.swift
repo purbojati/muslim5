@@ -178,14 +178,14 @@ final class SalahFocusService: ObservableObject {
 
     func setPeriodMode(_ enabled: Bool) {
         if enabled {
-            stopMuslim5Monitoring()
-            SalahFocusShieldStore.clear()
             state.activeRequirement = nil
             state.scheduledRequirement = nil
             state.temporaryUnlockUntil = nil
             state.revision += 1
             activePrayerName = nil
             persistState()
+            stopMuslim5Monitoring()
+            SalahFocusShieldStore.clear()
         }
         configurationRevision += 1
     }
@@ -222,13 +222,13 @@ final class SalahFocusService: ObservableObject {
         )
 
         guard state.isEnabled, isAuthorized, !periodMode else {
-            stopMuslim5Monitoring()
-            SalahFocusShieldStore.clear()
             state.activeRequirement = nil
             state.scheduledRequirement = nil
             state.temporaryUnlockUntil = nil
             activePrayerName = nil
             persistState()
+            stopMuslim5Monitoring()
+            SalahFocusShieldStore.clear()
             return
         }
 
@@ -240,14 +240,14 @@ final class SalahFocusService: ObservableObject {
                 calculationMethod: calculationMethod,
                 asrMethod: asrMethod
               ) else {
-            stopMuslim5Monitoring()
-            SalahFocusShieldStore.clear()
             state.activeRequirement = nil
             state.scheduledRequirement = nil
             state.temporaryUnlockUntil = nil
             activePrayerName = nil
             lastError = String(localized: "Salah Focus needs a valid location and prayer schedule.")
             persistState()
+            stopMuslim5Monitoring()
+            SalahFocusShieldStore.clear()
             return
         }
 
@@ -255,28 +255,31 @@ final class SalahFocusService: ObservableObject {
             .focusOccurrences(from: schedule, calendar: calendar)
             .map { $0.requirement(calendar: calendar) }
 
+        lastError = nil
         switch SalahFocusDecision.resolve(state: state, occurrences: requirements, now: now) {
         case .clear:
-            stopMuslim5Monitoring()
-            SalahFocusShieldStore.clear()
             state.activeRequirement = nil
             state.scheduledRequirement = nil
             state.temporaryUnlockUntil = nil
             activePrayerName = nil
+            persistState()
+            stopMuslim5Monitoring()
+            SalahFocusShieldStore.clear()
 
         case .shield(let requirement):
-            stopMuslim5Monitoring()
             state.activeRequirement = requirement
             state.scheduledRequirement = nil
             state.temporaryUnlockUntil = nil
             activePrayerName = requirement.prayerName
             persistState()
+            stopMuslim5Monitoring()
             SalahFocusShieldStore.apply()
 
         case .temporaryUnlock(let requirement, let unlockUntil):
             state.activeRequirement = requirement
             state.scheduledRequirement = nil
             activePrayerName = requirement.prayerName
+            persistState()
             SalahFocusShieldStore.clear()
 
             if !ensureTemporaryUnlockMonitoring(
@@ -289,14 +292,13 @@ final class SalahFocusService: ObservableObject {
             }
 
         case .schedule(let requirement):
-            SalahFocusShieldStore.clear()
             state.activeRequirement = nil
             state.temporaryUnlockUntil = nil
             activePrayerName = nil
             scheduleMonitoring(requirement, calendar: calendar)
+            SalahFocusShieldStore.clear()
         }
 
-        lastError = nil
         persistState()
     }
 
@@ -307,8 +309,6 @@ final class SalahFocusService: ObservableObject {
     }
 
     private func disable(clearError: Bool) {
-        stopMuslim5Monitoring()
-        SalahFocusShieldStore.clear()
         state.isEnabled = false
         state.enabledAt = nil
         state.activeRequirement = nil
@@ -319,6 +319,8 @@ final class SalahFocusService: ObservableObject {
         activePrayerName = nil
         if clearError { lastError = nil }
         persistState()
+        stopMuslim5Monitoring()
+        SalahFocusShieldStore.clear()
         configurationRevision += 1
     }
 
@@ -328,13 +330,19 @@ final class SalahFocusService: ObservableObject {
             return
         }
 
-        stopMuslim5Monitoring()
         state.revision += 1
         state.scheduledRequirement = requirement
         persistState()
+        stopMuslim5Monitoring()
 
-        guard let intervalEnd = calendar.date(byAdding: .minute, value: 15, to: requirement.start) else {
+        guard let intervalEnd = calendar.date(
+            byAdding: .day,
+            value: SalahFocusConstants.monitoringWindowDayCount,
+            to: requirement.start
+        ) else {
+            state.scheduledRequirement = nil
             lastError = String(localized: "Unable to create the next Salah Focus schedule.")
+            persistState()
             return
         }
 
@@ -353,6 +361,7 @@ final class SalahFocusService: ObservableObject {
         } catch {
             state.scheduledRequirement = nil
             lastError = error.localizedDescription
+            persistState()
         }
     }
 
@@ -367,7 +376,11 @@ final class SalahFocusService: ObservableObject {
         }
         guard
             unlockUntil > now,
-            let intervalEnd = calendar.date(byAdding: .minute, value: 15, to: unlockUntil)
+            let intervalEnd = calendar.date(
+                byAdding: .day,
+                value: SalahFocusConstants.monitoringWindowDayCount,
+                to: unlockUntil
+            )
         else {
             return false
         }
@@ -392,9 +405,7 @@ final class SalahFocusService: ObservableObject {
         for requirement: SalahFocusRequirement,
         revision: Int
     ) -> DeviceActivityName {
-        DeviceActivityName(
-            "\(SalahFocusConstants.activityPrefix).\(revision).\(requirement.dayIdentifier).\(requirement.prayerRawValue)"
-        )
+        DeviceActivityName(SalahFocusConstants.activityName(for: requirement, revision: revision))
     }
 
     private func stopMuslim5Monitoring() {

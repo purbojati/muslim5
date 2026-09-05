@@ -80,7 +80,11 @@ final class SalahFocusShieldAction: ShieldActionDelegate {
         let components: Set<Calendar.Component> = [
             .year, .month, .day, .hour, .minute, .second
         ]
-        let intervalEnd = calendar.date(byAdding: .minute, value: 15, to: date) ?? date
+        let intervalEnd = calendar.date(
+            byAdding: .day,
+            value: SalahFocusConstants.monitoringWindowDayCount,
+            to: date
+        ) ?? date
 
         return DeviceActivitySchedule(
             intervalStart: calendar.dateComponents(components, from: date),

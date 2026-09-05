@@ -7,9 +7,17 @@ enum SalahFocusConstants {
     static let activityPrefix = "muslim5.salah-focus"
     static let temporaryUnlockActivity = "\(activityPrefix).temporary-unlock"
     static let temporaryUnlockDuration: TimeInterval = 30 * 60
+    static let monitoringWindowDayCount = 1
     static let sharedStateKey = "salahFocus.sharedState"
     static var storeName: ManagedSettingsStore.Name {
         ManagedSettingsStore.Name("salah-focus")
+    }
+
+    static func activityName(
+        for requirement: SalahFocusRequirement,
+        revision: Int
+    ) -> String {
+        "\(activityPrefix).\(revision).\(requirement.dayIdentifier).\(requirement.prayerRawValue)"
     }
 }
 
@@ -50,6 +58,42 @@ struct SalahFocusSharedState: Codable, Equatable {
     var revision = 0
 }
 
+enum SalahFocusMonitorStartDecision: Equatable {
+    case ignore
+    case clear
+    case shield(SalahFocusRequirement)
+
+    static func resolve(
+        activityName: String,
+        state: SalahFocusSharedState
+    ) -> SalahFocusMonitorStartDecision {
+        guard state.isEnabled else {
+            return .clear
+        }
+
+        guard
+            let requirement = state.scheduledRequirement,
+            activityName == SalahFocusConstants.activityName(
+                for: requirement,
+                revision: state.revision
+            )
+        else {
+            // A stopped DeviceActivity can still deliver a delayed callback. It
+            // must not clear a shield created by a newer state revision.
+            return .ignore
+        }
+
+        guard
+            !state.completedRecordIdentifiers.contains(requirement.recordIdentifier),
+            !state.pausedDayIdentifiers.contains(requirement.dayIdentifier)
+        else {
+            return .clear
+        }
+
+        return .shield(requirement)
+    }
+}
+
 enum SalahFocusSharedStorage {
     static func load() -> SalahFocusSharedState {
         guard
@@ -86,8 +130,8 @@ private enum SalahFocusSharedStorageError: LocalizedError {
 
 enum SalahFocusShieldStore {
     static func apply() {
-        ManagedSettingsStore(named: SalahFocusConstants.storeName).clearAllSettings()
-        let store = ManagedSettingsStore()
+        let store = ManagedSettingsStore(named: SalahFocusConstants.storeName)
+        store.clearAllSettings()
         store.shield.applications = nil
         store.shield.applicationCategories = .all()
         store.shield.webDomains = nil

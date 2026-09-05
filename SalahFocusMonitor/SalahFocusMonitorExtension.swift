@@ -12,19 +12,23 @@ final class SalahFocusMonitorExtension: DeviceActivityMonitor {
             return
         }
 
-        guard
-            state.isEnabled,
-            let requirement = state.scheduledRequirement,
-            !state.completedRecordIdentifiers.contains(requirement.recordIdentifier),
-            !state.pausedDayIdentifiers.contains(requirement.dayIdentifier),
-            activity.rawValue == expectedActivityName(requirement: requirement, revision: state.revision)
-        else {
+        switch SalahFocusMonitorStartDecision.resolve(
+            activityName: activity.rawValue,
+            state: state
+        ) {
+        case .ignore:
+            return
+
+        case .clear:
+            state.scheduledRequirement = nil
+            try? SalahFocusSharedStorage.save(state)
             SalahFocusShieldStore.clear()
             return
-        }
 
-        state.activeRequirement = requirement
-        state.scheduledRequirement = nil
+        case .shield(let requirement):
+            state.activeRequirement = requirement
+            state.scheduledRequirement = nil
+        }
 
         do {
             try SalahFocusSharedStorage.save(state)
@@ -80,8 +84,8 @@ final class SalahFocusMonitorExtension: DeviceActivityMonitor {
             .year, .month, .day, .hour, .minute, .second
         ]
         guard let intervalEnd = calendar.date(
-            byAdding: .minute,
-            value: 15,
+            byAdding: .day,
+            value: SalahFocusConstants.monitoringWindowDayCount,
             to: unlockUntil
         ) else {
             return
@@ -95,10 +99,4 @@ final class SalahFocusMonitorExtension: DeviceActivityMonitor {
         try? DeviceActivityCenter().startMonitoring(activity, during: schedule)
     }
 
-    private func expectedActivityName(
-        requirement: SalahFocusRequirement,
-        revision: Int
-    ) -> String {
-        "\(SalahFocusConstants.activityPrefix).\(revision).\(requirement.dayIdentifier).\(requirement.prayerRawValue)"
-    }
 }

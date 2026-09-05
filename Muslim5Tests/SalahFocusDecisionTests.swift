@@ -98,6 +98,56 @@ final class SalahFocusDecisionTests: XCTestCase {
         )
     }
 
+    func testCurrentMonitorCallbackShieldsScheduledPrayer() {
+        let state = enabledState(scheduledRequirement: fajr, revision: 4)
+
+        XCTAssertEqual(
+            SalahFocusMonitorStartDecision.resolve(
+                activityName: SalahFocusConstants.activityName(for: fajr, revision: 4),
+                state: state
+            ),
+            .shield(fajr)
+        )
+    }
+
+    func testStaleMonitorCallbackDoesNotClearCurrentShield() {
+        let state = enabledState(scheduledRequirement: dhuhr, revision: 5)
+
+        XCTAssertEqual(
+            SalahFocusMonitorStartDecision.resolve(
+                activityName: SalahFocusConstants.activityName(for: fajr, revision: 4),
+                state: state
+            ),
+            .ignore
+        )
+    }
+
+    func testCompletedScheduledPrayerClearsWithoutShielding() {
+        var state = enabledState(scheduledRequirement: fajr, revision: 4)
+        state.completedRecordIdentifiers = [fajr.recordIdentifier]
+
+        XCTAssertEqual(
+            SalahFocusMonitorStartDecision.resolve(
+                activityName: SalahFocusConstants.activityName(for: fajr, revision: 4),
+                state: state
+            ),
+            .clear
+        )
+    }
+
+    func testDisabledMonitorStateClearsLegacyShield() {
+        var state = enabledState(scheduledRequirement: fajr, revision: 4)
+        state.isEnabled = false
+
+        XCTAssertEqual(
+            SalahFocusMonitorStartDecision.resolve(
+                activityName: SalahFocusConstants.activityName(for: fajr, revision: 4),
+                state: state
+            ),
+            .clear
+        )
+    }
+
     private var fajr: SalahFocusRequirement {
         requirement("fajr", day: "1970-01-02", start: 200)
     }
@@ -120,6 +170,18 @@ final class SalahFocusDecisionTests: XCTestCase {
             dayIdentifier: day,
             start: Date(timeIntervalSince1970: start)
         )
+    }
+
+    private func enabledState(
+        scheduledRequirement: SalahFocusRequirement,
+        revision: Int
+    ) -> SalahFocusSharedState {
+        var state = SalahFocusSharedState()
+        state.isEnabled = true
+        state.enabledAt = enabledAt
+        state.scheduledRequirement = scheduledRequirement
+        state.revision = revision
+        return state
     }
 
     private func decision(
