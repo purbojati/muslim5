@@ -12,10 +12,10 @@ final class SalahFocusDecisionTests: XCTestCase {
         )
     }
 
-    func testUnfinishedActiveRequirementStaysShielded() {
+    func testNewerDuePrayerReplacesUnfinishedActiveRequirement() {
         XCTAssertEqual(
-            decision(activeRequirement: fajr, occurrences: [dhuhr]),
-            .shield(fajr)
+            decision(activeRequirement: fajr, occurrences: [fajr, dhuhr]),
+            .shield(dhuhr)
         )
     }
 
@@ -26,7 +26,7 @@ final class SalahFocusDecisionTests: XCTestCase {
             decision(
                 activeRequirement: fajr,
                 temporaryUnlockUntil: unlockUntil,
-                occurrences: [fajr, dhuhr]
+                occurrences: [fajr]
             ),
             .temporaryUnlock(fajr, until: unlockUntil)
         )
@@ -37,7 +37,7 @@ final class SalahFocusDecisionTests: XCTestCase {
             decision(
                 activeRequirement: fajr,
                 temporaryUnlockUntil: Date(timeIntervalSince1970: 299),
-                occurrences: [fajr, dhuhr]
+                occurrences: [fajr]
             ),
             .shield(fajr)
         )
@@ -51,6 +51,28 @@ final class SalahFocusDecisionTests: XCTestCase {
                 completed: [fajr.recordIdentifier]
             ),
             .shield(dhuhr)
+        )
+    }
+
+    func testCompletedLatestPrayerDoesNotFallBackToOlderUncheckedPrayer() {
+        XCTAssertEqual(
+            decision(
+                activeRequirement: fajr,
+                occurrences: [fajr, dhuhr, maghrib, futureIsha],
+                completed: [maghrib.recordIdentifier]
+            ),
+            .schedule(futureIsha)
+        )
+    }
+
+    func testCompletedLatestPrayerClearsWhenThereIsNoFuturePrayer() {
+        XCTAssertEqual(
+            decision(
+                activeRequirement: fajr,
+                occurrences: [fajr, dhuhr, maghrib],
+                completed: [maghrib.recordIdentifier]
+            ),
+            .clear
         )
     }
 
@@ -158,6 +180,10 @@ final class SalahFocusDecisionTests: XCTestCase {
 
     private var futureIsha: SalahFocusRequirement {
         requirement("isha", day: "1970-01-03", start: 400)
+    }
+
+    private var maghrib: SalahFocusRequirement {
+        requirement("maghrib", day: "1970-01-02", start: 290)
     }
 
     private func requirement(

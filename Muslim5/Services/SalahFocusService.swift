@@ -60,26 +60,24 @@ enum SalahFocusDecision: Equatable {
             return .clear
         }
 
-        if let active = activeRequirement,
-           !completedRecordIdentifiers.contains(active.recordIdentifier),
-           !pausedDayIdentifiers.contains(active.dayIdentifier) {
-            if let temporaryUnlockUntil, temporaryUnlockUntil > now {
-                return .temporaryUnlock(active, until: temporaryUnlockUntil)
-            }
-            return .shield(active)
-        }
-
         let applicable = occurrences
             .filter { $0.start >= enabledAt }
-            .filter { !completedRecordIdentifiers.contains($0.recordIdentifier) }
             .filter { !pausedDayIdentifiers.contains($0.dayIdentifier) }
             .sorted { $0.start < $1.start }
 
-        if let due = applicable.first(where: { $0.start <= now }) {
-            return .shield(due)
+        if let latestDue = applicable.last(where: { $0.start <= now }),
+           !completedRecordIdentifiers.contains(latestDue.recordIdentifier) {
+            if activeRequirement == latestDue,
+               let temporaryUnlockUntil,
+               temporaryUnlockUntil > now {
+                return .temporaryUnlock(latestDue, until: temporaryUnlockUntil)
+            }
+            return .shield(latestDue)
         }
 
-        if let future = applicable.first(where: { $0.start > now }) {
+        if let future = applicable.first(where: {
+            $0.start > now && !completedRecordIdentifiers.contains($0.recordIdentifier)
+        }) {
             return .schedule(future)
         }
 

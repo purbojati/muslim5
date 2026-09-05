@@ -20,7 +20,7 @@ This is the closest App Store-compliant version of “lock the phone.” A norma
 - Let the user select which apps, categories, and websites are shielded using Apple’s privacy-preserving picker. Muslim 5 itself must remain reachable.
 - Apply the shield at the calculated start time for each enabled prayer. MVP enables all five prayers; a follow-up may add per-prayer switches if user feedback justifies the extra settings.
 - Keep the shield active for the exact due prayer until a record for that prayer and local calendar day saves successfully. A late or made-up status also counts because all three statuses represent a completed salah.
-- If another prayer becomes due while the earlier shield remains active, keep the earlier prayer as the requirement. After it is recorded, immediately reconcile; if another prayer is already due and unrecorded, update the shield to that prayer rather than briefly unlocking.
+- If another prayer becomes due while an earlier one remains unchecked, replace the earlier requirement with the latest due prayer. Salah Focus follows the current prayer rather than accumulating a backlog.
 - If the user removes the active prayer record while its window is still due, reconcile and reapply the shield.
 - Turning Salah Focus off is always allowed from Muslim 5 Settings and clears the shield immediately. Do not add a cooldown, PIN, remote approval, or shame copy.
 - Period Mode suspends Salah Focus, cancels monitoring, and clears active shields. Turning Period Mode off runs a fresh reconciliation from the next applicable prayer; it does not lock for prayers within the paused range.
@@ -135,7 +135,7 @@ Create `@MainActor final class SalahFocusService: ObservableObject` alongside `P
 Reconciliation rules:
 
 1. If disabled, paused, unauthorized, selection-empty, location-missing, or schedule-invalid: stop Muslim 5 monitoring and clear its named store.
-2. Find the earliest applicable due and unrecorded prayer, excluding paused days.
+2. Find the latest applicable due prayer, excluding paused days. Earlier unchecked prayers do not remain active after a newer prayer becomes due.
 3. If one exists: persist it as active and apply shields to the selected application, category, and web-domain tokens.
 4. Otherwise: clear the active shield and monitor only the next future unrecorded prayer.
 5. Use prayer/day/revision in the activity name so stale extension callbacks cannot reactivate an old shield.
@@ -213,7 +213,7 @@ Stop here if background triggering is unreliable or the entitlement request is r
 - Saving completed, late, or made-up records unlocks.
 - A failed SwiftData save does not unlock.
 - Deleting the active record reapplies the shield when still due.
-- Backlogged prayers advance without an unlocked gap.
+- A newer due prayer replaces an older unchecked requirement, and completing the latest due prayer does not fall back to an older one.
 - Period Mode, master disable, authorization loss, empty selection, corrupted payload, and invalid schedule all clear the named store and stop monitoring.
 - Time-zone, coordinate, calculation-method, and Asr-method changes replace the pending trigger.
 - Existing notification and prayer-time tests remain green.
