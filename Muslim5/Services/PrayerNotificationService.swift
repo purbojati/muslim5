@@ -172,7 +172,11 @@ final class PrayerNotificationService: ObservableObject {
         timeZone: TimeZone
     ) -> UNNotificationRequest {
         let content = UNMutableNotificationContent()
-        let message = Self.notificationMessage(for: prayer)
+        let message = Self.notificationMessage(
+            for: prayer,
+            at: date,
+            calendar: calendar
+        )
         content.title = message.title
         content.body = message.body
         content.sound = .default
@@ -201,10 +205,19 @@ final class PrayerNotificationService: ObservableObject {
 
     static func notificationMessage(
         for prayer: Prayer,
+        at date: Date? = nil,
+        calendar: Calendar = .autoupdatingCurrent,
         locale: Locale = .autoupdatingCurrent,
         bundle: Bundle = .main
     ) -> (title: String, body: String) {
-        switch prayer {
+        if prayer == .dhuhr, let date, isJumuah(date, calendar: calendar) {
+            return (
+                String(localized: "🕌 Jumu’ah — Answer the call", bundle: bundle, locale: locale),
+                String(localized: "It’s Friday. Make space for Jumu’ah and remember Allah.", bundle: bundle, locale: locale)
+            )
+        }
+
+        return switch prayer {
         case .fajr:
             (
                 String(localized: "🌅 Fajr — Begin with Allah", bundle: bundle, locale: locale),
@@ -231,5 +244,9 @@ final class PrayerNotificationService: ObservableObject {
                 String(localized: "Before you rest, return to Allah through Isha.", bundle: bundle, locale: locale)
             )
         }
+    }
+
+    static func isJumuah(_ date: Date, calendar: Calendar) -> Bool {
+        calendar.component(.weekday, from: date) == 6
     }
 }

@@ -84,6 +84,8 @@ struct TodayView: View {
         let schedule = makeSchedule(at: date)
         let phase = schedule?.phase(at: date)
         let scene = previewScene ?? phase?.scene ?? fallbackScene(at: date)
+        let isJumuah = dayOffset == 0
+            && (Self.isJumuah(date) || isJumuahPreviewEnabled)
         let hijriDate = hijriDisplayDate(
             for: date,
             maghrib: schedule?.today.maghrib
@@ -97,6 +99,7 @@ struct TodayView: View {
                         hijriDate: hijriDate,
                         phase: phase,
                         scene: scene,
+                        isJumuah: isJumuah,
                         topInset: geometry.safeAreaInsets.top
                     )
 
@@ -137,6 +140,7 @@ struct TodayView: View {
         hijriDate: Date,
         phase: PrayerPhase?,
         scene: PrayerScene,
+        isJumuah: Bool,
         topInset: CGFloat
     ) -> some View {
         prayerHeader(
@@ -144,6 +148,7 @@ struct TodayView: View {
             hijriDate: hijriDate,
             phase: phase,
             scene: scene,
+            isJumuah: isJumuah,
             topInset: topInset
         )
     }
@@ -153,13 +158,18 @@ struct TodayView: View {
         hijriDate: Date,
         phase: PrayerPhase?,
         scene: PrayerScene,
+        isJumuah: Bool,
         topInset: CGFloat
     ) -> some View {
         ZStack(alignment: .topLeading) {
             PrayerSkyBackground(scene: scene)
 
+            if isJumuah {
+                jumuahAtmosphere(topInset: topInset)
+            }
+
             VStack(alignment: .leading, spacing: 26) {
-                dayHeader(at: hijriDate)
+                dayHeader(at: hijriDate, isJumuah: isJumuah)
 
                 ZStack(alignment: .topLeading) {
                     Group {
@@ -207,10 +217,10 @@ struct TodayView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    private func dayHeader(at date: Date) -> some View {
+    private func dayHeader(at date: Date, isJumuah: Bool) -> some View {
         ZStack(alignment: .topLeading) {
             VStack(alignment: .leading, spacing: 3) {
-                Text(dayTitle)
+                Text(isJumuah ? String(localized: "Jumu’ah Mubarak") : dayTitle)
                     .font(.system(.title2, design: .serif, weight: .bold))
                 Text(hijriDateText(for: date))
                     .font(.footnote)
@@ -221,6 +231,53 @@ struct TodayView: View {
         }
         .foregroundStyle(.white)
         .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func jumuahAtmosphere(topInset: CGFloat) -> some View {
+        ZStack(alignment: .topTrailing) {
+            LinearGradient(
+                colors: [
+                    AppTheme.ink.opacity(0.42),
+                    AppTheme.gold.opacity(0.26),
+                    .clear
+                ],
+                startPoint: .topTrailing,
+                endPoint: .bottomLeading
+            )
+
+            RadialGradient(
+                colors: [.white.opacity(0.16), .clear],
+                center: .topTrailing,
+                startRadius: 4,
+                endRadius: 210
+            )
+
+            Image(systemName: "sparkles")
+                .font(.title2.weight(.light))
+                .foregroundStyle(AppTheme.parchment.opacity(0.28))
+                .padding(.top, topInset + 46)
+                .padding(.trailing, 30)
+
+            Image(systemName: "sparkle")
+                .font(.caption2)
+                .foregroundStyle(.white.opacity(0.26))
+                .padding(.top, topInset + 90)
+                .padding(.trailing, 72)
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+
+    private static func isJumuah(_ date: Date) -> Bool {
+        Calendar.autoupdatingCurrent.component(.weekday, from: date) == 6
+    }
+
+    private var isJumuahPreviewEnabled: Bool {
+        #if DEBUG
+        ProcessInfo.processInfo.arguments.contains("-PreviewJumuah")
+        #else
+        false
+        #endif
     }
 
     private var dayTitle: String {

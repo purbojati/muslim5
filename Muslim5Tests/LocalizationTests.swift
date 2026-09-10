@@ -49,6 +49,50 @@ final class LocalizationTests: XCTestCase {
         )
     }
 
+    @MainActor
+    func testDhuhrNotificationUsesJumuahCopyOnFriday() throws {
+        let bundle = try indonesianBundle
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = try XCTUnwrap(TimeZone(identifier: "Asia/Jakarta"))
+        let friday = try XCTUnwrap(
+            calendar.date(from: DateComponents(year: 2026, month: 9, day: 11, hour: 12))
+        )
+
+        let message = PrayerNotificationService.notificationMessage(
+            for: .dhuhr,
+            at: friday,
+            calendar: calendar,
+            locale: indonesian,
+            bundle: bundle
+        )
+
+        XCTAssertEqual(message.title, "🕌 Jumuah — Sambut panggilan-Nya")
+        XCTAssertEqual(
+            message.body,
+            "Hari ini Jumat. Luangkan waktu untuk salat Jumat dan mengingat Allah."
+        )
+    }
+
+    @MainActor
+    func testDhuhrNotificationKeepsRegularCopyOutsideFriday() throws {
+        let bundle = try indonesianBundle
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = try XCTUnwrap(TimeZone(identifier: "Asia/Jakarta"))
+        let thursday = try XCTUnwrap(
+            calendar.date(from: DateComponents(year: 2026, month: 9, day: 10, hour: 12))
+        )
+
+        let message = PrayerNotificationService.notificationMessage(
+            for: .dhuhr,
+            at: thursday,
+            calendar: calendar,
+            locale: indonesian,
+            bundle: bundle
+        )
+
+        XCTAssertEqual(message.title, "☀️ Zuhur — Berhenti sejenak dan kembali")
+    }
+
     func testEveryCatalogEntryHasAnApprovedIndonesianTranslation() throws {
         let repositoryRoot = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()

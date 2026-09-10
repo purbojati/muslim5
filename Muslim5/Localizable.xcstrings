@@ -1205,6 +1205,16 @@
         }
       }
     },
+    "It’s Friday. Make space for Jumu’ah and remember Allah.": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hari ini Jumat. Luangkan waktu untuk salat Jumat dan mengingat Allah."
+          }
+        }
+      }
+    },
     "It names the prayer and opens Muslim 5 when you’re ready.": {
       "localizations": {
         "id": {
@@ -1291,6 +1301,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Perjalanan"
+          }
+        }
+      }
+    },
+    "Jumu’ah Mubarak": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jumat Mubarak"
           }
         }
       }
@@ -3749,6 +3769,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "“Amal yang paling dicintai Allah adalah salat pada waktunya.”"
+          }
+        }
+      }
+    },
+    "🕌 Jumu’ah — Answer the call": {
+      "localizations": {
+        "id": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "🕌 Jumuah — Sambut panggilan-Nya"
           }
         }
       }
