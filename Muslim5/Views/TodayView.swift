@@ -92,7 +92,10 @@ struct TodayView: View {
         let phase = schedule?.phase(at: date)
         let scene = previewScene ?? phase?.scene ?? fallbackScene(at: date)
         let isJumuah = dayOffset == 0
-            && (Self.isJumuah(date) || isJumuahPreviewEnabled)
+            && (Self.isJumuahPeriod(
+                date,
+                maghrib: schedule?.today.maghrib
+            ) || isJumuahPreviewEnabled)
         let metrics = ProgressMetrics(records: records, pauses: pauses)
         let hijriDate = hijriDisplayDate(
             for: date,
@@ -282,8 +285,21 @@ struct TodayView: View {
         .accessibilityHidden(true)
     }
 
-    private static func isJumuah(_ date: Date) -> Bool {
-        Calendar.autoupdatingCurrent.component(.weekday, from: date) == 6
+    static func isJumuahPeriod(
+        _ date: Date,
+        maghrib: Date?,
+        calendar: Calendar = .autoupdatingCurrent
+    ) -> Bool {
+        switch calendar.component(.weekday, from: date) {
+        case 5:
+            guard let maghrib else { return false }
+            return date >= maghrib
+        case 6:
+            guard let maghrib else { return true }
+            return date < maghrib
+        default:
+            return false
+        }
     }
 
     private var isJumuahPreviewEnabled: Bool {

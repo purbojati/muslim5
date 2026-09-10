@@ -93,6 +93,44 @@ final class LocalizationTests: XCTestCase {
         XCTAssertEqual(message.title, "☀️ Zuhur — Berhenti sejenak dan kembali")
     }
 
+    @MainActor
+    func testJumuahAtmosphereBeginsAtThursdayMaghrib() throws {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = try XCTUnwrap(TimeZone(identifier: "Asia/Jakarta"))
+        let maghrib = try XCTUnwrap(
+            calendar.date(from: DateComponents(year: 2026, month: 9, day: 10, hour: 18))
+        )
+        let beforeMaghrib = try XCTUnwrap(
+            calendar.date(from: DateComponents(year: 2026, month: 9, day: 10, hour: 17, minute: 59))
+        )
+
+        XCTAssertFalse(
+            TodayView.isJumuahPeriod(beforeMaghrib, maghrib: maghrib, calendar: calendar)
+        )
+        XCTAssertTrue(
+            TodayView.isJumuahPeriod(maghrib, maghrib: maghrib, calendar: calendar)
+        )
+    }
+
+    @MainActor
+    func testJumuahAtmosphereEndsAtFridayMaghrib() throws {
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = try XCTUnwrap(TimeZone(identifier: "Asia/Jakarta"))
+        let maghrib = try XCTUnwrap(
+            calendar.date(from: DateComponents(year: 2026, month: 9, day: 11, hour: 18))
+        )
+        let beforeMaghrib = try XCTUnwrap(
+            calendar.date(from: DateComponents(year: 2026, month: 9, day: 11, hour: 17, minute: 59))
+        )
+
+        XCTAssertTrue(
+            TodayView.isJumuahPeriod(beforeMaghrib, maghrib: maghrib, calendar: calendar)
+        )
+        XCTAssertFalse(
+            TodayView.isJumuahPeriod(maghrib, maghrib: maghrib, calendar: calendar)
+        )
+    }
+
     func testEveryCatalogEntryHasAnApprovedIndonesianTranslation() throws {
         let repositoryRoot = URL(fileURLWithPath: #filePath)
             .deletingLastPathComponent()
