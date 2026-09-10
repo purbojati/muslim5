@@ -37,11 +37,11 @@ struct TodayView: View {
     @State private var dayOffset = 0
     @State private var navigationDirection = -1
     @State private var completionCelebrationDay: Date?
+    @State private var pendingPrayerCompletion: [Prayer: Bool] = [:]
+    @State private var prayerAwaitingFocusRelease: Prayer?
     @State private var focusReleaseConfirmationPrayer: Prayer?
     @State private var focusReleaseConfirmationTask: Task<Void, Never>?
     private let prayerScheduleService = PrayerScheduleService()
-
-    private var metrics: ProgressMetrics { ProgressMetrics(records: records, pauses: pauses) }
 
     var body: some View {
         NavigationStack {
@@ -77,6 +77,11 @@ struct TodayView: View {
             guard newPhase == .active else { return }
             Task { await synchronizeSharing(at: selectedDate()) }
         }
+        .onChange(of: salahFocusService.activePrayerName) { _, activePrayerName in
+            guard activePrayerName == nil, let prayer = prayerAwaitingFocusRelease else { return }
+            prayerAwaitingFocusRelease = nil
+            showFocusReleaseConfirmation(for: prayer)
+        }
     }
 
     @ViewBuilder
@@ -86,6 +91,7 @@ struct TodayView: View {
         let scene = previewScene ?? phase?.scene ?? fallbackScene(at: date)
         let isJumuah = dayOffset == 0
             && (Self.isJumuah(date) || isJumuahPreviewEnabled)
+        let metrics = ProgressMetrics(records: records, pauses: pauses)
         let hijriDate = hijriDisplayDate(
             for: date,
             maghrib: schedule?.today.maghrib
@@ -110,7 +116,12 @@ struct TodayView: View {
                             pauseBanner
                         }
 
-                        prayerList(schedule: schedule, on: date, currentDate: currentDate)
+                        prayerList(
+                            schedule: schedule,
+                            on: date,
+                            currentDate: currentDate,
+                            metrics: metrics
+                        )
 
                         checklistDayNavigation
                             .frame(maxWidth: .infinity, alignment: .center)
@@ -118,7 +129,8 @@ struct TodayView: View {
                         gentleFooter(
                             for: date,
                             schedule: schedule,
-                            currentDate: currentDate
+                            currentDate: currentDate,
+                            metrics: metrics
                         )
                     }
                     .padding(.horizontal, 18)
@@ -455,7 +467,8 @@ struct TodayView: View {
     private func prayerList(
         schedule: PrayerSchedule?,
         on date: Date,
-        currentDate: Date
+        currentDate: Date,
+        metrics: ProgressMetrics
     ) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             VStack(alignment: .leading, spacing: 3) {
@@ -479,8 +492,10 @@ struct TodayView: View {
                             prayer: prayer,
                             prayerTime: schedule?.today.time(for: prayer),
                             record: metrics.record(for: prayer, on: date),
+                            isVisuallyCompleted: pendingPrayerCompletion[prayer]
+                                ?? (metrics.record(for: prayer, on: date) != nil),
                             linkedUsers: sharingService.users(for: prayer, on: date),
-                            isEnabled: !periodMode,
+                            isEnabled: !periodMode && pendingPrayerCompletion[prayer] == nil,
                             hasPrayerTimePassed: hasPrayerTimePassed(
                                 prayer,
                                 in: schedule,
@@ -590,12 +605,14 @@ struct TodayView: View {
     private func gentleFooter(
         for date: Date,
         schedule: PrayerSchedule?,
-        currentDate: Date
+        currentDate: Date,
+        metrics: ProgressMetrics
     ) -> some View {
         let message = gentleFooterMessage(
             for: date,
             schedule: schedule,
-            currentDate: currentDate
+            currentDate: currentDate,
+            metrics: metrics
         )
 
         return HStack(alignment: .top, spacing: 14) {
@@ -620,7 +637,8 @@ struct TodayView: View {
     private func gentleFooterMessage(
         for date: Date,
         schedule: PrayerSchedule?,
-        currentDate: Date
+        currentDate: Date,
+        metrics: ProgressMetrics
     ) -> String {
         let completedCount = metrics.completedCount(on: date)
 
@@ -631,7 +649,8 @@ struct TodayView: View {
         if let prayer = mostRecentMissedPrayer(
             on: date,
             schedule: schedule,
-            currentDate: currentDate
+            currentDate: currentDate,
+            metrics: metrics
         ) {
             return prayer.missedReflection.body
         }
@@ -661,7 +680,8 @@ struct TodayView: View {
     private func mostRecentMissedPrayer(
         on date: Date,
         schedule: PrayerSchedule?,
-        currentDate: Date
+        currentDate: Date,
+        metrics: ProgressMetrics
     ) -> Prayer? {
         guard let schedule else { return nil }
 
@@ -695,58 +715,84 @@ struct TodayView: View {
     }
 
     private func toggle(_ prayer: Prayer, on date: Date) {
+        guard pendingPrayerCompletion[prayer] == nil else { return }
+
+        let metrics = ProgressMetrics(records: records, pauses: pauses)
         let existingRecord = metrics.record(for: prayer, on: date)
-        let willCompleteDay = existingRecord == nil && metrics.completedCount(on: date) == Prayer.allCases.count - 1
+        let isCompleting = existingRecord == nil
+        let willCompleteDay = isCompleting
+            && metrics.completedCount(on: date) == Prayer.allCases.count - 1
 
         completionCelebrationDay = willCompleteDay ? date : nil
-        var mutationFailed = false
-        withAnimation(.easeOut(duration: 0.2)) {
-            do {
-                if existingRecord != nil {
-                    try PrayerRecord.deleteAll(in: modelContext, day: date, prayer: prayer)
-                } else {
-                    try PrayerRecord.upsert(
-                        in: modelContext,
-                        day: date,
-                        prayer: prayer,
-                        status: .completed
-                    )
-                }
-            } catch {
-                modelContext.rollback()
-                mutationFailed = true
-            }
+        prepareFocusRelease(for: prayer, isCompleting: isCompleting)
+
+        withAnimation(.easeOut(duration: reduceMotion ? 0.1 : 0.18)) {
+            pendingPrayerCompletion[prayer] = isCompleting
         }
 
-        guard !mutationFailed else {
-            HapticFeedback.notification(.error)
-            return
-        }
-
-        guard save() else {
-            HapticFeedback.notification(.error)
-            return
-        }
-
-        synchronizeSalahFocus(
-            prayer: prayer,
-            on: date,
-            isCompleted: existingRecord == nil
-        )
-
-        if existingRecord != nil {
-            HapticFeedback.impact(.soft, intensity: 0.7)
-        } else if willCompleteDay {
+        if willCompleteDay {
             HapticFeedback.notification(.success)
-        } else {
+        } else if isCompleting {
             HapticFeedback.impact(.medium)
+        } else {
+            HapticFeedback.impact(.soft, intensity: 0.7)
+        }
+
+        Task { @MainActor in
+            // Let SwiftUI present the optimistic checkmark before persistence and
+            // system-service synchronization begin on the main actor.
+            await Task.yield()
+            commitToggle(
+                prayer,
+                on: date,
+                existingRecord: existingRecord
+            )
+        }
+    }
+
+    private func commitToggle(
+        _ prayer: Prayer,
+        on date: Date,
+        existingRecord: PrayerRecord?
+    ) {
+        var mutationFailed = false
+
+        do {
+            if existingRecord != nil {
+                try PrayerRecord.deleteAll(in: modelContext, day: date, prayer: prayer)
+            } else {
+                try PrayerRecord.upsert(
+                    in: modelContext,
+                    day: date,
+                    prayer: prayer,
+                    status: .completed
+                )
+            }
+        } catch {
+            modelContext.rollback()
+            mutationFailed = true
+        }
+
+        guard !mutationFailed, save() else {
+            cancelFocusRelease(for: prayer)
+            withAnimation(.easeOut(duration: 0.12)) {
+                pendingPrayerCompletion[prayer] = nil
+            }
+            HapticFeedback.notification(.error)
+            return
+        }
+
+        withAnimation(.easeOut(duration: 0.12)) {
+            pendingPrayerCompletion[prayer] = nil
         }
     }
 
     private func setStatus(_ status: PrayerStatus, for prayer: Prayer, on date: Date) {
+        let metrics = ProgressMetrics(records: records, pauses: pauses)
         let willCompleteDay = metrics.record(for: prayer, on: date) == nil
             && metrics.completedCount(on: date) == Prayer.allCases.count - 1
         completionCelebrationDay = willCompleteDay ? date : nil
+        prepareFocusRelease(for: prayer, isCompleting: true)
 
         do {
             try PrayerRecord.upsert(
@@ -757,21 +803,24 @@ struct TodayView: View {
             )
         } catch {
             modelContext.rollback()
+            cancelFocusRelease(for: prayer)
             HapticFeedback.notification(.error)
             return
         }
         if save() {
-            synchronizeSalahFocus(prayer: prayer, on: date, isCompleted: true)
             HapticFeedback.selection()
         } else {
+            cancelFocusRelease(for: prayer)
             HapticFeedback.notification(.error)
         }
     }
 
     private func setAttendance(_ attendance: PrayerAttendance, for prayer: Prayer, on date: Date) {
+        let metrics = ProgressMetrics(records: records, pauses: pauses)
         let willCompleteDay = metrics.record(for: prayer, on: date) == nil
             && metrics.completedCount(on: date) == Prayer.allCases.count - 1
         completionCelebrationDay = willCompleteDay ? date : nil
+        prepareFocusRelease(for: prayer, isCompleting: true)
 
         do {
             try PrayerRecord.upsert(
@@ -783,13 +832,14 @@ struct TodayView: View {
             )
         } catch {
             modelContext.rollback()
+            cancelFocusRelease(for: prayer)
             HapticFeedback.notification(.error)
             return
         }
         if save() {
-            synchronizeSalahFocus(prayer: prayer, on: date, isCompleted: true)
             HapticFeedback.selection()
         } else {
+            cancelFocusRelease(for: prayer)
             HapticFeedback.notification(.error)
         }
     }
@@ -815,28 +865,14 @@ struct TodayView: View {
         )
     }
 
-    private func synchronizeSalahFocus(
-        prayer: Prayer,
-        on date: Date,
-        isCompleted: Bool
-    ) {
-        let identifier = PrayerRecord.identifier(for: date, prayer: prayer)
-        let wasActiveRequirement = salahFocusService.activePrayerName == prayer.name
-        salahFocusService.synchronize(
-            coordinate: locationProvider.coordinate,
-            records: records,
-            pauses: pauses,
-            periodMode: periodMode,
-            calculationMethod: calculationMethod,
-            asrMethod: asrMethod,
-            completionOverride: (identifier, isCompleted)
-        )
+    private func prepareFocusRelease(for prayer: Prayer, isCompleting: Bool) {
+        guard isCompleting, salahFocusService.activePrayerName == prayer.name else { return }
+        prayerAwaitingFocusRelease = prayer
+    }
 
-        if isCompleted,
-           wasActiveRequirement,
-           salahFocusService.activePrayerName == nil {
-            showFocusReleaseConfirmation(for: prayer)
-        }
+    private func cancelFocusRelease(for prayer: Prayer) {
+        guard prayerAwaitingFocusRelease == prayer else { return }
+        prayerAwaitingFocusRelease = nil
     }
 
     private func showFocusReleaseConfirmation(for prayer: Prayer) {
@@ -856,6 +892,7 @@ struct TodayView: View {
 
     private var sharingSyncKey: String {
         let date = selectedDate()
+        let metrics = ProgressMetrics(records: records, pauses: pauses)
         let completionFingerprint = Prayer.allCases.map {
             metrics.record(for: $0, on: date) == nil ? "0" : "1"
         }.joined()
@@ -867,6 +904,7 @@ struct TodayView: View {
     }
 
     private func synchronizeSharing(at date: Date) async {
+        let metrics = ProgressMetrics(records: records, pauses: pauses)
         let completedPrayers = Set(
             Prayer.allCases.filter { metrics.record(for: $0, on: date) != nil }
         )

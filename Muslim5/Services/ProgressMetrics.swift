@@ -4,15 +4,15 @@ struct ProgressMetrics {
     let records: [PrayerRecord]
     let pauses: [TrackingPause]
     let calendar: Calendar
+    private let recordsByDay: [Date: [PrayerRecord]]
 
     init(records: [PrayerRecord], pauses: [TrackingPause] = [], calendar: Calendar = .current) {
         self.records = records
         self.pauses = pauses
         self.calendar = calendar
-    }
-
-    var recordsByDay: [Date: [PrayerRecord]] {
-        Dictionary(grouping: records) { calendar.startOfDay(for: $0.day) }
+        self.recordsByDay = Dictionary(grouping: records) {
+            calendar.startOfDay(for: $0.day)
+        }
     }
 
     func completedCount(on date: Date) -> Int {

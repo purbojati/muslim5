@@ -6,6 +6,7 @@ struct PrayerRow: View {
     let prayer: Prayer
     let prayerTime: Date?
     let record: PrayerRecord?
+    let isVisuallyCompleted: Bool
     let linkedUsers: [SharingUser]
     let isEnabled: Bool
     let hasPrayerTimePassed: Bool
@@ -56,7 +57,7 @@ struct PrayerRow: View {
                     }
                 }
 
-                if record != nil {
+                if isVisuallyCompleted {
                     Button(role: .destructive, action: onToggle) {
                         Label("Clear", systemImage: "xmark")
                     }
@@ -107,10 +108,13 @@ struct PrayerRow: View {
 
         return ZStack {
             Circle()
-                .fill(color.opacity(record == nil ? 0.12 : 0.20))
+                .fill(color.opacity(isVisuallyCompleted ? 0.20 : 0.12))
                 .overlay {
                     Circle()
-                        .strokeBorder(color.opacity(record == nil ? 0.16 : 0.28), lineWidth: 1)
+                        .strokeBorder(
+                            color.opacity(isVisuallyCompleted ? 0.28 : 0.16),
+                            lineWidth: 1
+                        )
                 }
                 .frame(width: 46, height: 46)
 
@@ -147,22 +151,24 @@ struct PrayerRow: View {
 
         return ZStack {
             Circle()
-                .fill(record == nil ? color.opacity(0.11) : AppTheme.success)
+                .fill(isVisuallyCompleted ? AppTheme.success : color.opacity(0.11))
                 .frame(width: 40, height: 40)
 
-            Image(systemName: record == nil ? "plus" : "checkmark")
+            Image(systemName: isVisuallyCompleted ? "checkmark" : "plus")
                 .font(.system(size: 15, weight: .bold))
-                .foregroundStyle(record == nil ? color : .white)
+                .foregroundStyle(isVisuallyCompleted ? .white : color)
                 .contentTransition(.symbolEffect(.replace))
         }
     }
 
     private var statusMessage: String {
-        guard let record else {
+        guard isVisuallyCompleted else {
             return hasPrayerTimePassed
                 ? prayer.passedTimeEncouragement
                 : String(localized: "Ready when you are")
         }
+
+        guard let record else { return String(localized: "Alhamdulillah") }
 
         let timingMessage = switch record.status {
         case .completed: String(localized: "Alhamdulillah")

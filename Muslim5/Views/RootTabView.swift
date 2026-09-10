@@ -28,6 +28,8 @@ struct RootTabView: View {
     @StateObject private var iCloudStatusService = ICloudStatusService()
     @StateObject private var salahFocusService = SalahFocusService()
     @StateObject private var sharingService = SharingService()
+    @State private var salahFocusSynchronizationTask: Task<Void, Never>?
+    @State private var cloudNormalizationTask: Task<Void, Never>?
 
     private enum AppTab: Hashable {
         case today
@@ -76,10 +78,10 @@ struct RootTabView: View {
             Task { await synchronizeNotifications() }
         }
         .onChange(of: salahFocusSynchronizationKey) {
-            synchronizeSalahFocus()
+            scheduleSalahFocusSynchronization()
         }
         .onChange(of: cloudDataFingerprint) {
-            normalizeCloudDataIfNeeded()
+            scheduleCloudDataNormalization()
         }
         .onReceive(NotificationCenter.default.publisher(for: .NSSystemTimeZoneDidChange)) { _ in
             Task {
@@ -184,6 +186,15 @@ struct RootTabView: View {
         )
     }
 
+    private func scheduleSalahFocusSynchronization() {
+        salahFocusSynchronizationTask?.cancel()
+        salahFocusSynchronizationTask = Task { @MainActor in
+            await Task.yield()
+            guard !Task.isCancelled else { return }
+            synchronizeSalahFocus()
+        }
+    }
+
     private var cloudDataFingerprint: String {
         let recordFingerprint = records.map {
             "\($0.id):\($0.statusRawValue):\($0.attendanceRawValue ?? ""):" +
@@ -210,6 +221,19 @@ struct RootTabView: View {
             #if DEBUG
             print("Could not normalize iCloud data: \(error)")
             #endif
+        }
+    }
+
+    private func scheduleCloudDataNormalization() {
+        cloudNormalizationTask?.cancel()
+        cloudNormalizationTask = Task { @MainActor in
+            do {
+                try await Task.sleep(for: .milliseconds(150))
+                guard !Task.isCancelled else { return }
+                normalizeCloudDataIfNeeded()
+            } catch {
+                // A newer model update replaced this normalization pass.
+            }
         }
     }
 
