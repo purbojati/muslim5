@@ -53,6 +53,7 @@ struct RootTabView: View {
         .environmentObject(salahFocusService)
         .environmentObject(sharingService)
         .task {
+            HapticFeedback.prepare()
             locationProvider.start()
             normalizeCloudDataIfNeeded()
             await iCloudStatusService.refresh()
@@ -160,6 +161,10 @@ struct RootTabView: View {
     }
 
     private var salahFocusSynchronizationKey: String {
+        guard salahFocusService.isEnabled else {
+            return "disabled|\(salahFocusService.configurationRevision)|\(periodMode)"
+        }
+
         let completionFingerprint = records.map(\.id).sorted().joined(separator: ",")
         let pauseFingerprint = pauses.map {
             "\($0.id.uuidString):\($0.startDay.timeIntervalSince1970):\($0.endDay?.timeIntervalSince1970 ?? 0)"
@@ -189,9 +194,13 @@ struct RootTabView: View {
     private func scheduleSalahFocusSynchronization() {
         salahFocusSynchronizationTask?.cancel()
         salahFocusSynchronizationTask = Task { @MainActor in
-            await Task.yield()
-            guard !Task.isCancelled else { return }
-            synchronizeSalahFocus()
+            do {
+                try await Task.sleep(for: .milliseconds(300))
+                guard !Task.isCancelled else { return }
+                synchronizeSalahFocus()
+            } catch {
+                // A newer data change replaced this synchronization pass.
+            }
         }
     }
 
@@ -228,7 +237,7 @@ struct RootTabView: View {
         cloudNormalizationTask?.cancel()
         cloudNormalizationTask = Task { @MainActor in
             do {
-                try await Task.sleep(for: .milliseconds(150))
+                try await Task.sleep(for: .seconds(1))
                 guard !Task.isCancelled else { return }
                 normalizeCloudDataIfNeeded()
             } catch {

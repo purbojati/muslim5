@@ -7,25 +7,28 @@ struct PrayerSkyBackground: View {
 
     var body: some View {
         ZStack {
-            LinearGradient(
-                colors: palette,
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
+            ZStack {
+                LinearGradient(
+                    colors: palette,
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
 
-            Image("PrayerAtmosphere")
-                .resizable()
-                .scaledToFill()
-                .saturation(0.8)
-                .contrast(1.1)
-                .blendMode(.overlay)
-                .opacity(illustrationOpacity)
+                Image("PrayerAtmosphere")
+                    .resizable()
+                    .scaledToFill()
+                    .saturation(0.8)
+                    .contrast(1.1)
+                    .blendMode(.overlay)
+                    .opacity(illustrationOpacity)
+
+                Color.black.opacity(legibilityOverlayOpacity)
+            }
+            .drawingGroup(opaque: true, colorMode: .nonLinear)
 
             SceneAmbience(scene: scene, reduceMotion: reduceMotion)
                 .id(scene)
                 .transition(.opacity)
-
-            Color.black.opacity(legibilityOverlayOpacity)
         }
         .clipped()
         .animation(.easeInOut(duration: 0.25), value: scene)

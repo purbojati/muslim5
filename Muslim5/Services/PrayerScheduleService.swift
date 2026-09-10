@@ -2,7 +2,21 @@ import Adhan
 import CoreLocation
 import Foundation
 
-struct PrayerScheduleService {
+final class PrayerScheduleService: @unchecked Sendable {
+    private struct DayCacheKey: Hashable {
+        let latitude: Double
+        let longitude: Double
+        let year: Int
+        let month: Int
+        let day: Int
+        let timeZoneIdentifier: String
+        let calculationMethod: String
+        let asrMethod: String
+    }
+
+    private let cacheLock = NSLock()
+    private var dayCache: [DayCacheKey: DailyPrayerSchedule] = [:]
+
     func focusOccurrences(
         from schedule: PrayerSchedule,
         calendar: Calendar = .autoupdatingCurrent
@@ -89,6 +103,20 @@ struct PrayerScheduleService {
         asrMethod: String
     ) -> DailyPrayerSchedule? {
         let components = calendar.dateComponents([.year, .month, .day], from: date)
+        let cacheKey = DayCacheKey(
+            latitude: coordinate.latitude,
+            longitude: coordinate.longitude,
+            year: components.year ?? 0,
+            month: components.month ?? 0,
+            day: components.day ?? 0,
+            timeZoneIdentifier: calendar.timeZone.identifier,
+            calculationMethod: calculationMethod,
+            asrMethod: asrMethod
+        )
+        if let cached = cachedDay(for: cacheKey) {
+            return cached
+        }
+
         let coordinates = Adhan.Coordinates(latitude: coordinate.latitude, longitude: coordinate.longitude)
         var parameters = parameters(for: calculationMethod)
         parameters.madhab = asrMethod == "hanafi" ? .hanafi : .shafi
@@ -101,7 +129,7 @@ struct PrayerScheduleService {
             return nil
         }
 
-        return DailyPrayerSchedule(
+        let schedule = DailyPrayerSchedule(
             fajr: times.fajr,
             sunrise: times.sunrise,
             dhuhr: times.dhuhr,
@@ -109,6 +137,23 @@ struct PrayerScheduleService {
             maghrib: times.maghrib,
             isha: times.isha
         )
+        cache(schedule, for: cacheKey)
+        return schedule
+    }
+
+    private func cachedDay(for key: DayCacheKey) -> DailyPrayerSchedule? {
+        cacheLock.lock()
+        defer { cacheLock.unlock() }
+        return dayCache[key]
+    }
+
+    private func cache(_ schedule: DailyPrayerSchedule, for key: DayCacheKey) {
+        cacheLock.lock()
+        defer { cacheLock.unlock() }
+        if dayCache.count >= 64 {
+            dayCache.removeAll(keepingCapacity: true)
+        }
+        dayCache[key] = schedule
     }
 
     private func parameters(for method: String) -> CalculationParameters {

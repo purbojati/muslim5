@@ -71,6 +71,8 @@ struct TodayView: View {
             }
         }
         .task(id: sharingSyncKey) {
+            try? await Task.sleep(for: .milliseconds(450))
+            guard !Task.isCancelled else { return }
             await synchronizeSharing(at: selectedDate())
         }
         .onChange(of: scenePhase) { _, newPhase in
@@ -357,17 +359,10 @@ struct TodayView: View {
         let showsSalahFocus = !salahFocusService.isEnabled
 
         if showsPrayerCircle && showsSalahFocus {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 12) {
-                    prayerCircleCard
-                        .frame(width: 280)
-
-                    salahFocusCard
-                        .frame(width: 280)
-                }
-                .scrollTargetLayout()
+            VStack(spacing: 12) {
+                prayerCircleCard
+                salahFocusCard
             }
-            .scrollTargetBehavior(.viewAligned)
         } else if showsPrayerCircle {
             prayerCircleCard
         } else if showsSalahFocus {
@@ -730,18 +725,20 @@ struct TodayView: View {
             pendingPrayerCompletion[prayer] = isCompleting
         }
 
-        if willCompleteDay {
-            HapticFeedback.notification(.success)
-        } else if isCompleting {
-            HapticFeedback.impact(.medium)
-        } else {
-            HapticFeedback.impact(.soft, intensity: 0.7)
-        }
-
         Task { @MainActor in
-            // Let SwiftUI present the optimistic checkmark before persistence and
-            // system-service synchronization begin on the main actor.
+            // Return from the button action first so SwiftUI can present the
+            // optimistic checkmark before haptics and persistence do any work.
             await Task.yield()
+
+            if willCompleteDay {
+                HapticFeedback.notification(.success)
+            } else if isCompleting {
+                HapticFeedback.impact(.medium)
+            } else {
+                HapticFeedback.impact(.soft, intensity: 0.7)
+            }
+
+            try? await Task.sleep(for: .milliseconds(60))
             commitToggle(
                 prayer,
                 on: date,
