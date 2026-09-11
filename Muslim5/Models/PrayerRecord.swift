@@ -54,16 +54,22 @@ final class PrayerRecord {
         status: PrayerStatus? = nil,
         attendance: PrayerAttendance? = nil,
         updateAttendance: Bool = false,
+        knownMatches: [PrayerRecord]? = nil,
         calendar: Calendar = .current
     ) throws -> PrayerRecord {
         let normalizedDay = calendar.startOfDay(for: day)
         let identifier = identifier(for: normalizedDay, prayer: prayer, calendar: calendar)
-        let predicate = #Predicate<PrayerRecord> { record in
-            record.id == identifier
+        let matches: [PrayerRecord]
+        if let knownMatches {
+            matches = knownMatches.sorted { $0.recordedAt > $1.recordedAt }
+        } else {
+            let predicate = #Predicate<PrayerRecord> { record in
+                record.id == identifier
+            }
+            var descriptor = FetchDescriptor(predicate: predicate)
+            descriptor.sortBy = [SortDescriptor(\PrayerRecord.recordedAt, order: .reverse)]
+            matches = try context.fetch(descriptor)
         }
-        var descriptor = FetchDescriptor(predicate: predicate)
-        descriptor.sortBy = [SortDescriptor(\PrayerRecord.recordedAt, order: .reverse)]
-        let matches = try context.fetch(descriptor)
 
         let record: PrayerRecord
         if let existing = matches.first {
@@ -96,8 +102,16 @@ final class PrayerRecord {
         in context: ModelContext,
         day: Date,
         prayer: Prayer,
+        knownMatches: [PrayerRecord]? = nil,
         calendar: Calendar = .current
     ) throws {
+        if let knownMatches {
+            for record in knownMatches {
+                context.delete(record)
+            }
+            return
+        }
+
         let identifier = identifier(for: day, prayer: prayer, calendar: calendar)
         let predicate = #Predicate<PrayerRecord> { record in
             record.id == identifier

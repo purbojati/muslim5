@@ -279,6 +279,32 @@ final class SharingService: ObservableObject {
         }
     }
 
+    func synchronizePrayer(
+        _ prayer: Prayer,
+        on date: Date,
+        isCompleted: Bool
+    ) async {
+        guard let client, let token else { return }
+        let dateKey = Self.dateKey(for: date)
+
+        do {
+            if isCompleted {
+                try await client.complete(prayer: prayer, date: dateKey, token: token)
+            } else {
+                try await client.clear(prayer: prayer, date: dateKey, token: token)
+            }
+
+            let response = try await client.prayerUsers(on: dateKey, token: token)
+            prayerUsersByDate[dateKey] = response.prayers
+            lastErrorMessage = nil
+            persistCachedState()
+        } catch is CancellationError {
+            return
+        } catch {
+            handle(error)
+        }
+    }
+
     func users(for prayer: Prayer, on date: Date) -> [SharingUser] {
         prayerUsersByDate[Self.dateKey(for: date)]?.users(for: prayer) ?? []
     }

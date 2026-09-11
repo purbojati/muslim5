@@ -737,8 +737,8 @@ struct TodayView: View {
         guard pendingPrayerCompletion[prayer] == nil else { return }
 
         let metrics = ProgressMetrics(records: records, pauses: pauses)
-        let existingRecord = metrics.record(for: prayer, on: date)
-        let isCompleting = existingRecord == nil
+        let existingRecords = matchingRecords(for: prayer, on: date)
+        let isCompleting = existingRecords.isEmpty
         let willCompleteDay = isCompleting
             && metrics.completedCount(on: date) == Prayer.allCases.count - 1
 
@@ -762,11 +762,10 @@ struct TodayView: View {
                 HapticFeedback.impact(.soft, intensity: 0.7)
             }
 
-            try? await Task.sleep(for: .milliseconds(60))
             commitToggle(
                 prayer,
                 on: date,
-                existingRecord: existingRecord
+                existingRecords: existingRecords
             )
         }
     }
@@ -774,19 +773,25 @@ struct TodayView: View {
     private func commitToggle(
         _ prayer: Prayer,
         on date: Date,
-        existingRecord: PrayerRecord?
+        existingRecords: [PrayerRecord]
     ) {
         var mutationFailed = false
 
         do {
-            if existingRecord != nil {
-                try PrayerRecord.deleteAll(in: modelContext, day: date, prayer: prayer)
+            if !existingRecords.isEmpty {
+                try PrayerRecord.deleteAll(
+                    in: modelContext,
+                    day: date,
+                    prayer: prayer,
+                    knownMatches: existingRecords
+                )
             } else {
                 try PrayerRecord.upsert(
                     in: modelContext,
                     day: date,
                     prayer: prayer,
-                    status: .completed
+                    status: .completed,
+                    knownMatches: existingRecords
                 )
             }
         } catch {
@@ -806,6 +811,11 @@ struct TodayView: View {
         withAnimation(.easeOut(duration: 0.12)) {
             pendingPrayerCompletion[prayer] = nil
         }
+        synchronizeSharingChange(
+            prayer: prayer,
+            on: date,
+            isCompleted: existingRecords.isEmpty
+        )
     }
 
     private func setStatus(_ status: PrayerStatus, for prayer: Prayer, on date: Date) {
@@ -814,13 +824,15 @@ struct TodayView: View {
             && metrics.completedCount(on: date) == Prayer.allCases.count - 1
         completionCelebrationDay = willCompleteDay ? date : nil
         prepareFocusRelease(for: prayer, isCompleting: true)
+        let existingRecords = matchingRecords(for: prayer, on: date)
 
         do {
             try PrayerRecord.upsert(
                 in: modelContext,
                 day: date,
                 prayer: prayer,
-                status: status
+                status: status,
+                knownMatches: existingRecords
             )
         } catch {
             modelContext.rollback()
@@ -830,6 +842,9 @@ struct TodayView: View {
         }
         if save() {
             HapticFeedback.selection()
+            if existingRecords.isEmpty {
+                synchronizeSharingChange(prayer: prayer, on: date, isCompleted: true)
+            }
         } else {
             cancelFocusRelease(for: prayer)
             HapticFeedback.notification(.error)
@@ -842,6 +857,7 @@ struct TodayView: View {
             && metrics.completedCount(on: date) == Prayer.allCases.count - 1
         completionCelebrationDay = willCompleteDay ? date : nil
         prepareFocusRelease(for: prayer, isCompleting: true)
+        let existingRecords = matchingRecords(for: prayer, on: date)
 
         do {
             try PrayerRecord.upsert(
@@ -849,7 +865,8 @@ struct TodayView: View {
                 day: date,
                 prayer: prayer,
                 attendance: attendance,
-                updateAttendance: true
+                updateAttendance: true,
+                knownMatches: existingRecords
             )
         } catch {
             modelContext.rollback()
@@ -859,6 +876,9 @@ struct TodayView: View {
         }
         if save() {
             HapticFeedback.selection()
+            if existingRecords.isEmpty {
+                synchronizeSharingChange(prayer: prayer, on: date, isCompleted: true)
+            }
         } else {
             cancelFocusRelease(for: prayer)
             HapticFeedback.notification(.error)
@@ -884,6 +904,25 @@ struct TodayView: View {
             calculationMethod: calculationMethod,
             asrMethod: asrMethod
         )
+    }
+
+    private func matchingRecords(for prayer: Prayer, on date: Date) -> [PrayerRecord] {
+        let identifier = PrayerRecord.identifier(for: date, prayer: prayer)
+        return records.filter { $0.id == identifier }
+    }
+
+    private func synchronizeSharingChange(
+        prayer: Prayer,
+        on date: Date,
+        isCompleted: Bool
+    ) {
+        Task {
+            await sharingService.synchronizePrayer(
+                prayer,
+                on: date,
+                isCompleted: isCompleted
+            )
+        }
     }
 
     private func prepareFocusRelease(for prayer: Prayer, isCompleting: Bool) {
@@ -913,11 +952,7 @@ struct TodayView: View {
 
     private var sharingSyncKey: String {
         let date = selectedDate()
-        let metrics = ProgressMetrics(records: records, pauses: pauses)
-        let completionFingerprint = Prayer.allCases.map {
-            metrics.record(for: $0, on: date) == nil ? "0" : "1"
-        }.joined()
-        return "\(dayOffset)-\(completionFingerprint)-\(sharingService.profile?.id ?? "local")"
+        return "\(dayOffset)-\(PrayerRecord.identifier(for: date, prayer: .fajr))-\(sharingService.profile?.id ?? "local")"
     }
 
     private func selectedDate() -> Date {
