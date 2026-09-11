@@ -4,6 +4,7 @@ const DEFAULT_AVATAR = "person.crop.circle.fill";
 const LINK_CODE_ALPHABET = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
 const LINK_CODE_LENGTH = 10;
 const PRAYERS = ["fajr", "dhuhr", "asr", "maghrib", "isha"] as const;
+const AUTHENTICATED_GET_CACHE_CONTROL = "private, max-age=30, must-revalidate";
 
 type Prayer = (typeof PRAYERS)[number];
 
@@ -84,7 +85,7 @@ async function route(request: Request, url: URL, env: Env): Promise<Response> {
   const pathname = normalizePathname(url.pathname);
 
   if (request.method === "GET" && pathname === "/health") {
-    return jsonResponse({ status: "ok" });
+    return jsonResponse({ status: "ok" }, 200, "public, max-age=60");
   }
 
   if (request.method === "POST" && pathname === `/${API_VERSION}/users`) {
@@ -94,7 +95,11 @@ async function route(request: Request, url: URL, env: Env): Promise<Response> {
   const user = await authenticate(request, env.DB);
 
   if (request.method === "GET" && pathname === `/${API_VERSION}/me`) {
-    return jsonResponse({ user: serializeMe(user) });
+    return jsonResponse(
+      { user: serializeMe(user) },
+      200,
+      AUTHENTICATED_GET_CACHE_CONTROL,
+    );
   }
 
   if (request.method === "PATCH" && pathname === `/${API_VERSION}/me`) {
@@ -288,7 +293,11 @@ async function listLinks(db: D1Database, userId: string): Promise<Response> {
     .bind(userId, userId, userId)
     .all<PublicUserRow>();
 
-  return jsonResponse({ users: result.results.map(serializePublicUser) });
+  return jsonResponse(
+    { users: result.results.map(serializePublicUser) },
+    200,
+    AUTHENTICATED_GET_CACHE_CONTROL,
+  );
 }
 
 async function createLink(
@@ -418,7 +427,11 @@ async function getPrayerUsers(
     prayers[row.prayer].push(serializePublicUser(row));
   }
 
-  return jsonResponse({ date, prayers });
+  return jsonResponse(
+    { date, prayers },
+    200,
+    AUTHENTICATED_GET_CACHE_CONTROL,
+  );
 }
 
 async function authenticate(
@@ -671,10 +684,14 @@ function canonicalLink(firstUserId: string, secondUserId: string): [string, stri
     : [secondUserId, firstUserId];
 }
 
-function jsonResponse(data: unknown, status = 200): Response {
+function jsonResponse(
+  data: unknown,
+  status = 200,
+  cacheControl = "no-store",
+): Response {
   return Response.json(data, {
     status,
-    headers: responseHeaders(),
+    headers: responseHeaders(cacheControl),
   });
 }
 
@@ -682,12 +699,16 @@ function emptyResponse(status: number): Response {
   return new Response(null, { status, headers: responseHeaders() });
 }
 
-function responseHeaders(): Headers {
-  return new Headers({
-    "Cache-Control": "no-store",
+function responseHeaders(cacheControl = "no-store"): Headers {
+  const headers = new Headers({
+    "Cache-Control": cacheControl,
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
   });
+  if (cacheControl.startsWith("private")) {
+    headers.set("Vary", "Authorization");
+  }
+  return headers;
 }
 
 function normalizePathname(pathname: string): string {

@@ -56,6 +56,7 @@ struct RootTabView: View {
             HapticFeedback.prepare()
             locationProvider.start()
             scheduleCloudDataNormalization()
+            sharingService.restoreCachedState()
             await iCloudStatusService.refresh()
             await sharingService.start()
             await synchronizeNotifications()

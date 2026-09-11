@@ -17,6 +17,7 @@ describe("Salah Streak API", () => {
   it("reports service health without authentication", async () => {
     const response = await api("/health");
     expect(response.status).toBe(200);
+    expect(response.headers.get("Cache-Control")).toBe("public, max-age=60");
     await expect(response.json()).resolves.toEqual({ status: "ok" });
   });
 
@@ -28,6 +29,10 @@ describe("Salah Streak API", () => {
 
     const response = await api("/v1/me", { token: registered.token });
     expect(response.status).toBe(200);
+    expect(response.headers.get("Cache-Control")).toBe(
+      "private, max-age=30, must-revalidate",
+    );
+    expect(response.headers.get("Vary")).toBe("Authorization");
     await expect(response.json()).resolves.toMatchObject({
       user: {
         id: registered.user.id,

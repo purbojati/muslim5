@@ -1,4 +1,5 @@
 import Combine
+import CryptoKit
 import Foundation
 import Security
 
@@ -28,7 +29,7 @@ struct SharingProfile: Codable, Equatable, Identifiable, Sendable {
     let updatedAt: String
 }
 
-struct SharingPrayerUsers: Decodable, Equatable, Sendable {
+struct SharingPrayerUsers: Codable, Equatable, Sendable {
     let fajr: [SharingUser]
     let dhuhr: [SharingUser]
     let asr: [SharingUser]
@@ -57,9 +58,14 @@ final class SharingService: ObservableObject {
     let isConfigured: Bool
 
     private let client: SharingAPIClient?
+    private let responseCache: SharingResponseCache
     private var token: String?
 
-    init(baseURL: URL? = SharingConfiguration.baseURL) {
+    init(
+        baseURL: URL? = SharingConfiguration.baseURL,
+        responseCache: SharingResponseCache = SharingResponseCache()
+    ) {
+        self.responseCache = responseCache
         if let baseURL {
             client = SharingAPIClient(baseURL: baseURL)
             isConfigured = true
@@ -69,16 +75,34 @@ final class SharingService: ObservableObject {
         }
     }
 
-    func start() async {
-        guard let client else { return }
+    func restoreCachedState() {
+        guard token == nil else { return }
 
         do {
             guard let storedToken = try SharingTokenStore.read() else { return }
             token = storedToken
-            let me = try await client.me(token: storedToken)
+            guard let snapshot = responseCache.load(for: storedToken) else { return }
+            profile = snapshot.profile
+            linkedUsers = snapshot.linkedUsers
+            prayerUsersByDate = snapshot.prayerUsersByDate
+        } catch {
+            // A cache or Keychain read failure must not prevent a network refresh.
+        }
+    }
+
+    func start() async {
+        guard let client else { return }
+        restoreCachedState()
+        guard let token else { return }
+
+        do {
+            async let profileResponse = client.me(token: token)
+            async let linksResponse = client.links(token: token)
+            let (me, links) = try await (profileResponse, linksResponse)
             profile = me.user
-            linkedUsers = try await client.links(token: storedToken).users
+            linkedUsers = links.users
             lastErrorMessage = nil
+            persistCachedState()
         } catch {
             handle(error)
         }
@@ -108,6 +132,8 @@ final class SharingService: ObservableObject {
             token = registration.token
             profile = registration.user
             linkedUsers = []
+            prayerUsersByDate = [:]
+            persistCachedState()
             return true
         } catch {
             handle(error)
@@ -127,6 +153,7 @@ final class SharingService: ObservableObject {
                 nickname: nickname,
                 token: token
             ).user
+            persistCachedState()
             return true
         } catch {
             handle(error)
@@ -144,6 +171,7 @@ final class SharingService: ObservableObject {
         do {
             _ = try await client.link(code: code, token: token)
             linkedUsers = try await client.links(token: token).users
+            persistCachedState()
             return true
         } catch {
             handle(error)
@@ -161,6 +189,7 @@ final class SharingService: ObservableObject {
             try await client.unlink(userID: userID, token: token)
             linkedUsers.removeAll { $0.id == userID }
             prayerUsersByDate.removeAll()
+            persistCachedState()
         } catch {
             handle(error)
         }
@@ -182,6 +211,7 @@ final class SharingService: ObservableObject {
                 createdAt: profile.createdAt,
                 updatedAt: profile.updatedAt
             )
+            persistCachedState()
         } catch {
             handle(error)
         }
@@ -210,6 +240,7 @@ final class SharingService: ObservableObject {
         do {
             linkedUsers = try await client.links(token: token).users
             lastErrorMessage = nil
+            persistCachedState()
         } catch {
             handle(error)
         }
@@ -240,6 +271,7 @@ final class SharingService: ObservableObject {
             let response = try await client.prayerUsers(on: dateKey, token: token)
             prayerUsersByDate[dateKey] = response.prayers
             lastErrorMessage = nil
+            persistCachedState()
         } catch is CancellationError {
             return
         } catch {
@@ -264,10 +296,25 @@ final class SharingService: ObservableObject {
     }
 
     private func resetIdentity() {
+        if let token {
+            responseCache.remove(for: token)
+        }
         token = nil
         profile = nil
         linkedUsers = []
         prayerUsersByDate = [:]
+    }
+
+    private func persistCachedState() {
+        guard let token, let profile else { return }
+        responseCache.save(
+            SharingCacheSnapshot(
+                profile: profile,
+                linkedUsers: linkedUsers,
+                prayerUsersByDate: prayerUsersByDate
+            ),
+            for: token
+        )
     }
 
     private static func dateKey(for date: Date) -> String {
@@ -282,6 +329,55 @@ final class SharingService: ObservableObject {
             components.month ?? 0,
             components.day ?? 0
         )
+    }
+}
+
+struct SharingCacheSnapshot: Codable, Equatable {
+    let profile: SharingProfile
+    let linkedUsers: [SharingUser]
+    let prayerUsersByDate: [String: SharingPrayerUsers]
+}
+
+struct SharingResponseCache {
+    private static let keyPrefix = "sharing-response-cache-v1."
+    private static let maximumCachedDays = 14
+    private let defaults: UserDefaults
+
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+    }
+
+    func load(for token: String) -> SharingCacheSnapshot? {
+        guard let data = defaults.data(forKey: cacheKey(for: token)) else { return nil }
+        return try? JSONDecoder().decode(SharingCacheSnapshot.self, from: data)
+    }
+
+    func save(_ snapshot: SharingCacheSnapshot, for token: String) {
+        let retainedDates = snapshot.prayerUsersByDate.keys
+            .sorted(by: >)
+            .prefix(Self.maximumCachedDays)
+        let retainedPrayerUsers = Dictionary(
+            uniqueKeysWithValues: retainedDates.compactMap { date in
+                snapshot.prayerUsersByDate[date].map { (date, $0) }
+            }
+        )
+        let retainedSnapshot = SharingCacheSnapshot(
+            profile: snapshot.profile,
+            linkedUsers: snapshot.linkedUsers,
+            prayerUsersByDate: retainedPrayerUsers
+        )
+        guard let data = try? JSONEncoder().encode(retainedSnapshot) else { return }
+        defaults.set(data, forKey: cacheKey(for: token))
+    }
+
+    func remove(for token: String) {
+        defaults.removeObject(forKey: cacheKey(for: token))
+    }
+
+    private func cacheKey(for token: String) -> String {
+        let digest = SHA256.hash(data: Data(token.utf8))
+        let fingerprint = digest.map { String(format: "%02x", $0) }.joined()
+        return Self.keyPrefix + fingerprint
     }
 }
 
