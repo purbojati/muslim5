@@ -77,6 +77,43 @@ final class PrayerScheduleTests: XCTestCase {
         XCTAssertTrue(schedule.hasEnded(.dhuhr, at: Date(timeIntervalSince1970: 400)))
     }
 
+    func testPrayerSkyAppearanceChangesWithinTheSameDaylightScene() {
+        let morning = PrayerSkyAppearance.resolved(
+            at: Date(timeIntervalSince1970: 250),
+            schedule: schedule
+        )
+        let midday = PrayerSkyAppearance.resolved(
+            at: Date(timeIntervalSince1970: 300),
+            schedule: schedule
+        )
+
+        XCTAssertNotEqual(morning, midday)
+        XCTAssertGreaterThan(midday.topColor.green, morning.topColor.green)
+    }
+
+    func testPrayerSkyAppearanceInterpolatesBetweenAnchors() {
+        let sunrise = PrayerSkyAppearance.resolved(
+            at: Date(timeIntervalSince1970: 200),
+            schedule: schedule
+        )
+        let halfwayToMorning = PrayerSkyAppearance.resolved(
+            at: Date(timeIntervalSince1970: 225),
+            schedule: schedule
+        )
+        let morning = PrayerSkyAppearance.resolved(
+            at: Date(timeIntervalSince1970: 250),
+            schedule: schedule
+        )
+
+        XCTAssertNotEqual(halfwayToMorning, sunrise)
+        XCTAssertNotEqual(halfwayToMorning, morning)
+        XCTAssertEqual(
+            halfwayToMorning.topColor.red,
+            (sunrise.topColor.red + morning.topColor.red) / 2,
+            accuracy: 0.000_001
+        )
+    }
+
     func testEveryPrayerHasDistinctPassedTimeEncouragement() {
         let messages = Set(Prayer.allCases.map(\.passedTimeEncouragement))
 

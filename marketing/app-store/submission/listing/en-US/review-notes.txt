@@ -1,0 +1,13 @@
+No sign-in or test account is required.
+
+Basic review path:
+1. Launch Muslim 5 and tap Begin.
+2. The Today tab shows local prayer times and the five-prayer checklist.
+3. Open Others > Qibla and allow location access to review the live Qibla compass.
+4. Open Others > Salah Focus to review the Screen Time shield feature. Family Controls authorization is requested only when the reviewer enables it. This feature must be tested on a physical iPhone because Screen Time shielding is limited in the simulator.
+5. Open Others > Salah Circle to review the private linking flow. Salah Circle creates an anonymous profile from a nickname; it does not require an email address or password.
+
+The “Lock Screen” wording in the App Store name refers to the app-blocking shield screen shown over ordinary apps through Apple’s Family Controls and Managed Settings frameworks. Muslim 5 does not replace, control, or lock the iOS system Lock Screen, and emergency/system access remains available.
+
+Salah Circle production service:
+https://muslim5.purbojati.workers.dev

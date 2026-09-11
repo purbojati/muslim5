@@ -2,16 +2,37 @@
   "sourceLanguage" : "en",
   "strings" : {
     "CFBundleDisplayName" : {
+      "comment" : "Bundle display name",
+      "extractionState" : "extracted_with_value",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Muslim 5"
+          }
+        },
         "id" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
+            "value" : "Muslim 5"
+          }
+        }
+      }
+    },
+    "CFBundleName" : {
+      "comment" : "Bundle name",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
             "value" : "Muslim 5"
           }
         }
       }
     },
     "NSLocationWhenInUseUsageDescription" : {
+      "comment" : "Privacy - Location When In Use Usage Description",
       "localizations" : {
         "en" : {
           "stringUnit" : {

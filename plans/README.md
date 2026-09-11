@@ -8,6 +8,12 @@
 | 005 | iCloud backup | IMPLEMENTED — DEVICE/CLOUDKIT VERIFICATION PENDING |
 | 006 | Indonesian localization | IMPLEMENTED — NATIVE REVIEW/DEVICE VERIFICATION PENDING |
 
+## App Store marketing
+
+| # | Plan | Status |
+|---|---|---|
+| 007 | App Store screenshots (English) | PLANNED |
+
 ## Animation improvements
 
 | # | Plan | Severity | Status |

@@ -4,12 +4,19 @@ struct PrayerSkyBackground: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     let scene: PrayerScene
+    let date: Date
+    let schedule: PrayerSchedule?
+
+    private var appearance: PrayerSkyAppearance {
+        guard let schedule else { return .fixed(for: scene) }
+        return .resolved(at: date, schedule: schedule)
+    }
 
     var body: some View {
         ZStack {
             ZStack {
                 LinearGradient(
-                    colors: palette,
+                    colors: [appearance.topColor.color, appearance.bottomColor.color],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
@@ -20,62 +27,188 @@ struct PrayerSkyBackground: View {
                     .saturation(0.8)
                     .contrast(1.1)
                     .blendMode(.overlay)
-                    .opacity(illustrationOpacity)
+                    .opacity(appearance.illustrationOpacity)
 
-                Color.black.opacity(legibilityOverlayOpacity)
+                Color.black.opacity(appearance.legibilityOverlayOpacity)
             }
             .drawingGroup(opaque: true, colorMode: .nonLinear)
+            .animation(.linear(duration: 30), value: appearance)
 
             SceneAmbience(scene: scene, reduceMotion: reduceMotion)
                 .id(scene)
                 .transition(.opacity)
+                .animation(.easeInOut(duration: 0.8), value: scene)
         }
         .clipped()
-        .animation(.easeInOut(duration: 0.25), value: scene)
         .accessibilityHidden(true)
     }
+}
 
-    private var illustrationOpacity: Double {
+struct PrayerSkyAppearance: Equatable {
+    let topColor: PrayerSkyColor
+    let bottomColor: PrayerSkyColor
+    let illustrationOpacity: Double
+    let legibilityOverlayOpacity: Double
+
+    static func resolved(at date: Date, schedule: PrayerSchedule) -> Self {
+        let today = schedule.today
+        let tomorrow = schedule.tomorrow
+        let todayPreDawn = today.fajr.addingTimeInterval(-90 * 60)
+        let tomorrowPreDawn = tomorrow.fajr.addingTimeInterval(-90 * 60)
+        let goldenHour = max(today.asr, today.maghrib.addingTimeInterval(-45 * 60))
+
+        let anchors = [
+            Anchor(date: schedule.previous.isha, appearance: .night),
+            Anchor(date: midpoint(schedule.previous.isha, todayPreDawn), appearance: .deepNight),
+            Anchor(date: todayPreDawn, appearance: .preDawn),
+            Anchor(date: today.fajr, appearance: .dawn),
+            Anchor(date: today.sunrise, appearance: .sunrise),
+            Anchor(date: midpoint(today.sunrise, today.dhuhr), appearance: .morning),
+            Anchor(date: today.dhuhr, appearance: .midday),
+            Anchor(date: today.asr, appearance: .afternoon),
+            Anchor(date: goldenHour, appearance: .goldenHour),
+            Anchor(date: today.maghrib, appearance: .sunset),
+            Anchor(date: today.isha, appearance: .twilight),
+            Anchor(date: midpoint(today.isha, tomorrowPreDawn), appearance: .deepNight),
+            Anchor(date: tomorrowPreDawn, appearance: .preDawn),
+            Anchor(date: tomorrow.fajr, appearance: .dawn)
+        ].sorted { $0.date < $1.date }
+
+        guard let first = anchors.first, let last = anchors.last else { return .night }
+        if date <= first.date { return first.appearance }
+        if date >= last.date { return last.appearance }
+
+        for (start, end) in zip(anchors, anchors.dropFirst()) where date <= end.date {
+            let duration = end.date.timeIntervalSince(start.date)
+            guard duration > 0 else { return end.appearance }
+            let progress = date.timeIntervalSince(start.date) / duration
+            return start.appearance.interpolated(to: end.appearance, progress: progress)
+        }
+
+        return last.appearance
+    }
+
+    static func fixed(for scene: PrayerScene) -> Self {
         switch scene {
-        case .daylight: 0.62
-        case .dawn, .goldenHour: 0.58
-        case .dusk: 0.52
-        case .night: 0.46
+        case .dawn: .dawn
+        case .daylight: .morning
+        case .goldenHour: .goldenHour
+        case .dusk: .sunset
+        case .night: .night
         }
     }
 
-    private var legibilityOverlayOpacity: Double {
-        scene == .daylight ? 0.08 : 0.04
+    private func interpolated(to other: Self, progress: Double) -> Self {
+        let t = min(max(progress, 0), 1)
+        return Self(
+            topColor: topColor.interpolated(to: other.topColor, progress: t),
+            bottomColor: bottomColor.interpolated(to: other.bottomColor, progress: t),
+            illustrationOpacity: illustrationOpacity.interpolated(to: other.illustrationOpacity, progress: t),
+            legibilityOverlayOpacity: legibilityOverlayOpacity.interpolated(
+                to: other.legibilityOverlayOpacity,
+                progress: t
+            )
+        )
     }
 
-    private var palette: [Color] {
-        switch scene {
-        case .dawn:
-            [
-                Color(red: 0.20, green: 0.22, blue: 0.38),
-                Color(red: 0.52, green: 0.39, blue: 0.48)
-            ]
-        case .daylight:
-            [
-                Color(red: 0.25, green: 0.45, blue: 0.60),
-                Color(red: 0.43, green: 0.61, blue: 0.67)
-            ]
-        case .goldenHour:
-            [
-                Color(red: 0.34, green: 0.38, blue: 0.50),
-                Color(red: 0.65, green: 0.46, blue: 0.38)
-            ]
-        case .dusk:
-            [
-                Color(red: 0.23, green: 0.21, blue: 0.36),
-                Color(red: 0.48, green: 0.33, blue: 0.41)
-            ]
-        case .night:
-            [
-                Color(red: 0.08, green: 0.10, blue: 0.18),
-                Color(red: 0.18, green: 0.18, blue: 0.29)
-            ]
-        }
+    private static func midpoint(_ start: Date, _ end: Date) -> Date {
+        start.addingTimeInterval(max(0, end.timeIntervalSince(start)) / 2)
+    }
+
+    private struct Anchor {
+        let date: Date
+        let appearance: PrayerSkyAppearance
+    }
+
+    private static let night = Self(
+        topColor: .init(red: 0.08, green: 0.10, blue: 0.18),
+        bottomColor: .init(red: 0.18, green: 0.18, blue: 0.29),
+        illustrationOpacity: 0.46,
+        legibilityOverlayOpacity: 0.04
+    )
+    private static let deepNight = Self(
+        topColor: .init(red: 0.055, green: 0.07, blue: 0.14),
+        bottomColor: .init(red: 0.13, green: 0.14, blue: 0.24),
+        illustrationOpacity: 0.42,
+        legibilityOverlayOpacity: 0.045
+    )
+    private static let preDawn = Self(
+        topColor: .init(red: 0.12, green: 0.13, blue: 0.25),
+        bottomColor: .init(red: 0.28, green: 0.24, blue: 0.37),
+        illustrationOpacity: 0.49,
+        legibilityOverlayOpacity: 0.04
+    )
+    private static let dawn = Self(
+        topColor: .init(red: 0.20, green: 0.22, blue: 0.38),
+        bottomColor: .init(red: 0.52, green: 0.39, blue: 0.48),
+        illustrationOpacity: 0.58,
+        legibilityOverlayOpacity: 0.04
+    )
+    private static let sunrise = Self(
+        topColor: .init(red: 0.27, green: 0.34, blue: 0.49),
+        bottomColor: .init(red: 0.69, green: 0.52, blue: 0.46),
+        illustrationOpacity: 0.61,
+        legibilityOverlayOpacity: 0.055
+    )
+    private static let morning = Self(
+        topColor: .init(red: 0.25, green: 0.45, blue: 0.60),
+        bottomColor: .init(red: 0.43, green: 0.61, blue: 0.67),
+        illustrationOpacity: 0.62,
+        legibilityOverlayOpacity: 0.08
+    )
+    private static let midday = Self(
+        topColor: .init(red: 0.22, green: 0.49, blue: 0.64),
+        bottomColor: .init(red: 0.48, green: 0.67, blue: 0.70),
+        illustrationOpacity: 0.64,
+        legibilityOverlayOpacity: 0.085
+    )
+    private static let afternoon = Self(
+        topColor: .init(red: 0.29, green: 0.43, blue: 0.57),
+        bottomColor: .init(red: 0.50, green: 0.59, blue: 0.61),
+        illustrationOpacity: 0.62,
+        legibilityOverlayOpacity: 0.07
+    )
+    private static let goldenHour = Self(
+        topColor: .init(red: 0.34, green: 0.38, blue: 0.50),
+        bottomColor: .init(red: 0.65, green: 0.46, blue: 0.38),
+        illustrationOpacity: 0.58,
+        legibilityOverlayOpacity: 0.04
+    )
+    private static let sunset = Self(
+        topColor: .init(red: 0.23, green: 0.21, blue: 0.36),
+        bottomColor: .init(red: 0.48, green: 0.33, blue: 0.41),
+        illustrationOpacity: 0.52,
+        legibilityOverlayOpacity: 0.04
+    )
+    private static let twilight = Self(
+        topColor: .init(red: 0.14, green: 0.15, blue: 0.27),
+        bottomColor: .init(red: 0.33, green: 0.26, blue: 0.38),
+        illustrationOpacity: 0.49,
+        legibilityOverlayOpacity: 0.04
+    )
+}
+
+struct PrayerSkyColor: Equatable {
+    let red: Double
+    let green: Double
+    let blue: Double
+
+    var color: Color {
+        Color(red: red, green: green, blue: blue)
+    }
+
+    fileprivate func interpolated(to other: Self, progress: Double) -> Self {
+        Self(
+            red: red.interpolated(to: other.red, progress: progress),
+            green: green.interpolated(to: other.green, progress: progress),
+            blue: blue.interpolated(to: other.blue, progress: progress)
+        )
+    }
+}
+
+private extension Double {
+    func interpolated(to other: Double, progress: Double) -> Double {
+        self + ((other - self) * progress)
     }
 }
 

@@ -110,6 +110,7 @@ struct TodayView: View {
                         hijriDate: hijriDate,
                         phase: phase,
                         scene: scene,
+                        schedule: schedule,
                         isJumuah: isJumuah,
                         topInset: geometry.safeAreaInsets.top
                     )
@@ -157,6 +158,7 @@ struct TodayView: View {
         hijriDate: Date,
         phase: PrayerPhase?,
         scene: PrayerScene,
+        schedule: PrayerSchedule?,
         isJumuah: Bool,
         topInset: CGFloat
     ) -> some View {
@@ -165,6 +167,7 @@ struct TodayView: View {
             hijriDate: hijriDate,
             phase: phase,
             scene: scene,
+            schedule: schedule,
             isJumuah: isJumuah,
             topInset: topInset
         )
@@ -175,11 +178,16 @@ struct TodayView: View {
         hijriDate: Date,
         phase: PrayerPhase?,
         scene: PrayerScene,
+        schedule: PrayerSchedule?,
         isJumuah: Bool,
         topInset: CGFloat
     ) -> some View {
         ZStack(alignment: .topLeading) {
-            PrayerSkyBackground(scene: scene)
+            PrayerSkyBackground(
+                scene: scene,
+                date: date,
+                schedule: previewScene == nil ? schedule : nil
+            )
 
             if isJumuah {
                 jumuahAtmosphere(topInset: topInset)

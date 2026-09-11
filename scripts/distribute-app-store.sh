@@ -12,6 +12,7 @@ OUTPUT_ROOT="${APP_STORE_OUTPUT_DIR:-${PROJECT_ROOT}/.build/app-store}"
 
 DRY_RUN=false
 UPLOAD=true
+KEEP_VERSION=false
 VERSION_BUMPED=false
 
 usage() {
@@ -19,11 +20,13 @@ usage() {
 Build and distribute Muslim 5 to App Store Connect.
 
 Usage:
-  ./scripts/distribute-app-store.sh [--dry-run] [--no-upload]
+  ./scripts/distribute-app-store.sh [--dry-run] [--no-upload] [--keep-version]
 
 Options:
   --dry-run    Show the next version/build without changing or building anything.
   --no-upload  Archive and export an IPA locally without uploading it.
+  --keep-version
+               Preserve the current marketing version and build number.
   -h, --help   Show this help.
 
 Authentication:
@@ -67,6 +70,9 @@ while [[ $# -gt 0 ]]; do
     --no-upload)
       UPLOAD=false
       ;;
+    --keep-version)
+      KEEP_VERSION=true
+      ;;
     -h|--help)
       usage
       exit 0
@@ -85,7 +91,7 @@ command -v ruby >/dev/null 2>&1 || fail "ruby is required to update Xcode build 
 # The app target stores the same version in Debug and Release. Only inspect
 # build-setting blocks that define MARKETING_VERSION so unrelated targets (for
 # example, the unit-test bundle) can keep their own build numbers.
-VERSION_RESULT="$({ DRY_RUN="${DRY_RUN}" ruby - "${PBXPROJ_PATH}" <<'RUBY'
+VERSION_RESULT="$({ DRY_RUN="${DRY_RUN}" KEEP_VERSION="${KEEP_VERSION}" ruby - "${PBXPROJ_PATH}" <<'RUBY'
 path = ARGV.fetch(0)
 contents = File.read(path)
 
@@ -113,10 +119,15 @@ match = current_marketing.match(/\A(\d+)\.(\d+)\.(\d+)\z/)
 abort "MARKETING_VERSION must use major.minor.patch format, found: #{current_marketing}" unless match
 abort "CURRENT_PROJECT_VERSION must be an integer, found: #{current_build}" unless current_build.match?(/\A\d+\z/)
 
-next_marketing = "#{match[1]}.#{match[2]}.#{match[3].to_i + 1}"
-next_build = (current_build.to_i + 1).to_s
+if ENV.fetch('KEEP_VERSION') == 'true'
+  next_marketing = current_marketing
+  next_build = current_build
+else
+  next_marketing = "#{match[1]}.#{match[2]}.#{match[3].to_i + 1}"
+  next_build = (current_build.to_i + 1).to_s
+end
 
-unless ENV.fetch('DRY_RUN') == 'true'
+unless ENV.fetch('DRY_RUN') == 'true' || ENV.fetch('KEEP_VERSION') == 'true'
   updated = contents.gsub(build_settings_pattern) do |settings|
     next settings unless settings.match?(/\bMARKETING_VERSION\s*=/)
 
@@ -140,13 +151,22 @@ RUBY
 IFS='|' read -r CURRENT_MARKETING NEXT_MARKETING CURRENT_BUILD NEXT_BUILD <<<"${VERSION_RESULT}"
 
 if [[ "${DRY_RUN}" == true ]]; then
-  echo "Marketing version: ${CURRENT_MARKETING} -> ${NEXT_MARKETING}"
-  echo "Build number:      ${CURRENT_BUILD} -> ${NEXT_BUILD}"
+  if [[ "${KEEP_VERSION}" == true ]]; then
+    echo "Marketing version: ${CURRENT_MARKETING} (preserved)"
+    echo "Build number:      ${CURRENT_BUILD} (preserved)"
+  else
+    echo "Marketing version: ${CURRENT_MARKETING} -> ${NEXT_MARKETING}"
+    echo "Build number:      ${CURRENT_BUILD} -> ${NEXT_BUILD}"
+  fi
   exit 0
 fi
 
-VERSION_BUMPED=true
-echo "Version bumped: ${CURRENT_MARKETING} (${CURRENT_BUILD}) -> ${NEXT_MARKETING} (${NEXT_BUILD})"
+if [[ "${KEEP_VERSION}" == true ]]; then
+  echo "Version preserved: ${CURRENT_MARKETING} (${CURRENT_BUILD})"
+else
+  VERSION_BUMPED=true
+  echo "Version bumped: ${CURRENT_MARKETING} (${CURRENT_BUILD}) -> ${NEXT_MARKETING} (${NEXT_BUILD})"
+fi
 
 KEY_PATH="${ASC_API_KEY_PATH:-}"
 KEY_ID="${ASC_API_KEY_ID:-}"
