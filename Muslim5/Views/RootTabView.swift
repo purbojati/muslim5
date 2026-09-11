@@ -55,7 +55,7 @@ struct RootTabView: View {
         .task {
             HapticFeedback.prepare()
             locationProvider.start()
-            normalizeCloudDataIfNeeded()
+            scheduleCloudDataNormalization()
             await iCloudStatusService.refresh()
             await sharingService.start()
             await synchronizeNotifications()
@@ -81,7 +81,7 @@ struct RootTabView: View {
         .onChange(of: salahFocusSynchronizationKey) {
             scheduleSalahFocusSynchronization()
         }
-        .onChange(of: cloudDataFingerprint) {
+        .onChange(of: iCloudStatusService.importRevision) {
             scheduleCloudDataNormalization()
         }
         .onReceive(NotificationCenter.default.publisher(for: .NSSystemTimeZoneDidChange)) { _ in
@@ -202,18 +202,6 @@ struct RootTabView: View {
                 // A newer data change replaced this synchronization pass.
             }
         }
-    }
-
-    private var cloudDataFingerprint: String {
-        let recordFingerprint = records.map {
-            "\($0.id):\($0.statusRawValue):\($0.attendanceRawValue ?? ""):" +
-                String($0.recordedAt.timeIntervalSince1970)
-        }.sorted().joined(separator: ",")
-        let pauseFingerprint = pauses.map {
-            "\($0.id.uuidString):\($0.reason):\($0.startDay.timeIntervalSince1970):" +
-                String($0.endDay?.timeIntervalSince1970 ?? 0)
-        }.sorted().joined(separator: ",")
-        return recordFingerprint + "|" + pauseFingerprint
     }
 
     private func normalizeCloudDataIfNeeded() {

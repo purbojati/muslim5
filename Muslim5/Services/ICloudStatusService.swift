@@ -145,6 +145,7 @@ final class ICloudStatusService: ObservableObject {
 
     @Published private(set) var status: Status = .checking
     @Published private(set) var syncStatus = ICloudSyncStateMachine.State.checking
+    @Published private(set) var importRevision = 0
 
     private let containerIdentifier: String
     private var stateMachine = ICloudSyncStateMachine()
@@ -212,6 +213,9 @@ final class ICloudStatusService: ObservableObject {
                 at: endDate,
                 errorMessage: event.error?.localizedDescription
             )
+            if kind == .import, event.succeeded {
+                importRevision &+= 1
+            }
         } else {
             stateMachine.eventStarted(kind)
         }

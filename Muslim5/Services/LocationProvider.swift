@@ -18,6 +18,7 @@ final class LocationProvider: NSObject, ObservableObject {
     private let manager = CLLocationManager()
     private let geocoder = CLGeocoder()
     private let defaults = UserDefaults.standard
+    private var isLocationRequestInFlight = false
 
     private enum StorageKey {
         static let latitude = "lastPrayerLatitude"
@@ -55,17 +56,14 @@ final class LocationProvider: NSObject, ObservableObject {
     }
 
     func requestLocation() {
-        guard CLLocationManager.locationServicesEnabled() else {
-            state = coordinate == nil ? .unavailable : .ready
-            return
-        }
-
         switch manager.authorizationStatus {
         case .notDetermined:
             state = coordinate == nil ? .requesting : .ready
             manager.requestWhenInUseAuthorization()
         case .authorizedAlways, .authorizedWhenInUse:
+            guard !isLocationRequestInFlight else { return }
             state = coordinate == nil ? .requesting : .ready
+            isLocationRequestInFlight = true
             manager.requestLocation()
         case .denied, .restricted:
             state = coordinate == nil ? .denied : .ready
@@ -75,6 +73,7 @@ final class LocationProvider: NSObject, ObservableObject {
     }
 
     private func store(_ location: CLLocation) {
+        isLocationRequestInFlight = false
         coordinate = location.coordinate
         defaults.set(location.coordinate.latitude, forKey: StorageKey.latitude)
         defaults.set(location.coordinate.longitude, forKey: StorageKey.longitude)
@@ -119,6 +118,7 @@ extension LocationProvider: @MainActor CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        isLocationRequestInFlight = false
         state = coordinate == nil ? .unavailable : .ready
     }
 }
