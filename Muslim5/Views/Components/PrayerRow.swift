@@ -2,6 +2,9 @@ import SwiftUI
 
 struct PrayerRow: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    @State private var completionBurstTrigger = 0
 
     let prayer: Prayer
     let prayerTime: Date?
@@ -70,6 +73,10 @@ struct PrayerRow: View {
                 ? String(localized: "Double tap to toggle. Touch and hold for more statuses.")
                 : String(localized: "Tracking is paused.")
         )
+        .onChange(of: isVisuallyCompleted) { wasCompleted, isCompleted in
+            guard !wasCompleted, isCompleted, !reduceMotion else { return }
+            completionBurstTrigger += 1
+        }
     }
 
     private var regularLayout: some View {
@@ -150,6 +157,11 @@ struct PrayerRow: View {
         let color = AppTheme.prayerColor(for: prayer)
 
         return ZStack {
+            PrayerCompletionBurst(
+                color: color,
+                trigger: completionBurstTrigger
+            )
+
             Circle()
                 .fill(isVisuallyCompleted ? AppTheme.success : color.opacity(0.11))
                 .frame(width: 40, height: 40)
@@ -196,6 +208,62 @@ struct PrayerRow: View {
 
     private func selectionSymbol(for attendance: PrayerAttendance) -> String {
         record?.attendance == attendance ? "checkmark.circle.fill" : attendance.symbol
+    }
+}
+
+private struct PrayerCompletionBurst: View {
+    let color: Color
+    let trigger: Int
+
+    var body: some View {
+        ZStack {
+            ForEach(0..<8, id: \.self) { index in
+                Capsule()
+                    .fill(color.opacity(0.72))
+                    .frame(width: 2, height: 5)
+                    .offset(y: -27)
+                    .rotationEffect(.degrees(Double(index) * 45))
+            }
+        }
+        .frame(width: 54, height: 54)
+        .phaseAnimator(BurstPhase.allCases, trigger: trigger) { content, phase in
+            content
+                .scaleEffect(phase.scale)
+                .opacity(phase.opacity)
+        } animation: { phase in
+            .timingCurve(0.23, 1, 0.32, 1, duration: phase.duration)
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+
+    private enum BurstPhase: CaseIterable {
+        case idle
+        case bright
+        case dispersed
+
+        var scale: CGFloat {
+            switch self {
+            case .idle: 0.88
+            case .bright: 1
+            case .dispersed: 1.22
+            }
+        }
+
+        var opacity: Double {
+            switch self {
+            case .idle, .dispersed: 0
+            case .bright: 1
+            }
+        }
+
+        var duration: Double {
+            switch self {
+            case .idle: 0
+            case .bright: 0.08
+            case .dispersed: 0.24
+            }
+        }
     }
 }
 
